@@ -1,24 +1,7 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Tourist portal of Cherkasy region
 
-Things you may want to cover:
+GeekHub Ruby on Rails graduation project
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+by [Alina Cheriapkina](https://github.com/alinajuly) & [Sergii Krynytsia](https://github.com/Haidamac)
