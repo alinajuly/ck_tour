@@ -62,3 +62,6 @@ end
 
  gem 'ed25519'
  gem 'bcrypt_pbkdf'
+
+# Provides Sprockets implementation for Rails 4.x (and beyond) Asset Pipeline.
+ gem 'sprockets-rails'
