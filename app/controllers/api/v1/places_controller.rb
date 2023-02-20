@@ -3,7 +3,7 @@ class Api::V1::PlacesController < ApplicationController
 
   # GET /api/v1/places
   def index
-    @api_v1_places = Api::V1::Place.all
+    @api_v1_places = Place.all
 
     render json: @api_v1_places
   end
