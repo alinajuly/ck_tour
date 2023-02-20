@@ -1,7 +1,7 @@
 AllCops:
   NewCops: enable
   Exclude:
-    - 'bin/{rails,rake}'
+    - 'bin/.'
 
 Documentation:
   Enabled: false
