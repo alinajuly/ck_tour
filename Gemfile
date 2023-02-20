@@ -60,5 +60,8 @@ group :development do
   gem 'sshkit-sudo'
 end
 
+# A Ruby binding to the Ed25519 elliptic curve public-key signature system described in RFC 8032.
  gem 'ed25519'
+ 
+#  This gem implements bcrypt_pdkfd (a variant of PBKDF2 with bcrypt-based PRF)
  gem 'bcrypt_pbkdf'
