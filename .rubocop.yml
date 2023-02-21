@@ -1,7 +1,7 @@
 AllCops:
   NewCops: enable
   Exclude:
-    - 'bin/.'
+    - 'bin/*'
 
 Documentation:
   Enabled: false
