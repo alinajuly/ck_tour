@@ -69,6 +69,7 @@ GEM
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
+    bcrypt (3.1.18)
     bcrypt_pbkdf (1.1.0)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
@@ -110,6 +111,7 @@ GEM
     irb (1.6.2)
       reline (>= 0.3.0)
     json (2.6.3)
+    jwt (2.7.0)
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -212,6 +214,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bcrypt (~> 3.1.7)
   bcrypt_pbkdf
   bootsnap
   capistrano
@@ -222,6 +225,7 @@ DEPENDENCIES
   capistrano3-puma
   debug
   ed25519
+  jwt (~> 2.7)
   net-imap
   net-pop
   net-smtp
