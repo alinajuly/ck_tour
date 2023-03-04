@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_04_210459) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_04_211115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,7 +28,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_04_210459) do
 
   create_table "comments", force: :cascade do |t|
     t.string "body"
-    t.integer "status", default: 0
+    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "commentable_type", null: false
@@ -62,6 +62,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_04_210459) do
     t.integer "rating"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.string "ratable_type", null: false
+    t.bigint "ratable_id", null: false
+    t.index ["ratable_type", "ratable_id"], name: "index_rates_on_ratable"
+    t.index ["user_id"], name: "index_rates_on_user_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -90,4 +95,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_04_210459) do
   end
 
   add_foreign_key "comments", "users"
+  add_foreign_key "rates", "users"
 end
