@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_04_211115) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_06_214901) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accommodations", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.string "description"
+    t.string "kind"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+  end
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -38,17 +50,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_04_211115) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
-  create_table "events", force: :cascade do |t|
-    t.string "title"
-    t.text "body"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.decimal "latitude", precision: 10, scale: 6
-    t.decimal "longitude", precision: 10, scale: 6
-    t.date "date_start"
-    t.date "date_end"
-  end
-
   create_table "places", force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -67,6 +68,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_04_211115) do
     t.bigint "ratable_id", null: false
     t.index ["ratable_type", "ratable_id"], name: "index_rates_on_ratable"
     t.index ["user_id"], name: "index_rates_on_user_id"
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.integer "places"
+    t.string "bed"
+    t.decimal "price_per_night"
+    t.text "description"
+    t.boolean "breakfast"
+    t.boolean "no_smoking"
+    t.bigint "accommodation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accommodation_id"], name: "index_rooms_on_accommodation_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -96,4 +110,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_04_211115) do
 
   add_foreign_key "comments", "users"
   add_foreign_key "rates", "users"
+  add_foreign_key "rooms", "accommodations"
 end

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  places: 1
+  bad: MyString
+  price_per_night: 9.99
+  description: MyText
+  breakfast: false
+  no_smoking: false
+  accommodation_id: one
+
+two:
+  places: 1
+  bad: MyString
+  price_per_night: 9.99
+  description: MyText
+  breakfast: false
+  no_smoking: false
+  accommodation_id: two
