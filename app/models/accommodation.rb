@@ -6,7 +6,8 @@ class Accommodation < ApplicationRecord
   end
   enum status: { unpublished: 0, published: 1 }
 
-  validates :name, :kind, :description, :address, presence: true
+  validates :name, :description, :address, presence: true
+  validates :kind, inclusion: { in: %w(hotel hostel apartment greenhouse), message: "%{value} is not a valid size" }
   validates :latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
 end
