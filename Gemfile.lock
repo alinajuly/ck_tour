@@ -200,6 +200,7 @@ GEM
       net-ssh (>= 2.8.0)
     sshkit-sudo (0.1.0)
       sshkit (~> 1.8)
+    stripe (8.3.0)
     thor (1.2.1)
     timeout (0.3.2)
     tzinfo (2.0.6)
@@ -234,6 +235,7 @@ DEPENDENCIES
   rails (~> 7.0.4, >= 7.0.4.2)
   rubocop
   sshkit-sudo
+  stripe (~> 8.3)
   tzinfo-data
 
 RUBY VERSION
