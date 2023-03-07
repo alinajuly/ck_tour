@@ -24,6 +24,8 @@ default: &default
 development:
   <<: *default
   database: ck_tour_development
+  username: alinajuly
+  password: alinajulypass
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -58,6 +60,8 @@ development:
 test:
   <<: *default
   database: ck_tour_test
+  username: alinajuly
+  password: alinajulypass
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -82,5 +86,5 @@ test:
 production:
   <<: *default
   database: ck_tour_production
-  username: ck_tour
-  password: <%= ENV["CK_TOUR_DATABASE_PASSWORD"] %>
+  username: deployer
+  password: <%= ENV["DATABASE_PASSWORD"] %>
