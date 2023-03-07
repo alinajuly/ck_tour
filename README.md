@@ -42,10 +42,6 @@ rails db:create
 rails db:migrate
 ```
 
-```
-rails db:seed
-```
-
 ## How to open in browser
 
 type in console
