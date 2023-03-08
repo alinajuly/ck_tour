@@ -26,7 +26,7 @@ class Api::V1::RoomsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /api/v1/articles/1
+  # PATCH/PUT /api/v1/rooms/1
   def update
     if @room.update(room_params)
       render json: { status: 'Update', data: @room }, status: :ok
@@ -35,6 +35,7 @@ class Api::V1::RoomsController < ApplicationController
     end
   end
 
+  # DELETE /api/v1/rooms/1
   def destroy
     if @room.destroy!
       render json: { status: 'Delete' }, status: :ok

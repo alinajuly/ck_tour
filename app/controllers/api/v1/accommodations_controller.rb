@@ -26,7 +26,7 @@ class Api::V1::AccommodationsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /api/v1/articles/1
+  # PATCH/PUT /api/v1/accommodations/1
   def update
     if @accommodation.update(accommodation_params)
       render json: { status: 'Update', data: @accommodation }, status: :ok
@@ -35,6 +35,7 @@ class Api::V1::AccommodationsController < ApplicationController
     end
   end
 
+  # DELETE /api/v1/accommodations/1
   def destroy
     if @accommodation.destroy!
       render json: { status: 'Delete' }, status: :ok
