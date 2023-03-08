@@ -39,6 +39,9 @@ gem 'stripe', '~> 8.3'
 # RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter
 gem 'rubocop', require: false
 
+# Fake data for seeds
+gem 'faker', '~> 3.1', '>= 3.1.1'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
