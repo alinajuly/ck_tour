@@ -79,8 +79,8 @@ type in Postman:
 method POST http://127.0.0.1:3000/auth/login
 
 Params:
-- KEY email  Value  example@ukr.net
-- KEY password Value qwerty
+- KEY email  VALUE  example@ukr.net
+- KEY password VALUE qwerty
 
 ### save the token you received!!!
 
@@ -89,7 +89,7 @@ Params:
 method GET:
 
 Headers: 
-- KEY Authorization   Value ```your token```
+- KEY Authorization   VALUE ```your token```
 
 routes:
 
@@ -106,32 +106,32 @@ show room http://127.0.0.1:3000/api/v1/accommodations/:id/rooms/:id
 method POST:
 
 Headers:
-- KEY Authorization   Value ```your token```
+- KEY Authorization   VALUE ```your token```
 
 new accommodation: http://127.0.0.1:3000/api/v1/accommodations
 
 Params:
-- KEY name Value ```string```
-- KEY description Value ```string```
-- KEY address Value ```string```
-- KEY kind Value ```string```
-- KEY latitude Value ```decimal (scale 6)```
-- KEY longitude Value ```decimal (scale 6)```
+- KEY name VALUE ```string```
+- KEY description VALUE ```string```
+- KEY address VALUE ```string```
+- KEY kind VALUE ```string```
+- KEY latitude VALUE ```decimal (scale 6)```
+- KEY longitude VALUE ```decimal (scale 6)```
 
 new room: http://127.0.0.1:3000/api/v1/accommodations/:id/rooms
 
 Params:
-- KEY places Value ```integer```
-- KEY bed Value ```string```
-- KEY description Value ```string```
-- KEY breakfast Value ```boolean```
-- KEY conditioner Value ```boolean```
-- KEY price_per_night Value ```decimal```
+- KEY places VALUE ```integer```
+- KEY bed VALUE ```string```
+- KEY description VALUE ```string```
+- KEY breakfast VALUE ```boolean```
+- KEY conditioner VALUE ```boolean```
+- KEY price_per_night VALUE ```decimal```
 
 4) DELETE data:
 
 Headers:
-- KEY Authorization   Value ```your token```
+- KEY Authorization   VALUE ```your token```
 
 - delete accommodation: http://127.0.0.1:3000/api/v1/accommodations/:id
 - delete room: http://127.0.0.1:3000/api/v1/accommodations/:id/rooms/:id
