@@ -81,7 +81,8 @@ method POST http://127.0.0.1:3000/auth/login
 Params:
 - KEY email  Value  example@ukr.net
 - KEY password Value qwerty
-save the token you received
+
+### save the token you received!!!
 
 2) GET data:
 
