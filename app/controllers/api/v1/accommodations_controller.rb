@@ -13,7 +13,8 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # GET /api/v1/accommodations/1
   def show
-    render json: @accommodation, status: :ok
+    @rooms = @accommodation.rooms
+    render json: { data: @accommodation, rooms: @rooms }, status: :ok
   end
 
   # POST /api/v1/accommodations

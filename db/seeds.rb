@@ -54,3 +54,24 @@ end
               description: 'Сімейний люкс 40 кв. м Вид Кондиціонер ',
               breakfast: true, conditioner: true, price_per_night: 4490, accommodation_id: accommodation.id)
 end
+
+accommodation = Accommodation.create(name: 'Dragomir Apartments',
+                                     description: 'Комплекс апартаментів "Драгомир" розташований в Черкасах. В комплексі гостям пропонують індивідуально мебльовані апартаменти та номери-студіо з кондиціонерами. Гостям надається безкоштовний Wi-Fi',
+                                     address: 'Митницька, 16 Черкаси 18015',
+                                     kind: 'apartment',
+                                     latitude: 49.437345,
+                                     longitude: 32.069233)
+
+Room.create(places: 2, bed: 'double',
+            description: 'Апартаменти-студіо',
+            breakfast: false, conditioner: true, price_per_night: 700, accommodation_id: accommodation.id)
+
+Room.create(places: 2, bed: 'double',
+            description: 'Покращені апартаменти ',
+            breakfast: false, conditioner: true, price_per_night: 900, accommodation_id: accommodation.id)
+
+Room.create(places: 4, bed: 'double+double',
+            description: 'Апартаменти-студіо ',
+            breakfast: false, conditioner: true, price_per_night: 800, accommodation_id: accommodation.id)
+
+

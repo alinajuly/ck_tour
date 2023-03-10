@@ -1,9 +1,10 @@
 class Api::V1::RoomsController < ApplicationController
+  before_action :set_accommodation
   before_action :set_room, only: %i[show update destroy]
 
-  # GET /api/v1/rooms
+  # GET /api/v1/accommodations/1/rooms
   def index
-    @rooms = Room.all
+    @rooms = @accommodation.rooms
     if @rooms
       render json: { data: @rooms }, status: :ok
     else
@@ -11,7 +12,7 @@ class Api::V1::RoomsController < ApplicationController
     end
   end
 
-  # GET /api/v1/rooms/1
+  # GET /api/v1/accommodations/1/rooms/1
   def show
     render json: @room, status: :ok
   end
@@ -45,6 +46,13 @@ class Api::V1::RoomsController < ApplicationController
   end
 
   private
+
+  def set_accommodation
+    @accommodation = Accommodation.find_by_id(params[:accommodation_id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'accommodation id not found' }, status: :not_found
+  end
 
   def set_room
     @room = Room.find(params[:id])
