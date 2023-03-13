@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_09_223239) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_12_212050) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,8 +22,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_09_223239) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "latitude", precision: 10, scale: 6
-    t.decimal "longitude", precision: 10, scale: 6
   end
 
   create_table "bookings", force: :cascade do |t|
@@ -49,6 +47,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_09_223239) do
     t.bigint "user_id", null: false
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "coordinates", force: :cascade do |t|
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.string "coordinatable_type", null: false
+    t.bigint "coordinatable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coordinatable_type", "coordinatable_id"], name: "index_coordinates_on_coordinatable"
   end
 
   create_table "places", force: :cascade do |t|
