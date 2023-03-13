@@ -62,7 +62,7 @@ http://localhost:3000
 
 ## Notice
 
-* After each command `git pull` please type in console
+* After each command `git pull` type in console
 
 ```
 bundle install
