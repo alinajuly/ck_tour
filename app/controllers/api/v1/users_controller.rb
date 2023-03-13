@@ -26,10 +26,16 @@ class Api::V1::UsersController < ApplicationController
 
   # PUT api/v1/users/{name}
   def update
-    unless @user.update(user_params)
-      render json: { errors: @user.errors.full_messages },
-             status: :unprocessable_entity
+    if user&.authenticate(params[:current_password])
+      user.update(password: params[:new_password])
+      render json: { message: 'Password updated successfully' }, status: :ok
+    else
+      render json: { error: 'Invalid current password' }, status: :unprocessable_entity
     end
+    # unless @user.update(user_params)
+    #   render json: { errors: @user.errors.full_messages },
+    #          status: :unprocessable_entity
+    # end
   end
 
   # DELETE api/v1/users/{name}
