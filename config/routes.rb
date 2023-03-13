@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users
       post '/auth/login', to: 'authentication#login'
+      resources :password_resets
+      post 'password_resets/:token', to: 'password_resets#password_reset'
       resources :partners
       post '/auth/login', to: 'authentication#login'
       resources :tours

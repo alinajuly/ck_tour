@@ -71,6 +71,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_13_202855) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "password_reset_tokens", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_password_reset_tokens_on_token"
+    t.index ["user_id"], name: "index_password_reset_tokens_on_user_id"
+  end
+
   create_table "places", force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -132,6 +141,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_13_202855) do
   add_foreign_key "bookings", "rooms"
   add_foreign_key "bookings", "users"
   add_foreign_key "comments", "users"
+  add_foreign_key "password_reset_tokens", "users"
   add_foreign_key "rates", "users"
   add_foreign_key "rooms", "accommodations"
 end
