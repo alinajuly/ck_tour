@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_12_212050) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_13_202855) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_212050) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["coordinatable_type", "coordinatable_id"], name: "index_coordinates_on_coordinatable"
+  end
+
+  create_table "partners", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "password_digest"
+    t.string "phone"
+    t.string "reg_code"
+    t.string "address"
+    t.string "person"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "places", force: :cascade do |t|
