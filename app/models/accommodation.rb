@@ -1,6 +1,6 @@
 class Accommodation < ApplicationRecord
   has_many :rooms
-  has_one :coordinate, as: :coordinatable
+  has_many :coordinates, as: :coordinatable
   has_many_attached :image do |attachable|
     attachable.variant :thumb, resize_to_limit: [100, 100]
     attachable.variant :main, resize_to_limit: [900, 900]
