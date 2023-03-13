@@ -1,7 +1,7 @@
-class AuthenticationController < ApplicationController
+class Api::V1::AuthenticationController < ApplicationController
   skip_before_action :authenticate_request
 
-  # Post /auth/login
+  # Post api/v1/auth/login
   def login
     @user = User.find_by_email(params[:email])
     if @user&.authenticate(params[:password])

@@ -1,19 +1,19 @@
-class UsersController < ApplicationController
+class Api::V1::UsersController < ApplicationController
   skip_before_action :authenticate_request, only: [:create]
   before_action :set_user, only: [:show, :destroy]
 
-  # GET /users
+  # GET api/v1/users
   def index
     @users = User.all
     render json: @users, status: :ok
   end
 
-  # GET /users/{name}
+  # GET api/v1/users/{name}
   def show
     render json: @user, status: :ok
   end
 
-  # POST /users
+  # POST api/v1/users
   def create
     @user = User.new(user_params)
     if @user.save
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # PUT /users/{name}
+  # PUT api/v1/users/{name}
   def update
     unless @user.update(user_params)
       render json: { errors: @user.errors.full_messages },
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/{name}
+  # DELETE api/v1/users/{name}
   def destroy
     @user.destroy
   end
