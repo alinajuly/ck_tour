@@ -43,17 +43,6 @@ class Api::V1::UsersController < ApplicationController
     @user.destroy
   end
 
-  def password_reset
-    user = User.find_by(email: params[:email])
-    if user
-      token = user.generate_password_reset_token
-      PasswordResetMailer.with(user: user, token: token).password_reset.deliver_now
-      render json: { message: 'Password reset email sent.' }, status: :ok
-    else
-      render json: { error: 'Email not found.' }, status: :not_found
-    end
-  end
-
   private
 
   def user_params

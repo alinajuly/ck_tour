@@ -17,8 +17,25 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8, maximum: 255 }, format: { with: VALID_PASSWORD_REGEX }
   validates :name, presence: true, uniqueness: true, length: { minimum: 3, maximum: 50 }
 
-  def generate_password_reset_token
-    payload = { user_id: id, exp: 1.hour.from_now.to_i }
-    JWT.encode(payload, Rails.application.secrets.secret_key_base)
+  def generate_password_token!
+    self.reset_password_token = generate_token
+    self.reset_password_sent_at = Time.now.utc
+    save!
+  end
+
+  def password_token_valid?
+    (self.reset_password_sent_at + 4.hours) > Time.now.utc
+  end
+
+  def reset_password!(password)
+    self.reset_password_token = nil
+    self.password = password
+    save!
+  end
+
+  private
+
+  def generate_token
+    SecureRandom.hex(10)
   end
 end
