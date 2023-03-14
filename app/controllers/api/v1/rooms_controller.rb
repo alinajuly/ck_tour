@@ -63,6 +63,6 @@ class Api::V1::RoomsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def room_params
-    params.permit(:places, :bed, :description, :price_per_night)
+    params.permit(:places, :bed, :name, :quantity, :description, :price_per_night)
   end
 end
