@@ -7,53 +7,37 @@ accommodation = Accommodation.create(name: 'Hotel Selena Family Resort',
 
 accommodation.coordinates.create(latitude: 49.504189, longitude: 31.962388)
 
-6.times do
-  Room.create(places: 2, bed: 'double',
+Room.create(places: 2, bed: 'double', name: 'Стандартний двомісний номер', quantity: 6,
               description: 'Стандартний двомісний номер зі спільною ванною кімнатою 16 кв. м Кондиціонер',
-              breakfast: true, conditioner: false, price_per_night: 1690, accommodation_id: accommodation.id)
-end
+              price_per_night: 1690, accommodation_id: accommodation.id)
 
-2.times do
-  Room.create(places: 2, bed: 'double',
+Room.create(places: 2, bed: 'double', name: 'Напівлюкс', quantity: 2,
               description: 'Напівлюкс Ванна кімната в номері 32 кв. м Кондиціонер Вид на басейн',
-              breakfast: true, conditioner: false, price_per_night: 2690, accommodation_id: accommodation.id)
-end
+              price_per_night: 2690, accommodation_id: accommodation.id)
 
-2.times do
-  Room.create(places: 2, bed: 'double',
+Room.create(places: 2, bed: 'double', name: 'Покращений', quantity: 2,
               description: 'Покращений двомісний номер  Ванна кімната в номері 32 кв. м Кондиціонер ',
-              breakfast: true, conditioner: false, price_per_night: 3290, accommodation_id: accommodation.id)
-end
+              price_per_night: 3290, accommodation_id: accommodation.id)
 
-3.times do
-  Room.create(places: 1, bed: 'one',
+Room.create(places: 1, bed: 'one', name: 'Покращений одномісний', quantity: 4,
               description: 'Покращений одномісний номер  Ванна кімната в номері 23 кв. м Кондиціонер ',
-              breakfast: true, conditioner: true, price_per_night: 2790, accommodation_id: accommodation.id)
-end
+              price_per_night: 2790, accommodation_id: accommodation.id)
 
-3.times do
-  Room.create(places: 2, bed: 'double',
+Room.create(places: 2, bed: 'double', name: 'Покращений двомісний', quantity: 3,
               description: 'Покращений двомісний номер  Ванна кімната в номері 23 кв. м Кондиціонер ',
-              breakfast: true, conditioner: true , price_per_night: 3290, accommodation_id: accommodation.id)
-end
+              price_per_night: 3290, accommodation_id: accommodation.id)
 
-4.times do
-  Room.create(places: 2, bed: 'twin',
+Room.create(places: 2, bed: 'twin', name: 'Покращений двомісний', quantity: 4,
               description: 'Покращений двомісний номер   Ванна кімната в номері 23 кв. м Вид Кондиціонер ',
-              breakfast: true, conditioner: false, price_per_night: 3290, accommodation_id: accommodation.id)
-end
+              price_per_night: 3290, accommodation_id: accommodation.id)
 
-5.times do
-  Room.create(places: 2, bed: 'double',
+Room.create(places: 2, bed: 'double', name: 'Бунгало', quantity: 5,
               description: 'Бунгало 40 кв. м Вид на сад Кондиціонер ',
-              breakfast: true, conditioner: false, price_per_night: 3990, accommodation_id: accommodation.id)
-end
+              price_per_night: 3990, accommodation_id: accommodation.id)
 
-5.times do
-  Room.create(places: 3, bed: 'double+one',
+Room.create(places: 3, bed: 'double+one', name: 'Сімейний люкс', quantity: 5,
               description: 'Сімейний люкс 40 кв. м Вид Кондиціонер ',
-              breakfast: true, conditioner: true, price_per_night: 4490, accommodation_id: accommodation.id)
-end
+              price_per_night: 4490, accommodation_id: accommodation.id)
 
 accommodation = Accommodation.create(name: 'Dragomir Apartments',
                                      description: 'Комплекс апартаментів "Драгомир" розташований в Черкасах. В комплексі гостям пропонують індивідуально мебльовані апартаменти та номери-студіо з кондиціонерами. Гостям надається безкоштовний Wi-Fi',
@@ -62,16 +46,14 @@ accommodation = Accommodation.create(name: 'Dragomir Apartments',
 
 accommodation.coordinates.create(latitude: 49.437345, longitude: 32.069233)
 
-Room.create(places: 2, bed: 'double',
+Room.create(places: 2, bed: 'double', name: 'Студіо', quantity: 1,
             description: 'Апартаменти-студіо',
-            breakfast: false, conditioner: true, price_per_night: 700, accommodation_id: accommodation.id)
+            price_per_night: 700, accommodation_id: accommodation.id)
 
-Room.create(places: 2, bed: 'double',
+Room.create(places: 2, bed: 'double', name: 'Покращений', quantity: 1,
             description: 'Покращені апартаменти ',
-            breakfast: false, conditioner: true, price_per_night: 900, accommodation_id: accommodation.id)
+            price_per_night: 900, accommodation_id: accommodation.id)
 
-Room.create(places: 4, bed: 'double+double',
+Room.create(places: 4, bed: 'double+double', name: 'Студіо', quantity: 1,
             description: 'Апартаменти-студіо ',
-            breakfast: false, conditioner: true, price_per_night: 800, accommodation_id: accommodation.id)
-
-
+            price_per_night: 800, accommodation_id: accommodation.id)
