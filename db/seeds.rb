@@ -3,7 +3,7 @@ User.create(name: 'Example', email: 'example@ukr.net', password: 'Qwerty_228')
 accommodation = Accommodation.create(name: 'Hotel Selena Family Resort',
                        description: 'Цей готель розташований у тихому місці поруч з Дніпром. Інфраструктура готелю налічує літню терасу і ресторан. Гостям пропонується оренда велосипедів, тенісні корти, SUP-борди, прогулянки по Дніпру, рибалка, а також лазні на дровах з виходом на річку, а також можливість користуватися різноманітними спортивними майданчиками',
                        address: 'Дахнівська, 21 Черкаси 19622',
-                       kind: 'hotel')
+                       kind: 'hotel', phone: '0472545454')
 
 accommodation.coordinates.create(latitude: 49.504189, longitude: 31.962388)
 
@@ -58,7 +58,7 @@ end
 accommodation = Accommodation.create(name: 'Dragomir Apartments',
                                      description: 'Комплекс апартаментів "Драгомир" розташований в Черкасах. В комплексі гостям пропонують індивідуально мебльовані апартаменти та номери-студіо з кондиціонерами. Гостям надається безкоштовний Wi-Fi',
                                      address: 'Митницька, 16 Черкаси 18015',
-                                     kind: 'apartment')
+                                     kind: 'apartment', phone: '0472454545')
 
 accommodation.coordinates.create(latitude: 49.437345, longitude: 32.069233)
 

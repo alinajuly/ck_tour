@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_14_184606) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_14_194934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_14_184606) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "phone"
   end
 
   create_table "amenities", force: :cascade do |t|
@@ -72,6 +73,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_14_184606) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["coordinatable_type", "coordinatable_id"], name: "index_coordinates_on_coordinatable"
+  end
+
+  create_table "facilities", force: :cascade do |t|
+    t.datetime "checkin_start", precision: nil
+    t.datetime "checkin_end", precision: nil
+    t.datetime "checkout_start", precision: nil
+    t.datetime "checkout_end", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "accommodation_id", null: false
+    t.boolean "credit_card", default: false
+    t.boolean "free_parking", default: false
+    t.boolean "wi_fi", default: false
+    t.boolean "breakfast", default: false
+    t.boolean "pets", default: false
+    t.index ["accommodation_id"], name: "index_facilities_on_accommodation_id"
   end
 
   create_table "partners", force: :cascade do |t|
@@ -157,6 +174,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_14_184606) do
   add_foreign_key "bookings", "rooms"
   add_foreign_key "bookings", "users"
   add_foreign_key "comments", "users"
+  add_foreign_key "facilities", "accommodations"
   add_foreign_key "password_reset_tokens", "users"
   add_foreign_key "rates", "users"
   add_foreign_key "rooms", "accommodations"
