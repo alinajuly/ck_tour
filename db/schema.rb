@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_14_194934) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_14_200645) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,14 +26,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_14_194934) do
   end
 
   create_table "amenities", force: :cascade do |t|
-    t.boolean "conditioner"
-    t.boolean "tv"
-    t.boolean "refrigerator"
-    t.boolean "kettle"
-    t.boolean "mv_owen"
-    t.boolean "hair_dryer"
-    t.boolean "nice_view"
-    t.boolean "inclusive"
+    t.boolean "conditioner", default: false
+    t.boolean "tv", default: false
+    t.boolean "refrigerator", default: false
+    t.boolean "kettle", default: false
+    t.boolean "mv_owen", default: false
+    t.boolean "hair_dryer", default: false
+    t.boolean "nice_view", default: false
+    t.boolean "inclusive", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "room_id", null: false
