@@ -36,6 +36,9 @@ gem "bootsnap", require: false
 # accept payments online
 gem 'stripe', '~> 8.3'
 
+# Use Active Storage variants
+gem 'image_processing', '~> 1.12', '>= 1.12.2'
+
 # RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter
 gem 'rubocop', require: false
 
