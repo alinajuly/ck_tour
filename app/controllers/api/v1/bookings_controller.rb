@@ -17,11 +17,35 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def create
-    @booking = Booking.new(room_params)
-    if @booking.save
-      render json: { data: @booking }, status: :created
-    else
-      render json: @booking.errors, status: :unprocessable_entity
+    def create
+      # Retrieve the booking parameters from the request body
+      check_in = Date.parse(params[:check_in])
+      check_out = Date.parse(params[:check_out])
+      number_of_people = params[:number_of_people].to_i
+
+      # Check if the room is available for the selected dates
+      if room.available?(check_in, check_out)
+        # If the room is available, create a new booking
+        booking = Booking.new(
+          room: @room,
+          user: @user,
+          check_in: check_in,
+          check_out: check_out,
+          number_of_people: number_of_people,
+        )
+
+        # Save the booking to the database
+        if booking.save
+          # If the booking is saved successfully, return a success response
+          render json: booking, status: :created
+        else
+          # If there was an error saving the booking, return an error response
+          render json: { errors: booking.errors.full_messages }, status: :unprocessable_entity
+        end
+      else
+        # If the room is not available, return an error response
+        render json: { error: 'Room is not available for the selected dates' }, status: :unprocessable_entity
+      end
     end
   end
 
