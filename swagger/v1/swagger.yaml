@@ -320,16 +320,30 @@ paths:
       required: true
       schema:
         type: string
-    get:
-      summary: list coordinates
-      responses:
-        '200':
-          description: successful
     post:
       summary: create coordinate
+      tags:
+      - Coordinate
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
+              required:
+              - latitude
+              - longitude
+        required: true
   "/api/v1/accommodations/{accommodation_id}/coordinates/{id}":
     parameters:
     - name: accommodation_id
@@ -346,21 +360,55 @@ paths:
         type: string
     get:
       summary: show coordinate
+      tags:
+      - Coordinate
       responses:
         '200':
           description: successful
     patch:
       summary: update coordinate
+      tags:
+      - Coordinate
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
     put:
       summary: update coordinate
+      tags:
+      - Coordinate
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
     delete:
       summary: delete coordinate
+      tags:
+      - Coordinate
       responses:
         '200':
           description: successful
@@ -374,14 +422,61 @@ paths:
         type: string
     get:
       summary: list rooms
+      tags:
+      - Room
+      parameters:
+      - name: check_in
+        in: query
+        schema:
+          type: string
+        description: Date of check in
+      - name: check_out
+        in: query
+        schema:
+          type: string
+        description: Date of check in
+      - name: number_of_peoples
+        in: query
+        schema:
+          type: string
+        description: Number of peoples
       responses:
         '200':
           description: successful
     post:
       summary: create room
+      tags:
+      - Room
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                places:
+                  type: integer
+                quantity:
+                  type: integer
+                description:
+                  type: string
+                bed:
+                  type: string
+                price_per_night:
+                  type: integer
+              required:
+              - name
+              - places
+              - bed
+              - description
+              - quantity
+              - price_per_night
+        required: true
   "/api/v1/accommodations/{accommodation_id}/rooms/{id}":
     parameters:
     - name: accommodation_id
@@ -398,21 +493,69 @@ paths:
         type: string
     get:
       summary: show room
+      tags:
+      - Room
       responses:
         '200':
           description: successful
     patch:
       summary: update room
+      tags:
+      - Room
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                places:
+                  type: integer
+                quantity:
+                  type: integer
+                description:
+                  type: string
+                bed:
+                  type: string
+                price_per_night:
+                  type: integer
+              required: false
     put:
       summary: update room
+      tags:
+      - Room
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                places:
+                  type: integer
+                quantity:
+                  type: integer
+                description:
+                  type: string
+                bed:
+                  type: string
+                price_per_night:
+                  type: integer
+              required: false
     delete:
       summary: delete room
+      tags:
+      - Room
       responses:
         '200':
           description: successful
@@ -526,7 +669,7 @@ servers:
 - url: http://{defaultHost}
   variables:
     defaultHost:
-      default: localhost:3000
+      default: 127.0.0.1:3000/
 securityDefinitions:
   jwt:
     type: apiKey

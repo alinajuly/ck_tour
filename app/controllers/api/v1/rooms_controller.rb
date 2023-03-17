@@ -30,7 +30,7 @@ module Api
 
       # POST /api/v1/rooms
       def create
-        @room = Room.new(room_params)
+        @room = @accommodation.rooms.new(room_params)
         if @room.save
           render json: { data: @room }, status: :created
         else
