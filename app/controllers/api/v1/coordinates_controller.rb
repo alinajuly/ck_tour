@@ -24,7 +24,7 @@ class Api::V1::CoordinatesController < ApplicationController
 
   def destroy
     if @coordinate.destroy!
-      render json: { status: 'Uncoordinated' }, status: :no_content
+      render json: { status: 'Delete' }, status: :no_content
     else
       render json: @coordinate.errors, status: :unprocessable_entity
     end
