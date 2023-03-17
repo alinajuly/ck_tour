@@ -6,6 +6,7 @@ accommodation = Accommodation.create(name: 'Hotel Selena Family Resort',
                        kind: 'hotel', phone: '0472545454', email: 'selena@sample.com')
 
 accommodation.coordinates.create(latitude: 49.504189, longitude: 31.962388)
+accommodation.tags.create(locality: 'Черкаси')
 
 checkin_start_time = Time.parse('2:00 PM')
 checkin_end_time = Time.parse('12:00 PM')
@@ -85,6 +86,7 @@ accommodation = Accommodation.create(name: 'Dragomir Apartments',
                                      kind: 'apartment', phone: '0472454545', email: 'dragomir@sample.com')
 
 accommodation.coordinates.create(latitude: 49.437345, longitude: 32.069233)
+accommodation.tags.create(locality: 'Черкаси')
 
 checkin_start_time = Time.parse('2:00 PM')
 checkin_end_time = Time.parse('10:00 PM')
@@ -116,6 +118,33 @@ Amenity.create(conditioner: true, tv: true, refrigerator: true, hair_dryer: true
 room = Room.create(places: 4, bed: 'double+double', name: 'Студіо', quantity: 1,
             description: 'Апартаменти-студіо ',
             price_per_night: 800, accommodation_id: accommodation.id)
+
+Amenity.create(conditioner: true, tv: true, refrigerator: true, hair_dryer: true, kettle: true, mv_owen: true,
+               room_id: room.id)
+
+accommodation = Accommodation.create(name: 'Guest House',
+                                     description: 'Guest house offers accommodation in Uman, 2.4 km from Singing fountains in Uman and 700 metres from Grave of Tsadik Nachman. The accommodation is 1.4 km from Sofiyivka Park, and guests benefit from private parking available on site and free WiFi.',
+                                     address: 'Комарницького, 21 Умань 20300',
+                                     kind: 'apartment', phone: '0472555555', email: 'uman_best@sample.com')
+
+accommodation.coordinates.create(latitude: 48.751585, longitude: 30.234364)
+accommodation.tags.create(locality: 'Умань')
+
+checkin_start_time = Time.parse('2:00 PM')
+checkin_end_time = Time.parse('10:00 PM')
+checkout_start_time = Time.parse('9:00 AM')
+checkout_end_time = Time.parse('1:00 PM')
+
+Facility.create(checkin_start: checkin_start_time,
+                checkin_end: checkin_end_time,
+                checkout_start: checkout_start_time,
+                checkout_end: checkout_end_time,
+                wi_fi: true,
+                accommodation_id: accommodation.id)
+
+room = Room.create(places: 9, bed: '4 twin + one', name: 'Guest House', quantity: 1,
+                   description: '3-кімнатні апартаменти',
+                   price_per_night: 1625, accommodation_id: accommodation.id)
 
 Amenity.create(conditioner: true, tv: true, refrigerator: true, hair_dryer: true, kettle: true, mv_owen: true,
                room_id: room.id)
