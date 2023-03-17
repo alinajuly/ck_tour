@@ -296,16 +296,30 @@ paths:
       required: true
       schema:
         type: string
-    get:
-      summary: list coordinates
-      responses:
-        '200':
-          description: successful
     post:
       summary: create coordinate
+      tags:
+      - Coordinate
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
+              required:
+              - latitude
+              - longitude
+        required: true
   "/api/v1/accommodations/{accommodation_id}/coordinates/{id}":
     parameters:
     - name: accommodation_id
@@ -322,21 +336,55 @@ paths:
         type: string
     get:
       summary: show coordinate
+      tags:
+      - Coordinate
       responses:
         '200':
           description: successful
     patch:
       summary: update coordinate
+      tags:
+      - Coordinate
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
     put:
       summary: update coordinate
+      tags:
+      - Coordinate
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
     delete:
       summary: delete coordinate
+      tags:
+      - Coordinate
       responses:
         '200':
           description: successful
