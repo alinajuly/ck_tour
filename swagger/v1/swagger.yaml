@@ -155,7 +155,14 @@ paths:
       responses:
         '200':
           description: successful
-  "/api/v1/bookings":
+  "/api/v1/users/{id}/bookings":
+    parameters:
+    - name: id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
     get:
       summary: list bookings
       tags:
@@ -193,8 +200,14 @@ paths:
               - check_in
               - check_out
         required: true
-  "/api/v1/bookings/{id}":
+  "/api/v1/users/{id}/bookings/{id}":
     parameters:
+    - name: id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
     - booking: id
       in: path
       description: booking id
@@ -384,3 +397,10 @@ servers:
   variables:
     defaultHost:
       default: localhost:3000
+securityDefinitions:
+  jwt:
+    type: apiKey
+    name: Authorization
+    in: header
+security:
+  jwt: []

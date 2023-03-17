@@ -1,5 +1,5 @@
 class Api::V1::BookingsController < ApplicationController
-  # before_action :authenticate_request
+  before_action :authenticate_request
   before_action :set_booking, only: %i[show update destroy]
 
   def index

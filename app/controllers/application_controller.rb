@@ -7,8 +7,12 @@ class ApplicationController < ActionController::API
 
   def authenticate_request
     header = request.headers['Authorization']
-    header = header.split(' ').last if header
-    decoded = jwt_decode(header)
-    @current_user = User.find(decoded[:user_id])
+    if header.present?
+      token = header.split(' ').last
+      decoded = jwt_decode(token)
+      @current_user = User.find(decoded[:user_id])
+    else
+      render json: { error: 'Authorization header missing' }, status: :unauthorized
+    end
   end
 end

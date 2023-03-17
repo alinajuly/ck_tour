@@ -1,9 +1,9 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/bookings', type: :request do
-  let(:booking) { current_user.bookings }
-  
-  path '/api/v1/bookings' do
+  path '/api/v1/users/{id}/bookings' do
+    parameter name: :id, in: :path, type: :string, description: 'user id'
+
     get('list bookings') do
       tags 'Booking'
       produces 'application/json'
@@ -60,8 +60,9 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
   end
 
-  path '/api/v1/bookings/{id}' do
+  path '/api/v1/users/{id}/bookings/{id}' do
     # You'll want to customize the parameter types...
+    parameter name: :id, in: :path, type: :string, description: 'user id'
     parameter booking: :id, in: :path, type: :string, description: 'booking id'
 
     get('show booking') do
