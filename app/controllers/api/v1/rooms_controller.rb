@@ -6,14 +6,12 @@ module Api
 
       # GET /api/v1/accommodations/1/rooms
       def index
-        check_in = params[:check_in]
-        check_out = params[:check_out]
-        number_of_peoples = params[:number_of_peoples]
+        @check_in = params[:check_in]
+        @check_out = params[:check_out]
+        @number_of_peoples = params[:number_of_peoples]
 
-        # debugger
-        @rooms = if check_in.present? && check_out.present? && number_of_peoples.present?
-                   @accommodation.rooms.where('places >= ?', number_of_peoples)
-                                 .where.not(id: booked_room_ids(check_in, check_out))
+        @rooms = if @check_in.present? && @check_out.present? && @number_of_peoples.present?
+                   available_rooms
                  else
                    @accommodation.rooms.all
                  end
@@ -76,8 +74,13 @@ module Api
 
       def booked_room_ids(check_in, check_out)
         Booking.joins(:room)
-                .where(check_in: ..check_out, check_out: check_in..)
-                .pluck(:room_id)
+               .where(check_in: ..check_out, check_out: check_in..)
+               .pluck(:room_id)
+      end
+
+      def available_rooms
+        @accommodation.rooms.where('places >= ?', @number_of_peoples)
+                      .where.not(id: booked_room_ids(@check_in, @check_out))
       end
 
       # Only allow a list of trusted parameters through.

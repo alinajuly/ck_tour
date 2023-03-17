@@ -3,7 +3,18 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # GET /api/v1/accommodations
   def index
-    @accommodations = Accommodation.all
+    # @available_rooms = Room.available_rooms(params[:check_in], params[:check_out], params[:number_of_people])
+    # debugger
+    @accommodations = if params[:tags].present? && @available_rooms.present?
+                        Accommodation.where(rooms: { id: @available_rooms.pluck(:id) })
+                                     .tag_filter(params[:tags])
+                                     .distinct
+                      elsif params[:tags].present?
+                        Accommodation.tag_filter(params[:tags])
+                      else
+                        Accommodation.all
+                      end
+
     if @accommodations
       render json: { data: @accommodations }, status: :ok
     else
@@ -52,6 +63,14 @@ class Api::V1::AccommodationsController < ApplicationController
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'accommodation id not found' }, status: :not_found
+  end
+
+  def available_rooms
+    @check_in = params[:check_in]
+    @check_out = params[:check_out]
+    @number_of_peoples = params[:number_of_peoples]
+    @available_rooms = Accommodation.joins(:rooms).where('places >= ?', @number_of_peoples)
+                                    .where.not(id: booked_room_ids(@check_in, @check_out))
   end
 
   # Only allow a list of trusted parameters through.

@@ -9,6 +9,8 @@ class Accommodation < ApplicationRecord
   end
   enum status: { unpublished: 0, published: 1 }
 
+  scope :tag_filter, ->(locality) { joins(:tags).where('locality ILIKE ?', "%#{locality}%") }
+
   validates :name, :description, :address, :phone, :email, presence: true
   validates :kind, inclusion: { in: %w(hotel hostel apartment greenhouse), message: "%{value} is not a valid size" }
 end
