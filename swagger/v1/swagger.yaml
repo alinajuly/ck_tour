@@ -1,0 +1,386 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/accommodations":
+    get:
+      summary: list accommodations
+      tags:
+      - Accommodation
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create accommodation
+      tags:
+      - Accommodation
+      description: Creates a new accommodation
+      parameters: []
+      responses:
+        '201':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                address:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                kind:
+                  type: string
+                  enum:
+                  - hotel
+                  - hostel
+                  - apartment
+                  - greenhouse
+              required:
+              - name
+              - description
+              - address
+              - phone
+              - email
+              - kind
+        required: true
+  "/api/v1/accommodations/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: accommodation id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show accommodation
+      tags:
+      - Accommodation
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update accommodation
+      tags:
+      - Accommodation
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                address:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                kind:
+                  type: string
+                  enum:
+                  - hotel
+                  - hostel
+                  - apartment
+                  - greenhouse
+              required:
+              - name
+              - description
+              - address
+              - phone
+              - email
+              - kind
+        required: true
+    put:
+      summary: update accommodation
+      tags:
+      - Accommodation
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                address:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                kind:
+                  type: string
+                  enum:
+                  - hotel
+                  - hostel
+                  - apartment
+                  - greenhouse
+              required:
+              - name
+              - description
+              - address
+              - phone
+              - email
+              - kind
+        required: true
+    delete:
+      summary: delete accommodation
+      tags:
+      - Accommodation
+      responses:
+        '200':
+          description: successful
+  "/api/v1/bookings":
+    get:
+      summary: list bookings
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create booking
+      tags:
+      - Booking
+      description: Creates a new booking
+      parameters: []
+      responses:
+        '201':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number_of_peoples:
+                  type: integer
+                check_in:
+                  type: date
+                check_out:
+                  type: date
+                note:
+                  type: text
+                confirmation:
+                  type: integer
+              required:
+              - number_of_peoples
+              - check_in
+              - check_out
+        required: true
+  "/api/v1/bookings/{id}":
+    parameters:
+    - booking: id
+      in: path
+      description: booking id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show booking
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update booking
+      tags:
+      - Booking
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number_of_peoples:
+                  type: integer
+                check_in:
+                  type: date
+                check_out:
+                  type: date
+                note:
+                  type: text
+                confirmation:
+                  type: integer
+              required:
+              - number_of_peoples
+              - check_in
+              - check_out
+              - note
+        required: true
+    put:
+      summary: update booking
+      tags:
+      - Booking
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number_of_peoples:
+                  type: integer
+                check_in:
+                  type: date
+                check_out:
+                  type: date
+                note:
+                  type: text
+                confirmation:
+                  type: integer
+              required:
+              - number_of_peoples
+              - check_in
+              - check_out
+              - confirmation
+        required: true
+    delete:
+      summary: delete booking
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: successful
+  "/api/v1/accommodations/{accommodation_id}/coordinates":
+    parameters:
+    - name: accommodation_id
+      in: path
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list coordinates
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create coordinate
+      responses:
+        '200':
+          description: successful
+  "/api/v1/accommodations/{accommodation_id}/coordinates/{id}":
+    parameters:
+    - name: accommodation_id
+      in: path
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show coordinate
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update coordinate
+      responses:
+        '200':
+          description: successful
+    put:
+      summary: update coordinate
+      responses:
+        '200':
+          description: successful
+    delete:
+      summary: delete coordinate
+      responses:
+        '200':
+          description: successful
+  "/api/v1/accommodations/{accommodation_id}/rooms":
+    parameters:
+    - name: accommodation_id
+      in: path
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list rooms
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create room
+      responses:
+        '200':
+          description: successful
+  "/api/v1/accommodations/{accommodation_id}/rooms/{id}":
+    parameters:
+    - name: accommodation_id
+      in: path
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show room
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update room
+      responses:
+        '200':
+          description: successful
+    put:
+      summary: update room
+      responses:
+        '200':
+          description: successful
+    delete:
+      summary: delete room
+      responses:
+        '200':
+          description: successful
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000
