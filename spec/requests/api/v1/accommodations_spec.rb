@@ -1,20 +1,7 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/accommodations', type: :request do
-  let(:accommodation) { 
-    Accommodation.create(
-      name: 'Hotel Selena Family Resort', 
-      description: 'Цей готель розташований у тихому місці поруч з Дніпром. Інфраструктура готелю налічує літню терасу і ресторан. 
-                    Гостям пропонується оренда велосипедів, тенісні корти, SUP-борди, прогулянки по Дніпру, рибалка, 
-                    а також лазні на дровах з виходом на річку, а також можливість користуватися різноманітними спортивними майданчиками'
-                      .encode("UTF-8"),
-      address: 'Дахнівська, 21 Черкаси 19622', 
-      kind: 'hotel', 
-      phone: '0472545454', 
-      email: 'selena@sample.com'
-    ) 
-  }
-  
+
   path '/api/v1/accommodations' do
     get('list accommodations') do
       tags 'Accommodation'
