@@ -20,6 +20,7 @@ class Api::V1::BookingsController < ApplicationController
     @room = Room.find_by_id(params[:room_id])
     @booking = @current_user.bookings.build(booking_params)
     if @booking.save
+      BookingMailer.booking_confirmation(@booking.user, @booking).deliver_now
       render json: @booking, status: :created
     else
       render json: @booking.errors, status: :unprocessable_entity
