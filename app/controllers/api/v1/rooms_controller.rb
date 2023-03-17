@@ -6,10 +6,14 @@ module Api
 
       # GET /api/v1/accommodations/1/rooms
       def index
-        @rooms = if booking_params_present?
-                   @accommodation.rooms.where('places >= ?', params[:number_of_people])
-                                 .where('quantity > 0')
-                                 .where.not(id: booked_room_ids(params[:check_in], params[:check_out]))
+        check_in = params[:check_in]
+        check_out = params[:check_out]
+        number_of_peoples = params[:number_of_peoples]
+
+        # debugger
+        @rooms = if check_in.present? && check_out.present? && number_of_peoples.present?
+                   @accommodation.rooms.where('places >= ?', number_of_peoples)
+                                 .where.not(id: booked_room_ids(check_in, check_out))
                  else
                    @accommodation.rooms.all
                  end
@@ -70,23 +74,15 @@ module Api
         render json: { message: 'room id not found' }, status: :not_found
       end
 
-      def booking_params
-        params.permit(bookings_attributes: [:check_in, :check_out, :number_of_people])
-      end
-
-      def booking_params_present?
-        booking_params[:check_in].present? && booking_params[:check_out].present? && booking_params[:number_of_people].present?
-      end
-
       def booked_room_ids(check_in, check_out)
         Booking.joins(:room)
-                .where('check_out > ? AND check_in < ?', check_in, check_out)
+                .where(check_in: ..check_out, check_out: check_in..)
                 .pluck(:room_id)
       end
 
       # Only allow a list of trusted parameters through.
       def room_params
-        params.permit(:places, :bed, :name, :quantity, :description, :price_per_night)
+        params.permit(:places, :bed, :name, :quantity, :description, :price_per_night, bookings_attributes: [:id, :check_in, :check_out, :number_of_peoples])
       end
     end
   end
