@@ -155,6 +155,30 @@ paths:
       responses:
         '200':
           description: successful
+  "/api/v1/auth/login":
+    post:
+      summary: authentication user
+      tags:
+      - Authentication
+      description: authentication user
+      parameters: []
+      responses:
+        '201':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - email
+              - password
+        required: true
   "/api/v1/users/{id}/bookings":
     parameters:
     - name: id
@@ -389,6 +413,112 @@ paths:
           description: successful
     delete:
       summary: delete room
+      responses:
+        '200':
+          description: successful
+  "/api/v1/users":
+    get:
+      summary: list users
+      tags:
+      - User
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create user
+      tags:
+      - User
+      description: Creates a new user
+      parameters: []
+      responses:
+        '201':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - name
+              - email
+              - password
+        required: true
+  "/api/v1/users/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show user
+      tags:
+      - User
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update user
+      tags:
+      - User
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - name
+              - email
+              - password
+        required: true
+    put:
+      summary: update user
+      tags:
+      - User
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - name
+              - email
+              - password
+        required: true
+    delete:
+      summary: delete user
+      tags:
+      - User
       responses:
         '200':
           description: successful
