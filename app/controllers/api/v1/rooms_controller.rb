@@ -79,9 +79,6 @@ module Api
       end
 
       def booked_room_ids(check_in, check_out)
-        # Booking.joins(:room)
-        #        .where('check_out > ? AND check_in < ?', check_in, check_out)
-        #        .pluck(:room_id)
         Booking.joins(:room)
                 .where('check_out > ? AND check_in < ?', check_in, check_out)
                 .pluck(:room_id)

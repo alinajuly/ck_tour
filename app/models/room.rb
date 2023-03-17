@@ -10,10 +10,6 @@ class Room < ApplicationRecord
   validates :places, :bed, :description, presence: true
   validates :price_per_night, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
-  def decrement_quantity!
-    decrement!(:quantity)
-  end
-
   # def unavailable_dates
   #   bookings.pluck(:check_in, :check_out).map do |range|
   #     { from: range[0], to: range[1] }
