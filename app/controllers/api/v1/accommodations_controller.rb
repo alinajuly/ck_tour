@@ -3,18 +3,23 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # GET /api/v1/accommodations
   def index
-    # @available_rooms = Room.available_rooms(params[:check_in], params[:check_out], params[:number_of_people])
-    # debugger
-    @accommodations = if params[:tags].present? && @available_rooms.present?
-                        Accommodation.where(rooms: { id: @available_rooms.pluck(:id) })
-                                     .tag_filter(params[:tags])
-                                     .distinct
+    check_in = params[:check_in]
+    check_out = params[:check_out]
+    number_of_peoples = params[:number_of_peoples]
+
+    @accommodations = if params[:tags].present? && params[:check_in].present? && params[:check_out].present? && params[:number_of_peoples].present?
+                        Accommodation.joins(:rooms)
+                                     .where('rooms.places >= ?', number_of_peoples)
+                                     .tag_filter(params[:tags]).distinct
+                        # Accommodation.joins(rooms: :bookings)
+                                     # .where.not(bookings: { check_in: ..check_out, check_out: check_in.. })
+                                     # .where('rooms.places >= ?', number_of_peoples)
+                                     # .tag_filter(params[:tags]).distinct
                       elsif params[:tags].present?
                         Accommodation.tag_filter(params[:tags])
                       else
                         Accommodation.all
                       end
-
     if @accommodations
       render json: { data: @accommodations }, status: :ok
     else
@@ -65,13 +70,11 @@ class Api::V1::AccommodationsController < ApplicationController
     render json: { message: 'accommodation id not found' }, status: :not_found
   end
 
-  def available_rooms
-    @check_in = params[:check_in]
-    @check_out = params[:check_out]
-    @number_of_peoples = params[:number_of_peoples]
-    @available_rooms = Accommodation.joins(:rooms).where('places >= ?', @number_of_peoples)
-                                    .where.not(id: booked_room_ids(@check_in, @check_out))
-  end
+  # def available_rooms
+  #   @available_rooms = Accommodation.joins(:rooms).where('places >= ?', @number_of_peoples)
+  #                                   # .joins(:bookings)
+  #                                   # .where(check_in: ..@check_out, check_out: @check_in..).pluck(:room_id)
+  # end
 
   # Only allow a list of trusted parameters through.
   def accommodation_params
