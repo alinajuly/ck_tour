@@ -155,6 +155,141 @@ paths:
       responses:
         '200':
           description: successful
+  "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities":
+    parameters:
+    - name: accommodation_id
+      in: path
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    - name: room_id
+      in: path
+      description: room_id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: create amenity
+      tags:
+      - Amenity
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conditioner:
+                  type: boolean
+                tv:
+                  type: boolean
+                refrigerator:
+                  type: boolean
+                kettle:
+                  type: boolean
+                mv_owen:
+                  type: boolean
+                hair_dryer:
+                  type: boolean
+                nice_view:
+                  type: boolean
+                inclusive:
+                  type: boolean
+        required: true
+  "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities/{id}":
+    parameters:
+    - name: accommodation_id
+      in: path
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show amenity
+      tags:
+      - Amenity
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update amenity
+      tags:
+      - Amenity
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conditioner:
+                  type: boolean
+                tv:
+                  type: boolean
+                refrigerator:
+                  type: boolean
+                kettle:
+                  type: boolean
+                mv_owen:
+                  type: boolean
+                hair_dryer:
+                  type: boolean
+                nice_view:
+                  type: boolean
+                inclusive:
+                  type: boolean
+              required: false
+    put:
+      summary: update amenity
+      tags:
+      - Amenity
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conditioner:
+                  type: boolean
+                tv:
+                  type: boolean
+                refrigerator:
+                  type: boolean
+                kettle:
+                  type: boolean
+                mv_owen:
+                  type: boolean
+                hair_dryer:
+                  type: boolean
+                nice_view:
+                  type: boolean
+                inclusive:
+                  type: boolean
+              required: false
+    delete:
+      summary: delete amenity
+      tags:
+      - Amenity
+      responses:
+        '200':
+          description: successful
   "/api/v1/auth/login":
     post:
       summary: authentication user
@@ -409,6 +544,153 @@ paths:
       summary: delete coordinate
       tags:
       - Coordinate
+      responses:
+        '200':
+          description: successful
+  "/api/v1/accommodations/{accommodation_id}/facilities":
+    parameters:
+    - name: accommodation_id
+      in: path
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: create facility
+      tags:
+      - Facility
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checkin_start:
+                  type: string
+                  format: datetime
+                checkin_end:
+                  type: string
+                  format: datetime
+                checkout_start:
+                  type: string
+                  format: datetime
+                checkout_end:
+                  type: string
+                  format: datetime
+                credit_card:
+                  type: boolean
+                free_parking:
+                  type: boolean
+                wi_fi:
+                  type: boolean
+                breakfast:
+                  type: boolean
+                pets:
+                  type: boolean
+        required: true
+  "/api/v1/accommodations/{accommodation_id}/facilities/{id}":
+    parameters:
+    - name: accommodation_id
+      in: path
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show facility
+      tags:
+      - Facility
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update facility
+      tags:
+      - Facility
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checkin_start:
+                  type: string
+                  format: datetime
+                checkin_end:
+                  type: string
+                  format: datetime
+                checkout_start:
+                  type: string
+                  format: datetime
+                checkout_end:
+                  type: string
+                  format: datetime
+                credit_card:
+                  type: boolean
+                free_parking:
+                  type: boolean
+                wi_fi:
+                  type: boolean
+                breakfast:
+                  type: boolean
+                pets:
+                  type: boolean
+              required: false
+    put:
+      summary: update facility
+      tags:
+      - Facility
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checkin_start:
+                  type: string
+                  format: datetime
+                checkin_end:
+                  type: string
+                  format: datetime
+                checkout_start:
+                  type: string
+                  format: datetime
+                checkout_end:
+                  type: string
+                  format: datetime
+                credit_card:
+                  type: boolean
+                free_parking:
+                  type: boolean
+                wi_fi:
+                  type: boolean
+                breakfast:
+                  type: boolean
+                pets:
+                  type: boolean
+              required: false
+    delete:
+      summary: delete facility
+      tags:
+      - Facility
       responses:
         '200':
           description: successful

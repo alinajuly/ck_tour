@@ -17,7 +17,10 @@ Rails.application.routes.draw do
       resources :places
 
       resources :accommodations do
-        resources :rooms
+        resources :facilities
+        resources :rooms do
+          resources :amenities
+        end
       end
 
       resources :accommodations do
