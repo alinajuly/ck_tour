@@ -14,3 +14,15 @@
 #       methods: [:get, :post, :put, :patch, :delete, :options, :head]
 #   end
 # end
+
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins 'localhost:3000/', 'tour-project-frontend.vercel.app/'
+    # '164.92.135.103'
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true,
+      expose: ['Authorization']
+  end
+end
