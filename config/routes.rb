@@ -13,7 +13,6 @@ Rails.application.routes.draw do
       resources :tours
       resources :comments
       resources :rates
-      resources :tags
       resources :places
 
       resources :accommodations do
@@ -25,6 +24,7 @@ Rails.application.routes.draw do
 
       resources :accommodations do
         resources :coordinates
+        resources :tags
       end
 
       resources :users do
