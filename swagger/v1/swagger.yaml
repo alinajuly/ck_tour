@@ -9,6 +9,27 @@ paths:
       summary: list accommodations
       tags:
       - Accommodation
+      parameters:
+      - name: tags
+        in: query
+        schema:
+          type: string
+        description: Locality
+      - name: check_in
+        in: query
+        schema:
+          type: string
+        description: Date of check in
+      - name: check_out
+        in: query
+        schema:
+          type: string
+        description: Date of check in
+      - name: number_of_peoples
+        in: query
+        schema:
+          type: integer
+        description: Number of peoples
       responses:
         '200':
           description: successful
@@ -951,7 +972,7 @@ servers:
 - url: http://{defaultHost}
   variables:
     defaultHost:
-      default: localhost:3000/
+      default: 127.0.0.1:3000/
 securityDefinitions:
   jwt:
     type: apiKey

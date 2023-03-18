@@ -5,7 +5,14 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     get('list accommodations') do
       tags 'Accommodation'
       produces 'application/json'
-
+      parameter name: :tags, in: :query, schema: { type: :string },
+                description: 'Locality'
+      parameter name: :check_in, in: :query, schema: { type: :string },
+                description: 'Date of check in'
+      parameter name: :check_out, in: :query, schema: { type: :string },
+                description: 'Date of check in'
+      parameter name: :number_of_peoples, in: :query, schema: { type: :integer },
+                description: 'Number of peoples'
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
