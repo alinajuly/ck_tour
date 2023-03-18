@@ -8,12 +8,14 @@ RSpec.describe 'api/v1/rooms', type: :request do
     get('list rooms') do
       tags 'Room'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :check_in, in: :query, schema: { type: :string },
                 description: 'Date of check in'
       parameter name: :check_out, in: :query, schema: { type: :string },
                 description: 'Date of check in'
       parameter name: :number_of_peoples, in: :query, schema: { type: :string },
                 description: 'Number of peoples'
+
       response(200, 'successful') do
         let(:accommodation_id) { '1' }
 
@@ -31,6 +33,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
     post('create room') do
       tags 'Room'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :room,
                 in: :body,
                 required: true,
@@ -69,38 +72,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
 
     get('show room') do
       tags 'Room'
-      response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
-    patch('update room') do
-      tags 'Room'
-      consumes 'application/json'
-      parameter name: :room,
-                in: :body,
-                schema: {
-                  type: :object,
-                  properties: {
-                    name: { type: :string },
-                    places: { type: :integer },
-                    quantity: { type: :integer },
-                    description: { type: :string },
-                    bed: { type: :string },
-                    price_per_night: { type: :integer }
-                  },
-                  required: false
-                }
+      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
@@ -120,6 +92,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
     put('update room') do
       tags 'Room'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :room,
               in: :body,
               schema: {
@@ -134,6 +107,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
                 },
                 required: false
               }
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -151,6 +125,8 @@ RSpec.describe 'api/v1/rooms', type: :request do
 
     delete('delete room') do
       tags 'Room'
+      security [ jwt_auth: [] ]
+      
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }

@@ -81,3 +81,4 @@ end
  
 #  This gem implements bcrypt_pdkfd (a variant of PBKDF2 with bcrypt-based PRF)
  gem 'bcrypt_pbkdf'
+ gem 'pry'

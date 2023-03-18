@@ -8,6 +8,8 @@ RSpec.describe 'api/v1/password', type: :request do
       tags 'Authentication'
       description 'forgot users password'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
+
       parameter name: :user,
                 in: :body,
                 required: true,
@@ -18,8 +20,8 @@ RSpec.describe 'api/v1/password', type: :request do
                   },
                   required: [ :email ]
                 }
-      response(200, 'successful') do
 
+      response(200, 'successful') do
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -38,6 +40,7 @@ RSpec.describe 'api/v1/password', type: :request do
       tags 'Authentication'
       description 'reset password'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :user,
                 in: :body,
                 required: false,
@@ -48,8 +51,8 @@ RSpec.describe 'api/v1/password', type: :request do
                     password: { type: :string }
                   }
                 }
-      response(200, 'successful') do
 
+      response(200, 'successful') do
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {

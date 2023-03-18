@@ -5,6 +5,7 @@ RSpec.describe 'api/v1/users', type: :request do
     get('list users') do
       tags 'User'
       produces 'application/json'
+      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         it 'should returns status response' do
@@ -62,6 +63,7 @@ RSpec.describe 'api/v1/users', type: :request do
 
     get('show user') do
       tags 'User'
+      security [ jwt_auth: [] ]
     
       response(200, 'successful') do
         it 'should returns status response' do
@@ -79,39 +81,10 @@ RSpec.describe 'api/v1/users', type: :request do
       end
     end
 
-    patch('update user') do
-      tags 'User'
-      consumes 'application/json'
-      parameter name: :user,
-                in: :body,
-                required: true,
-                schema: {
-                  type: :object,
-                  properties: {
-                    name: { type: :string },
-                    email: { type: :string },
-                    password: { type: :string }
-                  },
-                  required: [ :name, :email, :password ]
-                }
-      
-      response(200, 'successful') do
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
     put('update user') do
       tags 'User'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :user,
                 in: :body,
                 required: true,
@@ -141,6 +114,7 @@ RSpec.describe 'api/v1/users', type: :request do
 
     delete('delete user') do
       tags 'User'
+      security [ jwt_auth: [] ]
       
       response(200, 'successful') do
         let(:id) { '123' }

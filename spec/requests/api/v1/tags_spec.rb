@@ -9,6 +9,8 @@ RSpec.describe 'api/v1/tags', type: :request do
     get('list tags') do
       tags 'Tag'
       produces 'application/json'
+      security [ jwt_auth: [] ]
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
 
@@ -26,6 +28,7 @@ RSpec.describe 'api/v1/tags', type: :request do
     post('create tag') do
       tags 'Tag'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :coordinate,
                 in: :body,
                 required: true,
@@ -36,6 +39,7 @@ RSpec.describe 'api/v1/tags', type: :request do
                   },
                   required: [ :locality ]
                 }
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
 
@@ -58,33 +62,8 @@ RSpec.describe 'api/v1/tags', type: :request do
 
     get('show tag') do
       tags 'Tag'
-      response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
+      security [ jwt_auth: [] ]
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
-    patch('update tag') do
-      tags 'Tag'
-      consumes 'application/json'
-      parameter name: :coordinate,
-                in: :body,
-                required: false,
-                schema: {
-                  type: :object,
-                  properties: {
-                    locality: { type: :string }
-                  }
-                }
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -103,6 +82,7 @@ RSpec.describe 'api/v1/tags', type: :request do
     put('update tag') do
       tags 'Tag'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :coordinate,
                 in: :body,
                 required: false,
@@ -112,6 +92,7 @@ RSpec.describe 'api/v1/tags', type: :request do
                     locality: { type: :string }
                   }
                 }
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -129,6 +110,8 @@ RSpec.describe 'api/v1/tags', type: :request do
 
     delete('delete tag') do
       tags 'Tag'
+      security [ jwt_auth: [] ]
+      
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
