@@ -715,6 +715,47 @@ paths:
       responses:
         '200':
           description: successful
+  "/api/v1/password/forgot":
+    post:
+      summary: forgot password
+      tags:
+      - Authentication
+      description: forgot users password
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+              - email
+        required: true
+  "/api/v1/password/reset":
+    post:
+      summary: reset password
+      tags:
+      - Authentication
+      description: reset password
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
   "/api/v1/accommodations/{accommodation_id}/rooms":
     parameters:
     - name: accommodation_id
