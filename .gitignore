@@ -30,6 +30,9 @@
 
 #ignore database configuration file
 /config/database.yml
+/config/database.production.yml
+
+/config/credentials.yml.enc
 
 # Ignore idea
 .idea
