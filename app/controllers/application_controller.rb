@@ -12,7 +12,7 @@ class ApplicationController < ActionController::API
       decoded = jwt_decode(token)
       @current_user = User.find(decoded[:user_id])
     else
-      render json: { error: 'Authorization header missing' }, status: :unauthorized
+      render json: { error: 'Unauthorized' }, status: :unauthorized
     end
   end
 end
