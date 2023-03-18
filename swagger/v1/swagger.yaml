@@ -9,6 +9,8 @@ paths:
       summary: list accommodations
       tags:
       - Accommodation
+      security:
+      - jwt_auth: []
       parameters:
       - name: tags
         in: query
@@ -38,6 +40,8 @@ paths:
       tags:
       - Accommodation
       description: Creates a new accommodation
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '201':
@@ -86,53 +90,17 @@ paths:
       summary: show accommodation
       tags:
       - Accommodation
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
-    patch:
-      summary: update accommodation
-      tags:
-      - Accommodation
-      parameters: []
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                description:
-                  type: string
-                address:
-                  type: string
-                phone:
-                  type: string
-                email:
-                  type: string
-                  format: email
-                kind:
-                  type: string
-                  enum:
-                  - hotel
-                  - hostel
-                  - apartment
-                  - greenhouse
-              required:
-              - name
-              - description
-              - address
-              - phone
-              - email
-              - kind
-        required: true
     put:
       summary: update accommodation
       tags:
       - Accommodation
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -173,6 +141,8 @@ paths:
       summary: delete accommodation
       tags:
       - Accommodation
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -194,6 +164,8 @@ paths:
       summary: create amenity
       tags:
       - Amenity
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -239,44 +211,17 @@ paths:
       summary: show amenity
       tags:
       - Amenity
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
-    patch:
-      summary: update amenity
-      tags:
-      - Amenity
-      parameters: []
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                conditioner:
-                  type: boolean
-                tv:
-                  type: boolean
-                refrigerator:
-                  type: boolean
-                kettle:
-                  type: boolean
-                mv_owen:
-                  type: boolean
-                hair_dryer:
-                  type: boolean
-                nice_view:
-                  type: boolean
-                inclusive:
-                  type: boolean
-              required: false
     put:
       summary: update amenity
       tags:
       - Amenity
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -308,6 +253,8 @@ paths:
       summary: delete amenity
       tags:
       - Amenity
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -344,9 +291,11 @@ paths:
       schema:
         type: string
     get:
-      summary: list bookings
+      summary: list booking
       tags:
       - Booking
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -355,6 +304,8 @@ paths:
       tags:
       - Booking
       description: Creates a new booking
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '201':
@@ -398,43 +349,17 @@ paths:
       summary: show booking
       tags:
       - Booking
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
-    patch:
-      summary: update booking
-      tags:
-      - Booking
-      parameters: []
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                number_of_peoples:
-                  type: integer
-                check_in:
-                  type: date
-                check_out:
-                  type: date
-                note:
-                  type: text
-                confirmation:
-                  type: integer
-              required:
-              - number_of_peoples
-              - check_in
-              - check_out
-              - note
-        required: true
     put:
       summary: update booking
       tags:
       - Booking
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -465,6 +390,8 @@ paths:
       summary: delete booking
       tags:
       - Booking
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -480,6 +407,8 @@ paths:
       summary: create coordinate
       tags:
       - Coordinate
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -518,33 +447,17 @@ paths:
       summary: show coordinate
       tags:
       - Coordinate
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
-    patch:
-      summary: update coordinate
-      tags:
-      - Coordinate
-      parameters: []
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                latitude:
-                  type: string
-                  format: decimal
-                longitude:
-                  type: string
-                  format: decimal
     put:
       summary: update coordinate
       tags:
       - Coordinate
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -565,6 +478,8 @@ paths:
       summary: delete coordinate
       tags:
       - Coordinate
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -580,6 +495,8 @@ paths:
       summary: create facility
       tags:
       - Facility
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -631,50 +548,17 @@ paths:
       summary: show facility
       tags:
       - Facility
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
-    patch:
-      summary: update facility
-      tags:
-      - Facility
-      parameters: []
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                checkin_start:
-                  type: string
-                  format: datetime
-                checkin_end:
-                  type: string
-                  format: datetime
-                checkout_start:
-                  type: string
-                  format: datetime
-                checkout_end:
-                  type: string
-                  format: datetime
-                credit_card:
-                  type: boolean
-                free_parking:
-                  type: boolean
-                wi_fi:
-                  type: boolean
-                breakfast:
-                  type: boolean
-                pets:
-                  type: boolean
-              required: false
     put:
       summary: update facility
       tags:
       - Facility
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -712,6 +596,8 @@ paths:
       summary: delete facility
       tags:
       - Facility
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -721,6 +607,8 @@ paths:
       tags:
       - Authentication
       description: forgot users password
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -742,6 +630,8 @@ paths:
       tags:
       - Authentication
       description: reset password
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -768,6 +658,8 @@ paths:
       summary: list rooms
       tags:
       - Room
+      security:
+      - jwt_auth: []
       parameters:
       - name: check_in
         in: query
@@ -791,6 +683,8 @@ paths:
       summary: create room
       tags:
       - Room
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -839,40 +733,17 @@ paths:
       summary: show room
       tags:
       - Room
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
-    patch:
-      summary: update room
-      tags:
-      - Room
-      parameters: []
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                places:
-                  type: integer
-                quantity:
-                  type: integer
-                description:
-                  type: string
-                bed:
-                  type: string
-                price_per_night:
-                  type: integer
-              required: false
     put:
       summary: update room
       tags:
       - Room
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -900,6 +771,8 @@ paths:
       summary: delete room
       tags:
       - Room
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -915,6 +788,8 @@ paths:
       summary: list tags
       tags:
       - Tag
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -922,6 +797,8 @@ paths:
       summary: create tag
       tags:
       - Tag
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -955,29 +832,17 @@ paths:
       summary: show tag
       tags:
       - Tag
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
-    patch:
-      summary: update tag
-      tags:
-      - Tag
-      parameters: []
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                locality:
-                  type: string
     put:
       summary: update tag
       tags:
       - Tag
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -994,6 +859,8 @@ paths:
       summary: delete tag
       tags:
       - Tag
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -1002,6 +869,8 @@ paths:
       summary: list users
       tags:
       - User
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -1043,38 +912,17 @@ paths:
       summary: show user
       tags:
       - User
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
-    patch:
-      summary: update user
-      tags:
-      - User
-      parameters: []
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
-              required:
-              - name
-              - email
-              - password
-        required: true
     put:
       summary: update user
       tags:
       - User
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -1100,6 +948,8 @@ paths:
       summary: delete user
       tags:
       - User
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -1108,10 +958,9 @@ servers:
   variables:
     defaultHost:
       default: localhost:3000/
-securityDefinitions:
-  jwt:
-    type: apiKey
-    name: Authorization
-    in: header
-security:
-  jwt: []
+components:
+  securitySchemes:
+    jwt_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

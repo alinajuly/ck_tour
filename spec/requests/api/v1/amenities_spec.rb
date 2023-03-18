@@ -9,6 +9,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
     post('create amenity') do
       tags 'Amenity'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :amenity,
                 in: :body,
                 required: true,
@@ -48,41 +49,8 @@ RSpec.describe "Api::V1::Amenities", type: :request do
 
     get('show amenity') do
       tags 'Amenity'
-      response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
-    patch('update amenity') do
-      tags 'Amenity'
-      consumes 'application/json'
-      parameter name: :amenity,
-                in: :body,
-                schema: {
-                  type: :object,
-                  properties: {
-                    conditioner: { type: :boolean },
-                    tv: { type: :boolean },
-                    refrigerator: { type: :boolean },
-                    kettle: { type: :boolean },
-                    mv_owen: { type: :boolean },
-                    hair_dryer: { type: :boolean },
-                    nice_view: { type: :boolean },
-                    inclusive: { type: :boolean }
-                  },
-                  required: false
-                }
-
+      security [ jwt_auth: [] ]
+      
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -101,6 +69,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
     put('update amenity') do
       tags 'Amenity'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :amenity,
                 in: :body,
                 schema: {
@@ -117,6 +86,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
                   },
                   required: false
                 }
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -134,6 +104,8 @@ RSpec.describe "Api::V1::Amenities", type: :request do
 
     delete('delete amenity') do
       tags 'Amenity'
+      security [ jwt_auth: [] ]
+      
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }

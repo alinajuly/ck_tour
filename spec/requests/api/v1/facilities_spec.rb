@@ -8,6 +8,7 @@ RSpec.describe "Api::V1::Facilities", type: :request do
     post('create facility') do
       tags 'Facility'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :facility,
                 in: :body,
                 required: true,
@@ -48,41 +49,7 @@ RSpec.describe "Api::V1::Facilities", type: :request do
 
     get('show facility') do
       tags 'Facility'
-      response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
-    patch('update facility') do
-      tags 'Facility'
-      consumes 'application/json'
-      parameter name: :facility,
-                in: :body,
-                schema: {
-                  type: :object,
-                  properties: {
-                    checkin_start: { type: :string, format: :datetime },
-                    checkin_end: { type: :string, format: :datetime },
-                    checkout_start: { type: :string, format: :datetime },
-                    checkout_end: { type: :string, format: :datetime },
-                    credit_card: { type: :boolean },
-                    free_parking: { type: :boolean },
-                    wi_fi: { type: :boolean },
-                    breakfast: { type: :boolean },
-                    pets: { type: :boolean }
-                  },
-                  required: false
-                }
+      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
@@ -102,6 +69,7 @@ RSpec.describe "Api::V1::Facilities", type: :request do
     put('update facility') do
       tags 'Facility'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :facility,
                 in: :body,
                 schema: {
@@ -119,6 +87,7 @@ RSpec.describe "Api::V1::Facilities", type: :request do
                   },
                   required: false
                 }
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -136,6 +105,8 @@ RSpec.describe "Api::V1::Facilities", type: :request do
 
     delete('delete facility') do
       tags 'Facility'
+      security [ jwt_auth: [] ]
+      
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
