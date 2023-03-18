@@ -79,13 +79,16 @@ module Api
       end
 
       def available_rooms
-        @accommodation.rooms.where('places >= ?', @number_of_peoples)
-                      .where.not(id: booked_room_ids(@check_in, @check_out))
+        @free_places = @accommodation.rooms.where.not(id: booked_room_ids(@check_in, @check_out))
+                                     .pluck(:places).sum
+        return unless @free_places >= @number_of_peoples.to_i
+
+        @available_rooms = @accommodation.rooms.where.not(id: booked_room_ids(@check_in, @check_out))
       end
 
       # Only allow a list of trusted parameters through.
       def room_params
-        params.permit(:places, :bed, :name, :quantity, :description, :price_per_night, bookings_attributes: [:id, :check_in, :check_out, :number_of_peoples])
+        params.permit(:places, :bed, :name, :quantity, :description, :price_per_night, bookings_attributes: %i[id check_in check_out number_of_peoples])
       end
     end
   end
