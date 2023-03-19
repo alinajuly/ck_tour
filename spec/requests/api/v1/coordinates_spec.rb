@@ -9,6 +9,7 @@ RSpec.describe 'api/v1/coordinates', type: :request do
     post('create coordinate') do
       tags 'Coordinate'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :coordinate,
                 in: :body,
                 required: true,
@@ -20,6 +21,7 @@ RSpec.describe 'api/v1/coordinates', type: :request do
                   },
                   required: [ :latitude, :longitude ]
                 }
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
 
@@ -42,34 +44,8 @@ RSpec.describe 'api/v1/coordinates', type: :request do
 
     get('show coordinate') do
       tags 'Coordinate'
-      response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
+      security [ jwt_auth: [] ]
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
-    patch('update coordinate') do
-      tags 'Coordinate'
-      consumes 'application/json'
-      parameter name: :coordinate,
-                in: :body,
-                required: false,
-                schema: {
-                  type: :object,
-                  properties: {
-                    latitude: { type: :string, format: :decimal },
-                    longitude: { type: :string, format: :decimal }
-                  }
-                }
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -88,6 +64,7 @@ RSpec.describe 'api/v1/coordinates', type: :request do
     put('update coordinate') do
       tags 'Coordinate'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :coordinate,
                 in: :body,
                 required: false,
@@ -98,6 +75,7 @@ RSpec.describe 'api/v1/coordinates', type: :request do
                     longitude: { type: :string, format: :decimal }
                   }
                 }
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -115,6 +93,8 @@ RSpec.describe 'api/v1/coordinates', type: :request do
 
     delete('delete coordinate') do
       tags 'Coordinate'
+      security [ jwt_auth: [] ]
+      
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }

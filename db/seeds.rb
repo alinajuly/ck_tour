@@ -1,4 +1,4 @@
-User.create(name: 'Example', email: 'example@ukr.net', password: 'Qwerty_228')
+User.create(name: 'Example', email: 'example@ukr.net', password: '123@Start')
 
 accommodation = Accommodation.create(name: 'Hotel Selena Family Resort',
                        description: 'Цей готель розташований у тихому місці поруч з Дніпром. Інфраструктура готелю налічує літню терасу і ресторан. Гостям пропонується оренда велосипедів, тенісні корти, SUP-борди, прогулянки по Дніпру, рибалка, а також лазні на дровах з виходом на річку, а також можливість користуватися різноманітними спортивними майданчиками',
