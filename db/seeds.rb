@@ -6,7 +6,7 @@ accommodation = Accommodation.create(name: 'Hotel Selena Family Resort',
                        kind: 'hotel', phone: '0472545454', email: 'selena@sample.com')
 
 accommodation.coordinates.create(latitude: 49.504189, longitude: 31.962388)
-accommodation.tags.create(locality: 'Черкаси')
+accommodation.toponyms.create(locality: 'Черкаси')
 
 checkin_start_time = Time.parse('2:00 PM')
 checkin_end_time = Time.parse('12:00 PM')
@@ -86,7 +86,7 @@ accommodation = Accommodation.create(name: 'Dragomir Apartments',
                                      kind: 'apartment', phone: '0472454545', email: 'dragomir@sample.com')
 
 accommodation.coordinates.create(latitude: 49.437345, longitude: 32.069233)
-accommodation.tags.create(locality: 'Черкаси')
+accommodation.toponyms.create(locality: 'Черкаси')
 
 checkin_start_time = Time.parse('2:00 PM')
 checkin_end_time = Time.parse('10:00 PM')
@@ -128,7 +128,7 @@ accommodation = Accommodation.create(name: 'Guest House',
                                      kind: 'apartment', phone: '0472555555', email: 'uman_best@sample.com')
 
 accommodation.coordinates.create(latitude: 48.751585, longitude: 30.234364)
-accommodation.tags.create(locality: 'Умань')
+accommodation.toponyms.create(locality: 'Умань')
 
 checkin_start_time = Time.parse('2:00 PM')
 checkin_end_time = Time.parse('10:00 PM')
