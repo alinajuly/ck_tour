@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
       resources :accommodations do
         resources :coordinates
-        resources :tags
+        resources :toponyms
       end
 
       resources :users do

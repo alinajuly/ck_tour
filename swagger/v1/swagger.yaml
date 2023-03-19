@@ -903,7 +903,7 @@ paths:
       responses:
         '200':
           description: successful
-  "/api/v1/accommodations/{accommodation_id}/tags":
+  "/api/v1/accommodations/{accommodation_id}/toponyms":
     parameters:
     - name: accommodation_id
       in: path
@@ -912,16 +912,16 @@ paths:
       schema:
         type: string
     get:
-      summary: list tags
+      summary: list toponyms
       tags:
-      - Tag
+      - Toponym
       responses:
         '200':
           description: successful
     post:
-      summary: create tag
+      summary: create toponym
       tags:
-      - Tag
+      - Toponym
       parameters: []
       responses:
         '200':
@@ -937,7 +937,7 @@ paths:
               required:
               - locality
         required: true
-  "/api/v1/accommodations/{accommodation_id}/tags/{id}":
+  "/api/v1/accommodations/{accommodation_id}/toponyms/{id}":
     parameters:
     - name: accommodation_id
       in: path
@@ -952,16 +952,16 @@ paths:
       schema:
         type: string
     get:
-      summary: show tag
+      summary: show toponym
       tags:
-      - Tag
+      - Toponym
       responses:
         '200':
           description: successful
     patch:
-      summary: update tag
+      summary: update toponym
       tags:
-      - Tag
+      - Toponym
       parameters: []
       responses:
         '200':
@@ -975,9 +975,9 @@ paths:
                 locality:
                   type: string
     put:
-      summary: update tag
+      summary: update toponym
       tags:
-      - Tag
+      - Toponym
       parameters: []
       responses:
         '200':
@@ -991,9 +991,9 @@ paths:
                 locality:
                   type: string
     delete:
-      summary: delete tag
+      summary: delete toponym
       tags:
-      - Tag
+      - Toponym
       responses:
         '200':
           description: successful
