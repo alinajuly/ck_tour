@@ -78,33 +78,6 @@ RSpec.describe 'api/v1/toponyms', type: :request do
       end
     end
 
-    patch('update toponym') do
-      tags 'Toponym'
-      consumes 'application/json'
-      parameter name: :coordinate,
-                in: :body,
-                required: false,
-                schema: {
-                  type: :object,
-                  properties: {
-                    locality: { type: :string }
-                  }
-                }
-      response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
     put('update toponym') do
       tags 'Toponym'
       consumes 'application/json'
