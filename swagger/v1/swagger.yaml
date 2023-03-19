@@ -787,22 +787,18 @@ paths:
     get:
       summary: list toponyms
       tags:
-
       - Toponym
       security:
       - jwt_auth: []
-
       responses:
         '200':
           description: successful
     post:
       summary: create toponym
       tags:
-
       - Toponym
       security:
       - jwt_auth: []
-
       parameters: []
       responses:
         '200':
@@ -835,7 +831,6 @@ paths:
     get:
       summary: show toponym
       tags:
-
       - Toponym
       security:
       - jwt_auth: []
@@ -858,15 +853,12 @@ paths:
               properties:
                 locality:
                   type: string
-
     put:
       summary: update toponym
       tags:
-
       - Toponym
       security:
       - jwt_auth: []
-
       parameters: []
       responses:
         '200':
@@ -882,11 +874,9 @@ paths:
     delete:
       summary: delete toponym
       tags:
-
       - Toponym
       security:
       - jwt_auth: []
-
       responses:
         '200':
           description: successful
