@@ -32,17 +32,15 @@ RSpec.configure do |config|
           }
         }
       ],
-      # authentication
-      securityDefinitions: {
-        jwt: {
-          type: :apiKey,
-          name: 'Authorization',
-          in: :header
+      # Define the security scheme type (HTTP bearer)
+      components: {
+        securitySchemes: {
+          jwt_auth: {
+            type: :http,
+            scheme: :bearer,
+            bearerFormat: 'JWT'
+          }
         }
-      },
-      # JWT token transfer
-      security: {
-        jwt: []
       }
     }
   }

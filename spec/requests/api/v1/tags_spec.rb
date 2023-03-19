@@ -9,6 +9,8 @@ RSpec.describe 'api/v1/toponyms', type: :request do
     get('list toponyms') do
       tags 'Toponym'
       produces 'application/json'
+      security [ jwt_auth: [] ]
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
 
@@ -26,6 +28,7 @@ RSpec.describe 'api/v1/toponyms', type: :request do
     post('create toponym') do
       tags 'Toponym'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :coordinate,
                 in: :body,
                 required: true,
@@ -36,6 +39,7 @@ RSpec.describe 'api/v1/toponyms', type: :request do
                   },
                   required: [ :locality ]
                 }
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
 
@@ -58,6 +62,7 @@ RSpec.describe 'api/v1/toponyms', type: :request do
 
     get('show toponym') do
       tags 'Toponym'
+      security [ jwt_auth: [] ]
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -103,6 +108,7 @@ RSpec.describe 'api/v1/toponyms', type: :request do
     put('update toponym') do
       tags 'Toponym'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :coordinate,
                 in: :body,
                 required: false,
@@ -112,6 +118,7 @@ RSpec.describe 'api/v1/toponyms', type: :request do
                     locality: { type: :string }
                   }
                 }
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -129,6 +136,7 @@ RSpec.describe 'api/v1/toponyms', type: :request do
 
     delete('delete toponym') do
       tags 'Toponym'
+      security [ jwt_auth: [] ]
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }

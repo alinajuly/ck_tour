@@ -1,13 +1,15 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/bookings', type: :request do
+
   path '/api/v1/users/{id}/bookings' do
     parameter name: :id, in: :path, type: :string, description: 'user id'
-
-    get('list bookings') do
+    
+    get('list booking') do
       tags 'Booking'
       produces 'application/json'
-
+      security [ jwt_auth: [] ]
+      
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
@@ -28,6 +30,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
       tags 'Booking'
       description 'Creates a new booking'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :booking,
                 in: :body,
                 required: true,
@@ -67,6 +70,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
 
     get('show booking') do
       tags 'Booking'
+      security [ jwt_auth: [] ]
     
       response(200, 'successful') do
         it 'should returns status response' do
@@ -84,41 +88,10 @@ RSpec.describe 'api/v1/bookings', type: :request do
       end
     end
 
-    patch('update booking') do
-      tags 'Booking'
-      consumes 'application/json'
-      parameter name: :booking,
-                in: :body,
-                required: true,
-                schema: {
-                  type: :object,
-                  properties: {
-                    number_of_peoples: { type: :integer },
-                    check_in: { type: :date },
-                    check_out: { type: :date },
-                    note: { type: :text },
-                    confirmation: { type: :integer }
-                  },
-                  required: [ :number_of_peoples, :check_in, :check_out, :note ]
-                }
-      
-      response(200, 'successful') do
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
     put('update booking') do
       tags 'Booking'
       consumes 'application/json'
+      security [ jwt_auth: [] ]
       parameter name: :booking,
                 in: :body,
                 required: true,
@@ -150,6 +123,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
 
     delete('delete booking') do
       tags 'Booking'
+      security [ jwt_auth: [] ]
       
       response(200, 'successful') do
         let(:id) { '123' }
