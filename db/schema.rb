@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_17_190102) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_19_212156) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -166,13 +166,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_17_190102) do
     t.index ["accommodation_id"], name: "index_rooms_on_accommodation_id"
   end
 
-  create_table "tags", force: :cascade do |t|
+  create_table "toponyms", force: :cascade do |t|
     t.string "locality"
+    t.string "toponymable_type", null: false
+    t.bigint "toponymable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "tagable_type", null: false
-    t.bigint "tagable_id", null: false
-    t.index ["tagable_type", "tagable_id"], name: "index_tags_on_tagable"
+    t.index ["toponymable_type", "toponymable_id"], name: "index_toponyms_on_toponymable"
   end
 
   create_table "tours", force: :cascade do |t|

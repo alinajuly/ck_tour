@@ -11,7 +11,7 @@ class Api::V1::TagsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create api_v1_tag" do
-    assert_difference("Api::V1::Tag.count") do
+    assert_difference("Api::V1::Toponym.count") do
       post api_v1_tags_url, params: { api_v1_tag: {  } }, as: :json
     end
 
@@ -29,7 +29,7 @@ class Api::V1::TagsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy api_v1_tag" do
-    assert_difference("Api::V1::Tag.count", -1) do
+    assert_difference("Api::V1::Toponym.count", -1) do
       delete api_v1_tag_url(@api_v1_tag), as: :json
     end
 
