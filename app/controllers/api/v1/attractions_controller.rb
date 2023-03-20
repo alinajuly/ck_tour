@@ -5,7 +5,7 @@ class Api::V1::AttractionsController < ApplicationController
   # GET /api/v1/attractions
   def index
     @attractions = if params[:toponyms].present?
-                     attraction.toponym_filter(params[:toponyms])
+                     Attraction.toponym_filter(params[:toponyms])
                    else
                      Attraction.all
                    end

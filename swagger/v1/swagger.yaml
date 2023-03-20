@@ -9,7 +9,27 @@ paths:
       summary: list accommodations
       tags:
       - Accommodation
-      parameters: []
+      parameters:
+      - name: toponyms
+        in: query
+        schema:
+          type: string
+        description: Locality
+      - name: check_in
+        in: query
+        schema:
+          type: string
+        description: Date of check in
+      - name: check_out
+        in: query
+        schema:
+          type: string
+        description: Date of check in
+      - name: number_of_peoples
+        in: query
+        schema:
+          type: integer
+        description: Number of peoples
       responses:
         '200':
           description: successful
@@ -285,6 +305,12 @@ paths:
       summary: list attractions
       tags:
       - Attraction
+      parameters:
+      - name: toponyms
+        in: query
+        schema:
+          type: string
+        description: Locality
       responses:
         '200':
           description: successful
