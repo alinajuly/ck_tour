@@ -9,7 +9,6 @@ RSpec.describe 'api/v1/tags', type: :request do
     get('list tags') do
       tags 'Tag'
       produces 'application/json'
-      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
@@ -62,7 +61,6 @@ RSpec.describe 'api/v1/tags', type: :request do
 
     get('show tag') do
       tags 'Tag'
-      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }

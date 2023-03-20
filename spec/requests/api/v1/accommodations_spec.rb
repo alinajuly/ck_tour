@@ -5,7 +5,6 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     get('list accommodations') do
       tags 'Accommodation'
       produces 'application/json'
-      security [ jwt_auth: [] ]
       parameter name: :tags, in: :query, schema: { type: :string },
                 description: 'Locality'
       parameter name: :check_in, in: :query, schema: { type: :string },
@@ -75,7 +74,6 @@ RSpec.describe 'api/v1/accommodations', type: :request do
 
     get('show accommodation') do
       tags 'Accommodation'
-      security [ jwt_auth: [] ]
     
       response(200, 'successful') do
         it 'should returns status response' do

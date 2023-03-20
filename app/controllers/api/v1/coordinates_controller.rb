@@ -1,5 +1,6 @@
 class Api::V1::CoordinatesController < ApplicationController
   before_action :set_coordinate, only: %i[show destroy]
+  skip_before_action :authenticate_request, only: %i[show]
 
   def show
     render json: @coordinate

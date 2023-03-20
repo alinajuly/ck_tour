@@ -49,7 +49,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
 
     get('show amenity') do
       tags 'Amenity'
-      security [ jwt_auth: [] ]
       
       response(200, 'successful') do
         let(:accommodation_id) { '123' }

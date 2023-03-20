@@ -44,7 +44,6 @@ RSpec.describe 'api/v1/coordinates', type: :request do
 
     get('show coordinate') do
       tags 'Coordinate'
-      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }

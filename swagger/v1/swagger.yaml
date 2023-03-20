@@ -9,8 +9,6 @@ paths:
       summary: list accommodations
       tags:
       - Accommodation
-      security:
-      - jwt_auth: []
       parameters:
       - name: tags
         in: query
@@ -90,8 +88,6 @@ paths:
       summary: show accommodation
       tags:
       - Accommodation
-      security:
-      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -211,8 +207,6 @@ paths:
       summary: show amenity
       tags:
       - Amenity
-      security:
-      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -447,8 +441,6 @@ paths:
       summary: show coordinate
       tags:
       - Coordinate
-      security:
-      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -548,8 +540,6 @@ paths:
       summary: show facility
       tags:
       - Facility
-      security:
-      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -658,8 +648,6 @@ paths:
       summary: list rooms
       tags:
       - Room
-      security:
-      - jwt_auth: []
       parameters:
       - name: check_in
         in: query
@@ -733,8 +721,6 @@ paths:
       summary: show room
       tags:
       - Room
-      security:
-      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -788,8 +774,6 @@ paths:
       summary: list tags
       tags:
       - Tag
-      security:
-      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -832,8 +816,6 @@ paths:
       summary: show tag
       tags:
       - Tag
-      security:
-      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -879,6 +861,8 @@ paths:
       tags:
       - User
       description: Creates a new user
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '201':

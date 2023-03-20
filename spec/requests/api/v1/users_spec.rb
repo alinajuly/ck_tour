@@ -27,6 +27,7 @@ RSpec.describe 'api/v1/users', type: :request do
       tags 'User'
       description 'Creates a new user'
       consumes 'application/json'
+      
       parameter name: :user,
                 in: :body,
                 required: true,

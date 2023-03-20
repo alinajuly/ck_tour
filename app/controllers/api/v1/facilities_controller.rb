@@ -1,6 +1,7 @@
 class Api::V1::FacilitiesController < ApplicationController
   before_action :set_accommodation
   before_action :set_facility, only: %i[show destroy]
+  skip_before_action :authenticate_request, only: %i[show]
 
   def show
     render json: @facility, status: :ok

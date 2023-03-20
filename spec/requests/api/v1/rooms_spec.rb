@@ -8,7 +8,6 @@ RSpec.describe 'api/v1/rooms', type: :request do
     get('list rooms') do
       tags 'Room'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
       parameter name: :check_in, in: :query, schema: { type: :string },
                 description: 'Date of check in'
       parameter name: :check_out, in: :query, schema: { type: :string },
@@ -72,7 +71,6 @@ RSpec.describe 'api/v1/rooms', type: :request do
 
     get('show room') do
       tags 'Room'
-      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }

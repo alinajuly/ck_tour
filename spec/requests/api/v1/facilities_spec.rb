@@ -49,7 +49,6 @@ RSpec.describe "Api::V1::Facilities", type: :request do
 
     get('show facility') do
       tags 'Facility'
-      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
