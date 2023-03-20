@@ -5,6 +5,9 @@ RSpec.describe 'api/v1/attractions', type: :request do
   path '/api/v1/attractions' do
     get('list attractions') do
       tags 'Attraction'
+      produces 'application/json'
+      parameter name: :toponyms, in: :query, schema: { type: :string },
+                description: 'Locality'
 
       response(200, 'successful') do
         it 'should returns status response' do
