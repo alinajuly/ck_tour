@@ -9,11 +9,17 @@ Rails.application.routes.draw do
       post 'password/forgot', to: 'password#forgot'
       post 'password/reset', to: 'password#reset'
       resources :partners
-      post '/auth/login', to: 'authentication#login'
       resources :tours
       resources :comments
       resources :rates
       resources :places
+
+      resources :attractions do
+        resources :coordinates
+        resources :toponyms
+      end
+
+      get 'search', to: 'attractions#search'
 
       resources :accommodations do
         resources :facilities
