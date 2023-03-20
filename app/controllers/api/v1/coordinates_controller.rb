@@ -1,13 +1,14 @@
 class Api::V1::CoordinatesController < ApplicationController
   before_action :set_coordinate, only: %i[show destroy]
   skip_before_action :authenticate_request, only: %i[show]
+  include ResourceFinder
 
   def show
     render json: @coordinate
   end
 
   def create
-    @coordinate = Coordinate.new(coordinate_params)
+    @coordinate = parentable.coordinates.new(coordinate_params)
     if @coordinate.save
       render json: @coordinate, status: :created
     else
@@ -34,13 +35,13 @@ class Api::V1::CoordinatesController < ApplicationController
   private
 
   def set_coordinate
-    @coordinate = Coordinate.find(params[:id])
+    @coordinate = parentable.coordinates.find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'coordinate id not found' }, status: :not_found
   end
 
   def coordinate_params
-    params.require(:coordinate).permit(:coordinatable_type, :coordinatable_id)
+    params.permit(:latitude, :longitude)
   end
 end

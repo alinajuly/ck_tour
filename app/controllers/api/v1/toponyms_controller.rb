@@ -3,10 +3,11 @@ module Api
     class ToponymsController < ApplicationController
       skip_before_action :authenticate_request, only: %i[show index]
       before_action :set_toponym, only: %i[show update destroy]
+      include ResourceFinder
 
       # GET /api/v1/toponyms
       def index
-        @toponyms = Toponym.all
+        @toponyms = parentable.toponyms.all
 
         render json: @toponyms
       end
@@ -18,10 +19,10 @@ module Api
 
       # POST /api/v1/toponyms
       def create
-        @toponym = Toponym.new(toponym_params)
+        @toponym = parentable.toponyms.new(toponym_params)
 
         if @toponym.save
-          render json: @toponym, status: :created, location: @toponym
+          render json: @toponym, status: :created
         else
           render json: @toponym.errors, status: :unprocessable_entity
         end
@@ -45,12 +46,12 @@ module Api
 
       # Use callbacks to share common setup or constraints between actions.
       def set_toponym
-        @toponym = Toponym.find(params[:id])
+        @toponym = parentable.toponyms.find(params[:id])
       end
 
       # Only allow a list of trusted parameters through.
       def toponym_params
-        params.require(:toponym).permit(:locality)
+        params.permit(:locality)
       end
     end
   end
