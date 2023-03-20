@@ -1,5 +1,5 @@
 class Api::V1::CommentsController < ApplicationController
-  before_action :set_api_v1_comment, only: %i[ show update destroy ]
+  before_action :set_api_v1_comment, only: %i[show update destroy]
 
   # GET /api/v1/comments
   def index

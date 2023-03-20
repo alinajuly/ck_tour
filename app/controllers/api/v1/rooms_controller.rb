@@ -3,7 +3,7 @@ module Api
     class RoomsController < ApplicationController
       before_action :set_accommodation
       before_action :set_room, only: %i[show update destroy]
-      skip_before_action :authenticate_request, only: %i[get show]
+      skip_before_action :authenticate_request, only: %i[index show]
 
       # GET /api/v1/accommodations/1/rooms
       def index

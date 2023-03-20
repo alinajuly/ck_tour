@@ -1,3 +1,4 @@
+require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/tags', type: :request do
@@ -22,6 +23,30 @@ RSpec.describe 'api/v1/tags', type: :request do
         end
         run_test!
       end
+
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+      end
+            
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+      end
     end
 
     post('create tag') do
@@ -39,7 +64,7 @@ RSpec.describe 'api/v1/tags', type: :request do
                   required: [ :locality ]
                 }
 
-      response(200, 'successful') do
+      response(201, 'successful created') do
         let(:accommodation_id) { '123' }
 
         after do |example|
@@ -50,6 +75,30 @@ RSpec.describe 'api/v1/tags', type: :request do
           }
         end
         run_test!
+      end
+
+      response(201, 'successful created') do
+        it 'should returns status response' do
+          expect(response.status).to eq(201)
+        end
+      end
+            
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
       end
     end
   end
@@ -74,6 +123,30 @@ RSpec.describe 'api/v1/tags', type: :request do
           }
         end
         run_test!
+      end
+
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+      end
+            
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
       end
     end
 
@@ -104,6 +177,30 @@ RSpec.describe 'api/v1/tags', type: :request do
         end
         run_test!
       end
+
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+      end
+            
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+      end
     end
 
     delete('delete tag') do
@@ -122,6 +219,30 @@ RSpec.describe 'api/v1/tags', type: :request do
           }
         end
         run_test!
+      end
+
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+      end
+                  
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
       end
     end
   end

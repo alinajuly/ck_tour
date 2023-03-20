@@ -1,5 +1,5 @@
 class Api::V1::ToursController < ApplicationController
-  before_action :set_api_v1_tour, only: %i[ show update destroy ]
+  before_action :set_api_v1_tour, only: %i[show update destroy]
 
   # GET /api/v1/tours
   def index

@@ -9,30 +9,16 @@ paths:
       summary: list accommodations
       tags:
       - Accommodation
-      parameters:
-      - name: tags
-        in: query
-        schema:
-          type: string
-        description: Locality
-      - name: check_in
-        in: query
-        schema:
-          type: string
-        description: Date of check in
-      - name: check_out
-        in: query
-        schema:
-          type: string
-        description: Date of check in
-      - name: number_of_peoples
-        in: query
-        schema:
-          type: integer
-        description: Number of peoples
+      parameters: []
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     post:
       summary: create accommodation
       tags:
@@ -43,7 +29,13 @@ paths:
       parameters: []
       responses:
         '201':
-          description: successful
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -91,6 +83,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     put:
       summary: update accommodation
       tags:
@@ -101,6 +99,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -125,13 +129,7 @@ paths:
                   - hostel
                   - apartment
                   - greenhouse
-              required:
-              - name
-              - description
-              - address
-              - phone
-              - email
-              - kind
+              required: false
         required: true
     delete:
       summary: delete accommodation
@@ -142,6 +140,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities":
     parameters:
     - name: accommodation_id
@@ -164,8 +168,14 @@ paths:
       - jwt_auth: []
       parameters: []
       responses:
-        '200':
-          description: successful
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -197,9 +207,9 @@ paths:
       required: true
       schema:
         type: string
-    - name: id
+    - name: room_id
       in: path
-      description: id
+      description: room_id
       required: true
       schema:
         type: string
@@ -210,6 +220,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     put:
       summary: update amenity
       tags:
@@ -220,6 +236,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -252,6 +274,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/auth/login":
     post:
       summary: authentication user
@@ -261,7 +289,13 @@ paths:
       parameters: []
       responses:
         '201':
-          description: successful
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -278,7 +312,7 @@ paths:
         required: true
   "/api/v1/users/{id}/bookings":
     parameters:
-    - name: id
+    - name: user_id
       in: path
       description: user id
       required: true
@@ -293,6 +327,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     post:
       summary: create booking
       tags:
@@ -303,7 +343,13 @@ paths:
       parameters: []
       responses:
         '201':
-          description: successful
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -313,11 +359,13 @@ paths:
                 number_of_peoples:
                   type: integer
                 check_in:
-                  type: date
+                  type: string
+                  format: date
                 check_out:
-                  type: date
+                  type: string
+                  format: date
                 note:
-                  type: text
+                  type: string
                 confirmation:
                   type: integer
               required:
@@ -327,13 +375,13 @@ paths:
         required: true
   "/api/v1/users/{id}/bookings/{id}":
     parameters:
-    - name: id
+    - name: user_id
       in: path
       description: user id
       required: true
       schema:
         type: string
-    - booking: id
+    - name: booking_id
       in: path
       description: booking id
       required: true
@@ -348,6 +396,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     put:
       summary: update booking
       tags:
@@ -358,6 +412,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -367,18 +427,16 @@ paths:
                 number_of_peoples:
                   type: integer
                 check_in:
-                  type: date
+                  type: string
+                  format: date
                 check_out:
-                  type: date
+                  type: string
+                  format: date
                 note:
-                  type: text
+                  type: string
                 confirmation:
                   type: integer
-              required:
-              - number_of_peoples
-              - check_in
-              - check_out
-              - confirmation
+              required: false
         required: true
     delete:
       summary: delete booking
@@ -389,6 +447,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/accommodations/{accommodation_id}/coordinates":
     parameters:
     - name: accommodation_id
@@ -405,8 +469,14 @@ paths:
       - jwt_auth: []
       parameters: []
       responses:
-        '200':
-          description: successful
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -444,6 +514,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     put:
       summary: update coordinate
       tags:
@@ -454,6 +530,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -475,6 +557,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/accommodations/{accommodation_id}/facilities":
     parameters:
     - name: accommodation_id
@@ -491,8 +579,14 @@ paths:
       - jwt_auth: []
       parameters: []
       responses:
-        '200':
-          description: successful
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -543,6 +637,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     put:
       summary: update facility
       tags:
@@ -553,6 +653,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -591,6 +697,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/password/forgot":
     post:
       summary: forgot password
@@ -603,6 +715,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -626,6 +744,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -636,6 +760,9 @@ paths:
                   type: string
                 password:
                   type: string
+              required:
+              - email
+              - password
   "/api/v1/accommodations/{accommodation_id}/rooms":
     parameters:
     - name: accommodation_id
@@ -648,25 +775,30 @@ paths:
       summary: list rooms
       tags:
       - Room
-      parameters:
-      - name: check_in
-        in: query
-        schema:
-          type: string
-        description: Date of check in
-      - name: check_out
-        in: query
-        schema:
-          type: string
-        description: Date of check in
-      - name: number_of_peoples
-        in: query
-        schema:
-          type: string
-        description: Number of peoples
+      parameters: []
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                check_in:
+                  type: string
+                check_out:
+                  type: string
+                number_of_peoples:
+                  type: string
+              required: false
+        required: true
     post:
       summary: create room
       tags:
@@ -675,8 +807,14 @@ paths:
       - jwt_auth: []
       parameters: []
       responses:
-        '200':
-          description: successful
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -711,9 +849,9 @@ paths:
       required: true
       schema:
         type: string
-    - name: id
+    - name: room_id
       in: path
-      description: id
+      description: room_id
       required: true
       schema:
         type: string
@@ -724,6 +862,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     put:
       summary: update room
       tags:
@@ -734,6 +878,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -762,6 +912,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/accommodations/{accommodation_id}/tags":
     parameters:
     - name: accommodation_id
@@ -777,6 +933,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     post:
       summary: create tag
       tags:
@@ -785,8 +947,14 @@ paths:
       - jwt_auth: []
       parameters: []
       responses:
-        '200':
-          description: successful
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -819,6 +987,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     put:
       summary: update tag
       tags:
@@ -829,6 +1003,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -846,6 +1026,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/users":
     get:
       summary: list users
@@ -856,17 +1042,27 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     post:
       summary: create user
       tags:
       - User
       description: Creates a new user
-      security:
-      - jwt_auth: []
       parameters: []
       responses:
         '201':
-          description: successful
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -901,6 +1097,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     put:
       summary: update user
       tags:
@@ -911,6 +1113,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -937,6 +1145,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
 servers:
 - url: http://{defaultHost}
   variables:

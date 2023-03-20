@@ -1,6 +1,6 @@
 class Api::V1::AccommodationsController < ApplicationController
   before_action :set_accommodation, only: %i[show update destroy]
-  skip_before_action :authenticate_request, only: %i[get show]
+  skip_before_action :authenticate_request, only: %i[index show]
 
   # GET /api/v1/accommodations
   def index
