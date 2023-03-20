@@ -3,7 +3,7 @@ require 'swagger_helper'
 RSpec.describe 'api/v1/bookings', type: :request do
 
   path '/api/v1/users/{id}/bookings' do
-    parameter name: :id, in: :path, type: :string, description: 'user id'
+    parameter name: 'user_id', in: :path, type: :string, description: 'user id'
     
     get('list booking') do
       tags 'Booking'
@@ -38,9 +38,9 @@ RSpec.describe 'api/v1/bookings', type: :request do
                   type: :object,
                   properties: {
                     number_of_peoples: { type: :integer },
-                    check_in: { type: :date },
-                    check_out: { type: :date },
-                    note: { type: :text },
+                    check_in: { type: :string, format: :date },
+                    check_out: { type: :string, format: :date },
+                    note: { type: :string },
                     confirmation: { type: :integer }
                   },
                   required: [ :number_of_peoples, :check_in, :check_out ]
@@ -65,8 +65,8 @@ RSpec.describe 'api/v1/bookings', type: :request do
 
   path '/api/v1/users/{id}/bookings/{id}' do
     # You'll want to customize the parameter types...
-    parameter name: :id, in: :path, type: :string, description: 'user id'
-    parameter booking: :id, in: :path, type: :string, description: 'booking id'
+    parameter name: 'user_id', in: :path, type: :string, description: 'user id'
+    parameter name: 'booking_id', in: :path, type: :string, description: 'booking id'
 
     get('show booking') do
       tags 'Booking'
@@ -99,12 +99,12 @@ RSpec.describe 'api/v1/bookings', type: :request do
                   type: :object,
                   properties: {
                     number_of_peoples: { type: :integer },
-                    check_in: { type: :date },
-                    check_out: { type: :date },
-                    note: { type: :text },
+                    check_in: { type: :string, format: :date },
+                    check_out: { type: :string, format: :date },
+                    note: { type: :string },
                     confirmation: { type: :integer }
                   },
-                  required: [ :number_of_peoples, :check_in, :check_out, :confirmation ]
+                  required: false
                 }
 
       response(200, 'successful') do

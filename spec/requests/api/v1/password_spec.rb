@@ -49,7 +49,8 @@ RSpec.describe 'api/v1/password', type: :request do
                   properties: {
                     email: { type: :string },
                     password: { type: :string }
-                  }
+                  },
+                  required: [ :email, :password ]
                 }
 
       response(200, 'successful') do
