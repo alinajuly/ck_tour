@@ -1,4 +1,5 @@
 class Api::V1::AccommodationsController < ApplicationController
+  skip_before_action :authenticate_request, only: %i[show index]
   before_action :set_accommodation, only: %i[show update destroy]
   skip_before_action :authenticate_request, only: %i[index show]
 
@@ -8,16 +9,16 @@ class Api::V1::AccommodationsController < ApplicationController
     check_out = params[:check_out]
     number_of_peoples = params[:number_of_peoples]
 
-    @accommodations = if params[:tags].present? && params[:check_in].present? && params[:check_out].present? && params[:number_of_peoples].present?
+    @accommodations = if params[:toponyms].present? && params[:check_in].present? && params[:check_out].present? && params[:number_of_peoples].present?
                         Accommodation.joins(:rooms)
                                      .where('rooms.places >= ?', number_of_peoples)
-                                     .tag_filter(params[:tags]).distinct
+                                     .toponym_filter(params[:toponyms]).distinct
                         # Accommodation.joins(rooms: :bookings)
                                      # .where.not(bookings: { check_in: ..check_out, check_out: check_in.. })
                                      # .where('rooms.places >= ?', number_of_peoples)
                                      # .tag_filter(params[:tags]).distinct
-                      elsif params[:tags].present?
-                        Accommodation.tag_filter(params[:tags])
+                      elsif params[:toponyms].present?
+                        Accommodation.toponym_filter(params[:toponyms])
                       else
                         Accommodation.all
                       end
