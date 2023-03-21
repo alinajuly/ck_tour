@@ -1,4 +1,7 @@
-User.create(name: 'Example', email: 'example@ukr.net', password: '123@Start')
+User.create(name: 'admin', email: 'admin@test.com', password: 'Admin123!', role: 0 )
+User.create(name: 'partner', email: 'partner@test.com', password: 'Partner123!', role: 1 )
+User.create(name: 'tourist', email: 'tourist@test.com', password: 'User123!', role: 2 )
+  
 
 attraction = Attraction.create(title: 'Долина троянд', description: 'Долина Троянд — парк-пам\'ятка садово-паркового мистецтва
 в Україні розміщений неподалік від центральної частини міста Черкаси, при вулиці

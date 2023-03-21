@@ -84,3 +84,6 @@ gem 'bcrypt_pbkdf'
 
 # Alternative to the standard IRB shell for Ruby. It features syntax highlighting, a flexible plugin architecture, runtime invocation and source and documentation browsing
 gem 'pry'
+
+# Pundit provides a set of helpers which guide you in leveraging regular Ruby classes and object oriented design patterns to build a simple, robust and scalable authorization system
+gem 'pundit'

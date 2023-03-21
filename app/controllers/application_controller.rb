@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include JsonWebToken
+  include Pundit::Authorization
 
   before_action :authenticate_request
 
@@ -14,5 +15,9 @@ class ApplicationController < ActionController::API
     else
       render json: { error: 'Unauthorized' }, status: :unauthorized
     end
+  end
+
+  def user_not_authorized
+    render json: { error: 'You are not authorized to perform this action.' }, status: :unauthorized
   end
 end
