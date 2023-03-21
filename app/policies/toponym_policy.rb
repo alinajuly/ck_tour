@@ -1,4 +1,8 @@
-class CoordinatePolicy < ApplicationPolicy
+class ToponymPolicy < ApplicationPolicy
+  def index?
+    true
+  end
+  
   def show?
     true
   end

@@ -1,21 +1,43 @@
 class UserPolicy < ApplicationPolicy
+  class Scope < Scope
+    def resolve
+      if user.admin?
+        scope.all
+      elsif user.partner?
+        scope.where(id: user.id)
+      elsif user.tourist?
+        scope.where(id: user.id)
+      else
+        scope.none
+      end
+    end
+  end
+
   def index?
     user.admin?
   end
 
   def show?
-    user.admin?
+    user.admin? || user.id == record.id || user.partner? || user.tourist?
   end
 
   def create?
-    user.admin?
+    true
   end
 
   def update?
-    user.admin?
+    true
   end
 
   def destroy?
     true
   end
+
+  # def create_admin?
+  #   user.admin?
+  # end
+
+  # def change_role?
+  #   true
+  # end
 end
