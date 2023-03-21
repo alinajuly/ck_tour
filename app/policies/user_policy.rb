@@ -18,7 +18,8 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? || user.id == record.id || user.partner? || user.tourist?
+    true
+    # user.admin? || user.id == record.id || user.partner? || user.tourist?
   end
 
   def create?
@@ -33,11 +34,11 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
-  # def create_admin?
-  #   user.admin?
-  # end
+  def create_admin?
+    user.admin?
+  end
 
-  # def change_role?
-  #   true
-  # end
+  def change_role?
+    true
+  end
 end

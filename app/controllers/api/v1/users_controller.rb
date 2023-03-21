@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   skip_before_action :authenticate_request, only: [:create]
-  before_action :set_user, only: [:show, :destroy]
+  before_action :set_user, only: %i[show destroy create_admin change_role]
   before_action :authorize_policy
 
   # GET api/v1/users
@@ -54,6 +54,23 @@ class Api::V1::UsersController < ApplicationController
     authorize @user
 
     @user.destroy
+  end
+
+  def create_admin
+    authorize @user
+
+    @user.admin!
+  end
+
+  def change_role
+    authorize @user
+    debugger
+    if @user.tourist?
+      @user.partner!
+    else
+      @user.tourist!
+      @user.accommodations.destroy_all
+    end
   end
 
   private

@@ -4,10 +4,14 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :users
+      resources :users do
+        put '/change_role', to: 'users#change_role'
+      end
       post '/auth/login', to: 'authentication#login'
       post 'password/forgot', to: 'password#forgot'
       post 'password/reset', to: 'password#reset'
+
+      post 'admin/create_admin', 'users#create_admin'
 
       get '/toponyms', to: 'toponyms#index'
       resources :tours
@@ -33,6 +37,7 @@ Rails.application.routes.draw do
         resources :rooms do
           resources :amenities
         end
+        put '/change_status', to: 'accommodations#change_status'
       end
 
       resources :accommodations do
