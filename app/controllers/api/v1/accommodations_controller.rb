@@ -1,6 +1,6 @@
 class Api::V1::AccommodationsController < ApplicationController
-  skip_before_action :authenticate_request, only: %i[index show ]
-  before_action :set_accommodation, only: %i[show update destroy]
+  skip_before_action :authenticate_request, only: %i[index show]
+  before_action :set_accommodation, only: %i[show update destroy confirm]
   before_action :authorize_policy
 
   # GET /api/v1/accommodations
@@ -22,6 +22,8 @@ class Api::V1::AccommodationsController < ApplicationController
                       else
                         Accommodation.all
                       end
+    authorize @accommodations
+
     if @accommodations
       render json: { data: @accommodations }, status: :ok
     else
@@ -31,6 +33,8 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # GET /api/v1/accommodations/1
   def show
+    authorize @accommodation
+
     @rooms = @accommodation.rooms
     render json: { data: @accommodation, rooms: @rooms }, status: :ok
   end
@@ -70,9 +74,14 @@ class Api::V1::AccommodationsController < ApplicationController
     end
   end
 
-  # def confirm
-  #   authorize @accommodation
-  # end
+  def change_status
+    authorize @accommodation
+    if @accommodation.unpublished?
+      @accommodation.published!
+    else
+      @accommodation.unpublished!
+    end
+  end
 
   private
 

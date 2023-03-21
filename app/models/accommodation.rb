@@ -1,4 +1,5 @@
 class Accommodation < ApplicationRecord
+  belongs_to :user
   has_many :rooms
   has_many :facilities
   has_many :coordinates, as: :coordinatable

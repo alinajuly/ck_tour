@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   require 'securerandom'
-  has_many :bookings
+  has_many :accommodations, dependent: :destroy
+  has_many :bookings, dependent: :destroy
 
   has_secure_password
 
@@ -18,7 +19,7 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8, maximum: 255 }, format: { with: VALID_PASSWORD_REGEX }
   validates :name, presence: true, uniqueness: true, length: { minimum: 3, maximum: 50 }
 
-  enum role: { admin: 0, partner: 1, tourist: 2 }
+  enum role: { tourist: 0, partner: 1, admin: 2 }
 
   def generate_password_token!
     self.reset_password_token = generate_token
