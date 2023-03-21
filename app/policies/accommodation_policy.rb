@@ -26,7 +26,7 @@ class AccommodationPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin?
+    user.partner? && user.admin?
   end
 
   def confirm?
