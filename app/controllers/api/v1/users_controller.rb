@@ -1,21 +1,30 @@
 class Api::V1::UsersController < ApplicationController
   skip_before_action :authenticate_request, only: [:create]
   before_action :set_user, only: [:show, :destroy]
+  before_action :authorize_policy
 
   # GET api/v1/users
   def index
     @users = User.all
+
+    authorize @users
+
     render json: @users, status: :ok
   end
 
   # GET api/v1/users/{name}
   def show
+    authorize @user
+
     render json: @user, status: :ok
   end
 
   # POST api/v1/users
   def create
     @user = User.new(user_params)
+
+    authorize @user
+
     if @user.save
       render json: @user, status: :created
     else
@@ -26,6 +35,8 @@ class Api::V1::UsersController < ApplicationController
 
   # PUT api/v1/users/{name}
   def update
+    authorize @user
+
     if user&.authenticate(params[:current_password])
       user.update(password: params[:new_password])
       render json: { message: 'Password updated successfully' }, status: :ok
@@ -40,6 +51,8 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE api/v1/users/{name}
   def destroy
+    authorize @user
+
     @user.destroy
   end
 
@@ -51,5 +64,9 @@ class Api::V1::UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def authorize_policy
+    authorize User
   end
 end

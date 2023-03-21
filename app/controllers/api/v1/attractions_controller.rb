@@ -1,6 +1,7 @@
 class Api::V1::AttractionsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[show index search]
   before_action :set_attraction, only: %i[show update destroy]
+  before_action :authorize_policy
 
   # GET /api/v1/attractions
   def index
@@ -9,6 +10,9 @@ class Api::V1::AttractionsController < ApplicationController
                    else
                      Attraction.all
                    end
+
+    authorize @attractions
+
     if @attractions
       # render json: { data: @attractions }, status: :ok
       render json: @attractions.as_json(include: :coordinates), status: :ok
@@ -19,6 +23,8 @@ class Api::V1::AttractionsController < ApplicationController
 
   # GET /api/v1/attractions/1
   def show
+    authorize @attraction
+
     render json: @attraction.as_json(include: :coordinates), status: :ok
     # render json: @attraction.as_json(include: :toponyms), status: :ok
   end
@@ -26,6 +32,9 @@ class Api::V1::AttractionsController < ApplicationController
   # POST /api/v1/attractions
   def create
     @attraction = Attraction.new(attraction_params)
+
+    authorize @attraction
+
     if @attraction.save
       render json: { data: @attraction }, status: :created
     else
@@ -35,6 +44,8 @@ class Api::V1::AttractionsController < ApplicationController
 
   # PATCH/PUT /api/v1/attractions/1
   def update
+    authorize @attraction
+
     if @attraction.update(attraction_params)
       render json: { status: 'Update', data: @attraction }, status: :ok
     else
@@ -44,6 +55,8 @@ class Api::V1::AttractionsController < ApplicationController
 
   # DELETE /api/v1/attractions/1
   def destroy
+    authorize @attraction
+
     if @attraction.destroy!
       render json: { status: 'Delete' }, status: :ok
     else
@@ -52,6 +65,8 @@ class Api::V1::AttractionsController < ApplicationController
   end
 
   def search
+    authorize @attraction
+
     @result = Attraction.all.joins(:toponyms).where('title||description||locality ILIKE ?', "%#{params[:req]}%")
     if @result.blank?
       render json: { message: 'Attraction not found' }, status: :ok
@@ -72,5 +87,9 @@ class Api::V1::AttractionsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def attraction_params
     params.permit(:title, :description)
+  end
+
+  def authorize_policy
+    authorize Attraction
   end
 end
