@@ -8,15 +8,22 @@ Rails.application.routes.draw do
       post '/auth/login', to: 'authentication#login'
       post 'password/forgot', to: 'password#forgot'
       post 'password/reset', to: 'password#reset'
-      resources :partners
+
+      get '/toponyms', to: 'toponyms#index'
       resources :tours
       resources :comments
       resources :rates
       resources :places
 
       resources :attractions do
-        resources :coordinates
-        resources :toponyms
+        resources :coordinates, only: %i[create]
+        get '/coordinates', to: 'coordinates#show'
+        put '/coordinates', to: 'coordinates#update'
+        delete '/coordinates', to: 'coordinates#destroy'
+        resources :toponyms, only: %i[create]
+        get '/toponyms', to: 'toponyms#show'
+        put '/toponyms', to: 'toponyms#update'
+        delete '/toponyms', to: 'toponyms#destroy'
       end
 
       get 'search', to: 'attractions#search'
@@ -29,8 +36,14 @@ Rails.application.routes.draw do
       end
 
       resources :accommodations do
-        resources :coordinates
-        resources :toponyms
+        resources :coordinates, only: %i[create]
+        get '/coordinates', to: 'coordinates#show'
+        put '/coordinates', to: 'coordinates#update'
+        delete '/coordinates', to: 'coordinates#destroy'
+        resources :toponyms, only: %i[create]
+        get '/toponyms', to: 'toponyms#show'
+        put '/toponyms', to: 'toponyms#update'
+        delete '/toponyms', to: 'toponyms#destroy'
       end
 
       resources :users do

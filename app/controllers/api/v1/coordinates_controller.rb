@@ -1,5 +1,5 @@
 class Api::V1::CoordinatesController < ApplicationController
-  before_action :set_coordinate, only: %i[show destroy]
+  before_action :set_coordinate, only: %i[show update destroy]
   skip_before_action :authenticate_request, only: %i[show]
   include ResourceFinder
 
@@ -35,10 +35,7 @@ class Api::V1::CoordinatesController < ApplicationController
   private
 
   def set_coordinate
-    @coordinate = parentable.coordinates.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'coordinate id not found' }, status: :not_found
+    @coordinate = parentable.coordinates
   end
 
   def coordinate_params

@@ -604,11 +604,17 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/accommodations/{accommodation_id}/coordinates":
+  "/api/v1/{parentable_type}/{parentable_id}/coordinates":
     parameters:
-    - name: accommodation_id
+    - name: parentable_type
       in: path
-      description: accommodation_id
+      description: f.e. attractions, accommodations
+      required: true
+      schema:
+        type: string
+    - name: parentable_id
+      in: path
+      description: f.e. attractions_id, accommodations_id
       required: true
       schema:
         type: string
@@ -644,20 +650,6 @@ paths:
               - latitude
               - longitude
         required: true
-  "/api/v1/accommodations/{accommodation_id}/coordinates/{id}":
-    parameters:
-    - name: accommodation_id
-      in: path
-      description: accommodation_id
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
     get:
       summary: show coordinate
       tags:
@@ -665,8 +657,6 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
         '404':
           description: not found
         '422':
@@ -1069,23 +1059,32 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/accommodations/{accommodation_id}/toponyms":
-    parameters:
-    - name: accommodation_id
-      in: path
-      description: accommodation_id
-      required: true
-      schema:
-        type: string
+  "/api/v1/toponyms":
     get:
       summary: list toponyms
       tags:
       - Toponym
-      security:
-      - jwt_auth: []
       responses:
         '200':
           description: successful
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/{parentable_type}/{parentable_id}/toponyms":
+    parameters:
+    - name: parentable_type
+      in: path
+      description: f.e. attractions, accommodations
+      required: true
+      schema:
+        type: string
+    - name: parentable_id
+      in: path
+      description: f.e. attractions_id, accommodations_id
+      required: true
+      schema:
+        type: string
     post:
       summary: create toponym
       tags:
@@ -1094,8 +1093,14 @@ paths:
       - jwt_auth: []
       parameters: []
       responses:
-        '200':
-          description: successful
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -1105,31 +1110,20 @@ paths:
                 locality:
                   type: string
               required:
-              - locality
+              - latitude
+              - longitude
         required: true
-  "/api/v1/accommodations/{accommodation_id}/toponyms/{id}":
-    parameters:
-    - name: accommodation_id
-      in: path
-      description: accommodation_id
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
     get:
       summary: show toponym
       tags:
       - Toponym
-      security:
-      - jwt_auth: []
       responses:
         '200':
           description: successful
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     put:
       summary: update toponym
       tags:
@@ -1140,6 +1134,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
       requestBody:
         content:
           application/json:
@@ -1157,6 +1157,12 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/users":
     get:
       summary: list users
