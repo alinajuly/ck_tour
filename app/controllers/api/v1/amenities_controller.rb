@@ -2,14 +2,21 @@ class Api::V1::AmenitiesController < ApplicationController
   before_action :set_accommodation
   before_action :set_room
   before_action :set_amenity, only: %i[show destroy]
+  skip_before_action :authenticate_request, only: %i[show]
+  before_action :authorize_policy
 
   def show
+    authorize @amenity
+
     render json: @amenity, status: :ok
   end
 
   # POST /api/v1/amenities
   def create
     @amenity = @room.amenities.new(amenity_params)
+
+    authorize @amenity
+
     if @amenity.save
       render json: { data: @amenity }, status: :created
     else
@@ -19,6 +26,8 @@ class Api::V1::AmenitiesController < ApplicationController
 
   # PATCH/PUT /api/v1/amenities/1
   def update
+    authorize @amenity
+
     if @amenity.update(amenity_params)
       render json: { status: 'Update', data: @amenity }, status: :ok
     else
@@ -28,6 +37,8 @@ class Api::V1::AmenitiesController < ApplicationController
 
   # DELETE /api/v1/amenities/1
   def destroy
+    authorize @amenity
+
     if @amenity.destroy!
       render json: { status: 'Delete' }, status: :ok
     else
@@ -61,5 +72,9 @@ class Api::V1::AmenitiesController < ApplicationController
   # Only allow a list of trusted parameters through.
   def amenity_params
     params.permit(:conditioner, :tv, :refrigerator, :kettle, :mv_owen, :hair_dryer, :nice_view, :inclusive)
+  end
+
+  def authorize_policy
+    authorize Amenity
   end
 end

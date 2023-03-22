@@ -1,6 +1,7 @@
 class Api::V1::AccommodationsController < ApplicationController
-  skip_before_action :authenticate_request, only: %i[show index]
-  before_action :set_accommodation, only: %i[show update destroy]
+  skip_before_action :authenticate_request, only: %i[index show]
+  before_action :set_accommodation, only: %i[show update destroy confirm]
+  before_action :authorize_policy
 
   # GET /api/v1/accommodations
   def index
@@ -21,6 +22,8 @@ class Api::V1::AccommodationsController < ApplicationController
                       else
                         Accommodation.all
                       end
+    authorize @accommodations
+
     if @accommodations
       render json: { data: @accommodations }, status: :ok
     else
@@ -30,6 +33,8 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # GET /api/v1/accommodations/1
   def show
+    authorize @accommodation
+
     @rooms = @accommodation.rooms
     render json: { data: @accommodation, rooms: @rooms }, status: :ok
   end
@@ -37,6 +42,9 @@ class Api::V1::AccommodationsController < ApplicationController
   # POST /api/v1/accommodations
   def create
     @accommodation = Accommodation.new(accommodation_params)
+
+    authorize @accommodation
+
     if @accommodation.save
       render json: { data: @accommodation }, status: :created
     else
@@ -46,6 +54,8 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # PATCH/PUT /api/v1/accommodations/1
   def update
+    authorize @accommodation
+
     if @accommodation.update(accommodation_params)
       render json: { status: 'Update', data: @accommodation }, status: :ok
     else
@@ -55,10 +65,22 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # DELETE /api/v1/accommodations/1
   def destroy
+    authorize @accommodation
+
     if @accommodation.destroy!
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @accommodation.errors, status: :unprocessable_entity
+    end
+  end
+
+  def change_status
+    authorize @accommodation
+    
+    if @accommodation.unpublished?
+      @accommodation.published!
+    else
+      @accommodation.unpublished!
     end
   end
 
@@ -80,5 +102,9 @@ class Api::V1::AccommodationsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def accommodation_params
     params.permit(:name, :description, :address, :kind, :phone, :email, :status)
+  end
+
+  def authorize_policy
+    authorize Accommodation
   end
 end

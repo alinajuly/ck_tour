@@ -1,5 +1,5 @@
 class Api::V1::RatesController < ApplicationController
-  before_action :set_api_v1_rate, only: %i[ show update destroy ]
+  before_action :set_api_v1_rate, only: %i[show update destroy]
 
   # GET /api/v1/rates
   def index

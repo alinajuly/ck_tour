@@ -39,6 +39,8 @@ gem 'stripe', '~> 8.3'
 # Use Active Storage variants
 gem 'image_processing', '~> 1.12', '>= 1.12.2'
 
+gem "aws-sdk-s3", require: false
+
 # RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter
 gem 'rubocop', require: false
 
@@ -77,8 +79,13 @@ group :development do
 end
 
 # A Ruby binding to the Ed25519 elliptic curve public-key signature system described in RFC 8032.
- gem 'ed25519'
+gem 'ed25519'
  
 #  This gem implements bcrypt_pdkfd (a variant of PBKDF2 with bcrypt-based PRF)
- gem 'bcrypt_pbkdf'
- gem 'pry'
+gem 'bcrypt_pbkdf'
+
+# Alternative to the standard IRB shell for Ruby. It features syntax highlighting, a flexible plugin architecture, runtime invocation and source and documentation browsing
+gem 'pry'
+
+# Pundit provides a set of helpers which guide you in leveraging regular Ruby classes and object oriented design patterns to build a simple, robust and scalable authorization system
+gem 'pundit'

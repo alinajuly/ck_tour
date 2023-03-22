@@ -71,6 +71,22 @@ GEM
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
+    aws-eventstream (1.2.0)
+    aws-partitions (1.732.0)
+    aws-sdk-core (3.170.1)
+      aws-eventstream (~> 1, >= 1.0.2)
+      aws-partitions (~> 1, >= 1.651.0)
+      aws-sigv4 (~> 1.5)
+      jmespath (~> 1, >= 1.6.1)
+    aws-sdk-kms (1.63.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.119.1)
+      aws-sdk-core (~> 3, >= 3.165.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.4)
+    aws-sigv4 (1.5.2)
+      aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.18)
     bcrypt_pbkdf (1.1.0)
     bootsnap (1.16.0)
@@ -120,6 +136,7 @@ GEM
     io-console (0.6.0)
     irb (1.6.2)
       reline (>= 0.3.0)
+    jmespath (1.6.2)
     json (2.6.3)
     json-schema (3.0.0)
       addressable (>= 2.8)
@@ -167,6 +184,8 @@ GEM
     public_suffix (5.0.1)
     puma (5.6.5)
       nio4r (~> 2.0)
+    pundit (2.3.0)
+      activesupport (>= 3.0.0)
     racc (1.6.2)
     rack (2.2.6.2)
     rack-cors (2.0.1)
@@ -271,6 +290,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  aws-sdk-s3
   bcrypt (~> 3.1.7)
   bcrypt_pbkdf
   bootsnap
@@ -292,6 +312,7 @@ DEPENDENCIES
   pg (~> 1.1)
   pry
   puma (~> 5.0)
+  pundit
   rack-cors
   rails (~> 7.0.4, >= 7.0.4.2)
   rspec-rails

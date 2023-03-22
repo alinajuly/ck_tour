@@ -135,3 +135,8 @@ Headers:
 
 - delete accommodation: http://127.0.0.1:3000/api/v1/accommodations/:id
 - delete room: http://127.0.0.1:3000/api/v1/accommodations/:id/rooms/:id
+
+Open Swagger UI in browser:
+```ruby
+http://localhost:3000/api-docs/index.html
+```

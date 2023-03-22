@@ -1,29 +1,15 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-RSpec.describe 'api/v1/accommodations', type: :request do
-  path '/api/v1/accommodations' do
-    get('list accommodations') do
-      tags 'Accommodation'
+RSpec.describe 'api/v1/toponyms', type: :request do
+  path '/api/v1/toponyms' do
+    get('list toponyms') do
+      tags 'Toponym'
       produces 'application/json'
-      parameter name: :toponyms, in: :query, schema: { type: :string },
-                description: 'Locality'
-      parameter name: :check_in, in: :query, schema: { type: :string },
-                description: 'Date of check in'
-      parameter name: :check_out, in: :query, schema: { type: :string },
-                description: 'Date of check in'
-      parameter name: :number_of_peoples, in: :query, schema: { type: :integer },
-                description: 'Number of peoples'
 
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
-        end
-      end
-
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
         end
       end
 
@@ -39,28 +25,29 @@ RSpec.describe 'api/v1/accommodations', type: :request do
         end
       end
     end
+  end
 
-    post('create accommodation') do
-      tags 'Accommodation'
-      description 'Creates a new accommodation'
+
+  path '/api/v1/{parentable_type}/{parentable_id}/toponyms' do
+    # You'll want to customize the parameter types...
+    parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations'
+    parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attractions_id, accommodations_id'
+
+    post('create toponym') do
+      tags 'Toponym'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
-      parameter name: :accommodation,
-                in: :body,
-                required: true,
-                schema: {
-                  type: :object,
-                  properties: {
-                    name: { type: :string },
-                    description: { type: :string },
-                    address: { type: :string },
-                    phone: { type: :string },
-                    email: { type: :string, format: :email },
-                    kind: { type: :string, enum: [ 'hotel', 'hostel', 'apartment', 'greenhouse' ] }
-                  },
-                  required: [ :name, :description, :address, :phone, :email, :kind ]
-                }
-      
+      security [jwt_auth: []]
+      parameter name: :toponym,
+              in: :body,
+              required: true,
+              schema: {
+                type: :object,
+                properties: {
+                  locality: { type: :string }
+                },
+                required: %i[latitude longitude]
+              }
+
       response(201, 'successful created') do
         it 'should returns status response' do
           expect(response.status).to eq(201)
@@ -78,23 +65,18 @@ RSpec.describe 'api/v1/accommodations', type: :request do
           expect(response.status).to eq(404)
         end
       end
-  
+
       response(422, 'invalid request') do
         it 'should returns status response' do
           expect(response.status).to eq(422)
         end
       end
     end
-  end
 
-  path '/api/v1/accommodations/{id}' do
-    # You'll want to customize the parameter types...
-    parameter name: :id, in: :path, type: :string, description: 'accommodation id'
-
-    get('show accommodation') do
-      tags 'Accommodation'
-
+    get('show toponym') do
+      tags 'Toponym'
       response(200, 'successful') do
+        let(:accommodation_id) { '123' }
         let(:id) { '123' }
 
         after do |example|
@@ -104,17 +86,12 @@ RSpec.describe 'api/v1/accommodations', type: :request do
             }
           }
         end
+        run_test!
       end
-    
+
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
-        end
-      end
-            
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
         end
       end
 
@@ -131,27 +108,22 @@ RSpec.describe 'api/v1/accommodations', type: :request do
       end
     end
 
-    put('update accommodation') do
-      tags 'Accommodation'
+    put('update toponym') do
+      tags 'Toponym'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
-      parameter name: :accommodation,
+      security [jwt_auth: []]
+      parameter name: :coordinate,
                 in: :body,
-                required: true,
+                required: false,
                 schema: {
                   type: :object,
                   properties: {
-                    name: { type: :string },
-                    description: { type: :string },
-                    address: { type: :string },
-                    phone: { type: :string },
-                    email: { type: :string, format: :email },
-                    kind: { type: :string, enum: [ 'hotel', 'hostel', 'apartment', 'greenhouse' ] }
-                  },
-                  required: false
+                    locality: { type: :string }
+                  }
                 }
 
       response(200, 'successful') do
+        let(:accommodation_id) { '123' }
         let(:id) { '123' }
 
         after do |example|
@@ -161,14 +133,9 @@ RSpec.describe 'api/v1/accommodations', type: :request do
             }
           }
         end
+        run_test!
       end
 
-      response(200, 'successful') do
-        it 'should returns status response' do
-          expect(response.status).to eq(200)
-        end
-      end
-            
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -188,22 +155,21 @@ RSpec.describe 'api/v1/accommodations', type: :request do
       end
     end
 
-    delete('delete accommodation') do
-      tags 'Accommodation'
-      security [ jwt_auth: [] ]
-      
+    delete('delete toponym') do
+      tags 'Toponym'
+      security [jwt_auth: []]
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
       end
-      
+
       response(404, 'not found') do
         it 'should returns status response' do
           expect(response.status).to eq(404)

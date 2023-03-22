@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_19_212156) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_21_211201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,6 +24,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_212156) do
     t.datetime "updated_at", null: false
     t.string "phone"
     t.string "email"
+    t.bigint "user_id", null: false
+    t.string "reg_code"
+    t.string "address_owner"
+    t.string "person"
+    t.index ["user_id"], name: "index_accommodations_on_user_id"
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -67,6 +72,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_212156) do
     t.datetime "updated_at", null: false
     t.bigint "room_id", null: false
     t.index ["room_id"], name: "index_amenities_on_room_id"
+  end
+
+  create_table "attractions", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "bookings", force: :cascade do |t|
@@ -119,18 +131,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_212156) do
     t.boolean "breakfast", default: false
     t.boolean "pets", default: false
     t.index ["accommodation_id"], name: "index_facilities_on_accommodation_id"
-  end
-
-  create_table "partners", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "password_digest"
-    t.string "phone"
-    t.string "reg_code"
-    t.string "address"
-    t.string "person"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "places", force: :cascade do |t|
@@ -191,8 +191,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_19_212156) do
     t.string "password_digest"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
+    t.integer "role", default: 0
   end
 
+  add_foreign_key "accommodations", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "amenities", "rooms"

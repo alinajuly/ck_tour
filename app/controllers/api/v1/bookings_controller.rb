@@ -1,9 +1,12 @@
 class Api::V1::BookingsController < ApplicationController
   before_action :authenticate_request
   before_action :set_booking, only: %i[show update destroy]
+  before_action :authorize_policy
 
   def index
     @bookings = @current_user.bookings
+
+    authorize @bookings
     if @bookings
       render json: { data: @bookings }, status: :ok
     else
@@ -12,6 +15,8 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def show
+    authorize @booking
+
     render json: @booking, status: :ok
   end
 
@@ -19,6 +24,9 @@ class Api::V1::BookingsController < ApplicationController
     # @accommodation = Accommodation.find_by_id(params[:accommodation_id])
     @room = Room.find_by_id(params[:room_id])
     @booking = @current_user.bookings.build(booking_params)
+
+    authorize @booking
+
     if @booking.save
       BookingMailer.booking_confirmation(@booking.user, @booking).deliver_now
       render json: @booking, status: :created
@@ -28,6 +36,8 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def update
+    authorize @booking
+
     if @booking.update(room_params)
       render json: { status: 'Update', data: @booking }, status: :ok
     else
@@ -36,6 +46,8 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def destroy
+    authorize @booking
+
     if @booking.destroy!
       render json: { status: 'Delete' }, status: :ok
     else
@@ -55,5 +67,9 @@ class Api::V1::BookingsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def booking_params
     params.permit(:number_of_peoples, :check_in, :check_out, :note, :confirmation, :room_id)
+  end
+
+  def authorize_policy
+    authorize Booking
   end
 end
