@@ -11,12 +11,12 @@ set :puma_user, fetch(:user)
 set :rvm_ruby_version, '3.1.2'
 set :pty, true
 
-set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/master.key', 'config/puma.rb', 'config/secrets.yml', 'config/secrets.production.yml')
+set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/master.key', 'config/puma.rb', 'config/secrets.yml' )
 set :linked_dirs,  fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads', 'public/images',
                                                 'storage')
 
 set :config_example_suffix, '.example'
-set :config_files, %w[config/database.yml config/secrets.yml config/secrets.production.yml]
+set :config_files, %w[config/database.yml config/secrets.yml ]
 set :nginx_use_ssl, false
 
 namespace :deploy do
