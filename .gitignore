@@ -27,6 +27,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+# /config/secrets.yml
 
 #ignore database configuration file
 /config/database.yml
@@ -36,3 +37,6 @@
 
 # Ignore idea
 .idea
+
+# Ignore application configuration
+/config/application.yml

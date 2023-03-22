@@ -1,6 +1,5 @@
 require_relative "boot"
 require "rails/all"
-require 'jwt'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -8,7 +7,6 @@ Bundler.require(*Rails.groups)
 
 module CkTour
   class Application < Rails::Application
-    include JsonWebToken
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 

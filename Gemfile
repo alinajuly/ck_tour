@@ -89,3 +89,6 @@ gem 'pry'
 
 # Pundit provides a set of helpers which guide you in leveraging regular Ruby classes and object oriented design patterns to build a simple, robust and scalable authorization system
 gem 'pundit'
+
+# Simple, Heroku-friendly Rails app configuration using ENV and a single YAML file
+gem "figaro"
