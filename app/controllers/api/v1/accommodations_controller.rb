@@ -76,6 +76,7 @@ class Api::V1::AccommodationsController < ApplicationController
 
   def change_status
     authorize @accommodation
+    
     if @accommodation.unpublished?
       @accommodation.published!
     else
