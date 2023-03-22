@@ -73,7 +73,6 @@ group :development do
   gem 'capistrano3-puma'
   gem 'capistrano-nginx'
   gem 'capistrano-upload-config'
-  gem 'capistrano-rbenv'
   gem 'sshkit-sudo'
   
   # generate preview of e-mail instead of sending
