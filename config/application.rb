@@ -8,6 +8,7 @@ Bundler.require(*Rails.groups)
 
 module CkTour
   class Application < Rails::Application
+    include JsonWebToken
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
@@ -23,7 +24,5 @@ module CkTour
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
-    
-    config.include JsonWebToken
   end
 end
