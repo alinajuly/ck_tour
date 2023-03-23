@@ -64,7 +64,7 @@ class Api::V1::UsersController < ApplicationController
 
   def change_role
     authorize @user
-    debugger
+
     if @user.tourist?
       @user.partner!
     else
