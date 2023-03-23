@@ -1289,7 +1289,7 @@ servers:
 - url: http://{defaultHost}
   variables:
     defaultHost:
-      default: localhost:3000/
+      default: 164.92.135.103
 components:
   securitySchemes:
     jwt_auth:
