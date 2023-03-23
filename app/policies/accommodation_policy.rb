@@ -22,11 +22,11 @@ class AccommodationPolicy < ApplicationPolicy
   end
 
   def update?
-    user.partner? && user.admin?
+    user.partner? || user.admin?
   end
 
   def destroy?
-    user.partner? && user.admin?
+    user.partner? || user.admin?
   end
 
   def change_status?
