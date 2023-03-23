@@ -4,19 +4,19 @@ lock "~> 3.17.1"
 set :application, "ck_tour"
 set :repo_url, "git@github.com:alinajuly/ck_tour.git"
 
-# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp # if you want to chose branch before each deploy
+ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp # if you want to chose branch before each deploy
 
 set :user, 'deployer'
 set :puma_user, fetch(:user)
 set :rvm_ruby_version, '3.1.2'
 set :pty, true
 
-set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/master.key', 'config/puma.rb', 'config/secrets.yml' )
+set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/master.key', 'config/puma.rb', 'config/secrets.yml')
 set :linked_dirs,  fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads', 'public/images',
                                                 'storage')
 
 set :config_example_suffix, '.example'
-set :config_files, %w[config/database.yml config/secrets.yml ]
+set :config_files, %w[config/database.yml config/secrets.yml]
 set :nginx_use_ssl, false
 
 namespace :deploy do
