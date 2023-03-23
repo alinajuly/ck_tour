@@ -4,7 +4,7 @@ lock "~> 3.17.1"
 set :application, "ck_tour"
 set :repo_url, "git@github.com:alinajuly/ck_tour.git"
 
-ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp # if you want to chose branch before each deploy
+# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp # if you want to chose branch before each deploy
 
 set :user, 'deployer'
 set :puma_user, fetch(:user)
