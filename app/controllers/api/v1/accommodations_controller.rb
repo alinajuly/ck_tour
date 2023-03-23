@@ -101,7 +101,7 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def accommodation_params
-    params.permit(:name, :description, :address, :kind, :phone, :email, :status)
+    params.permit(:name, :description, :address, :kind, :phone, :email, :status, :user_id)
   end
 
   def authorize_policy

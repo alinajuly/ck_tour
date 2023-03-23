@@ -80,6 +80,8 @@ paths:
                   - hostel
                   - apartment
                   - greenhouse
+                user_id:
+                  type: string
               required:
               - name
               - description
@@ -87,6 +89,7 @@ paths:
               - phone
               - email
               - kind
+              - user_id
         required: true
   "/api/v1/accommodations/{id}":
     parameters:

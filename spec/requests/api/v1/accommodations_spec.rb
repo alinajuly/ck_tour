@@ -56,9 +56,10 @@ RSpec.describe 'api/v1/accommodations', type: :request do
                     address: { type: :string },
                     phone: { type: :string },
                     email: { type: :string, format: :email },
-                    kind: { type: :string, enum: [ 'hotel', 'hostel', 'apartment', 'greenhouse' ] }
+                    kind: { type: :string, enum: [ 'hotel', 'hostel', 'apartment', 'greenhouse' ] },
+                    user_id: { type: :string }
                   },
-                  required: [ :name, :description, :address, :phone, :email, :kind ]
+                  required: [ :name, :description, :address, :phone, :email, :kind, :user_id ]
                 }
       
       response(201, 'successful created') do

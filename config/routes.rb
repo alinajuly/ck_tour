@@ -19,6 +19,9 @@ Rails.application.routes.draw do
       resources :rates
       resources :places
 
+      root 'attractions#index'
+      get 'search', to: 'attractions#search'
+
       resources :attractions do
         resources :coordinates, only: %i[create]
         get '/coordinates', to: 'coordinates#show'
@@ -29,8 +32,6 @@ Rails.application.routes.draw do
         put '/toponyms', to: 'toponyms#update'
         delete '/toponyms', to: 'toponyms#destroy'
       end
-
-      get 'search', to: 'attractions#search'
 
       resources :accommodations do
         resources :facilities
