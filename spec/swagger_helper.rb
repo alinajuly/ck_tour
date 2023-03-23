@@ -27,8 +27,15 @@ RSpec.configure do |config|
           url: 'http://{defaultHost}',
           variables: {
             defaultHost: {
+              default: 'localhost:3000'
+            }
+          }
+        },
+        {
+          url: 'http://{ck_tour_Host}',
+          variables: {
+            ck_tour_Host: {
               default: '164.92.135.103'
-              # default: 'localhost:3000/'
             }
           }
         }
