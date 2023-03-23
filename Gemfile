@@ -39,6 +39,7 @@ gem 'stripe', '~> 8.3'
 # Use Active Storage variants
 gem 'image_processing', '~> 1.12', '>= 1.12.2'
 
+# Official AWS Ruby gem for Amazon Simple Storage Service (Amazon S3). This gem is part of the AWS SDK for Ruby
 gem "aws-sdk-s3", require: false
 
 # RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter
@@ -90,6 +91,3 @@ gem 'pry'
 
 # Pundit provides a set of helpers which guide you in leveraging regular Ruby classes and object oriented design patterns to build a simple, robust and scalable authorization system
 gem 'pundit'
-
-# Simple, Heroku-friendly Rails app configuration using ENV and a single YAML file
-gem "figaro"
