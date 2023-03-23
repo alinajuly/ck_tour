@@ -7,6 +7,11 @@ Rails.application.routes.draw do
       resources :users do
         put '/change_role', to: 'users#change_role'
       end
+
+      resources :users do
+        resources :bookings
+      end
+
       post '/auth/login', to: 'authentication#login'
       post 'password/forgot', to: 'password#forgot'
       post 'password/reset', to: 'password#reset'
@@ -14,6 +19,7 @@ Rails.application.routes.draw do
       post 'admin/create_admin', 'users#create_admin'
 
       get '/toponyms', to: 'toponyms#index'
+      
       resources :tours
       resources :comments
       resources :rates
@@ -50,10 +56,6 @@ Rails.application.routes.draw do
         get '/toponyms', to: 'toponyms#show'
         put '/toponyms', to: 'toponyms#update'
         delete '/toponyms', to: 'toponyms#destroy'
-      end
-
-      resources :users do
-        resources :bookings
       end
 
     end
