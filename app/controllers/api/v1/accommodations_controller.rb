@@ -52,13 +52,26 @@ class Api::V1::AccommodationsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /api/v1/accommodations/1
+  # PUT /api/v1/accommodations/1
   def update
     authorize @accommodation
 
     if @accommodation.update(accommodation_params)
       render json: { status: 'Update', data: @accommodation }, status: :ok
     else
+      render json: @accommodation.errors, status: :unprocessable_entity
+    end
+  end
+
+  # PUT /api/v1/accommodations/1/change_status
+  def change_status
+    authorize @accommodation
+    
+    if @accommodation.unpublished?
+      @accommodation.published!
+      render json: { status: 'Status is changed', data: @accommodation }, status: :ok
+    else
+      @accommodation.unpublished!
       render json: @accommodation.errors, status: :unprocessable_entity
     end
   end
@@ -71,16 +84,6 @@ class Api::V1::AccommodationsController < ApplicationController
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @accommodation.errors, status: :unprocessable_entity
-    end
-  end
-
-  def change_status
-    authorize @accommodation
-    
-    if @accommodation.unpublished?
-      @accommodation.published!
-    else
-      @accommodation.unpublished!
     end
   end
 

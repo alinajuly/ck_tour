@@ -33,6 +33,13 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  # POST api/v1/users/create_admin
+  def create_admin
+    authorize @user
+
+    @user.admin!
+  end
+
   # PUT api/v1/users/{name}
   def update
     authorize @user
@@ -49,30 +56,29 @@ class Api::V1::UsersController < ApplicationController
     # end
   end
 
+  # PUT api/v1/users/{id}/change_role
+  def change_role
+    authorize @user
+
+    if @user.tourist?
+      @user.partner!
+
+      render json: { status: 'Role is changed', data: @accommodation }, status: :ok
+    elsif
+      @user.tourist!
+      @user.accommodations.destroy_all
+    else
+      render json: { error: 'Invalid current password' }, status: :unprocessable_entity
+    end
+  end
+
   # DELETE api/v1/users/{name}
   def destroy
     authorize @user
 
     @user.destroy
   end
-
-  def create_admin
-    authorize @user
-
-    @user.admin!
-  end
-
-  def change_role
-    authorize @user
-
-    if @user.tourist?
-      @user.partner!
-    else
-      @user.tourist!
-      @user.accommodations.destroy_all
-    end
-  end
-
+  
   private
 
   def user_params

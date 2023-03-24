@@ -169,6 +169,29 @@ paths:
           description: not found
         '422':
           description: invalid request
+  "/api/v1/accommodations/{id}/change_status":
+    parameters:
+    - name: id
+      in: path
+      description: accommodation id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: change_status
+      tags:
+      - Accommodation
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities":
     parameters:
     - name: accommodation_id
@@ -1209,8 +1232,6 @@ paths:
                   type: string
                 password:
                   type: string
-                role:
-                  type: integer
               required:
               - name
               - email
@@ -1287,6 +1308,62 @@ paths:
           description: not found
         '422':
           description: invalid request
+  "/api/v1/users/{id}/change_role":
+    parameters:
+    - name: id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: change_role
+      tags:
+      - User
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/users/create_admin":
+    post:
+      summary: create admin
+      tags:
+      - User
+      description: Creates a new admin
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - name
+              - email
+              - password
+        required: true
 servers:
 - url: http://{defaultHost}
   variables:
