@@ -45,8 +45,7 @@ RSpec.describe 'api/v1/users', type: :request do
                   properties: {
                     name: { type: :string },
                     email: { type: :string },
-                    password: { type: :string },
-                    role: { type: :integer }
+                    password: { type: :string }
                   },
                   required: [ :name, :email, :password ]
                 }

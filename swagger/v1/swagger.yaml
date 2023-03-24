@@ -1209,6 +1209,8 @@ paths:
                   type: string
                 password:
                   type: string
+                role:
+                  type: integer
               required:
               - name
               - email
