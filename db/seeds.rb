@@ -178,7 +178,7 @@ room = Room.create(places: 4, bed: 'double+double', name: 'Студіо', quanti
 Amenity.create(conditioner: true, tv: true, refrigerator: true, hair_dryer: true, kettle: true, mv_owen: true,
                room_id: room.id)
 
-user = User.create(name: 'partner', email: 'partner@test.com', password: 'Partner123!', role: 1)
+user = User.create(name: 'partner2', email: 'partner2@test.com', password: 'Partner1234!', role: 1)
 
 accommodation = Accommodation.create(name: 'Guest House',
                                      description: 'Guest house offers accommodation in Uman, 2.4 km from Singing fountains in Uman and 700 metres from Grave of Tsadik Nachman. The accommodation is 1.4 km from Sofiyivka Park, and guests benefit from private parking available on site and free WiFi.',
