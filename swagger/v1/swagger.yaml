@@ -192,6 +192,39 @@ paths:
           description: not found
         '422':
           description: invalid request
+  "/api/v1/admins":
+    post:
+      summary: create admin
+      tags:
+      - Admin
+      description: Creates a new admin
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - name
+              - email
+              - password
+        required: true
   "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities":
     parameters:
     - name: accommodation_id

@@ -8,8 +8,6 @@ Rails.application.routes.draw do
         put '/change_role', to: 'users#change_role'
       end
 
-      post '/create_admin', to: 'users#create_admin'
-
       resources :users do
         resources :bookings
       end
@@ -17,6 +15,8 @@ Rails.application.routes.draw do
       post '/auth/login', to: 'authentication#login'
       post 'password/forgot', to: 'password#forgot'
       post 'password/reset', to: 'password#reset'
+
+      post 'admins/create_admin', to: 'admins#create_admin'
 
       get '/toponyms', to: 'toponyms#index'
       

@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   skip_before_action :authenticate_request, only: [:create]
-  before_action :set_user, only: %i[show destroy create_admin change_role]
+  before_action :set_user, only: %i[show update destroy change_role]
   before_action :authorize_policy
 
   # GET api/v1/users
@@ -33,19 +33,12 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # POST api/v1/users/create_admin
-  def create_admin
-    authorize @user
-
-    @user.admin!
-  end
-
   # PUT api/v1/users/{name}
   def update
     authorize @user
 
-    if user&.authenticate(params[:current_password])
-      user.update(password: params[:new_password])
+    if @user&.authenticate(params[:current_password])
+      @user.update(password: params[:new_password])
       render json: { message: 'Password updated successfully' }, status: :ok
     else
       render json: { error: 'Invalid current password' }, status: :unprocessable_entity
@@ -57,26 +50,26 @@ class Api::V1::UsersController < ApplicationController
   end
 
   # PUT api/v1/users/{id}/change_role
-  def change_role
-    authorize @user
-
-    if @user.tourist?
-      @user.partner!
-
-      render json: { status: 'Role is changed', data: @accommodation }, status: :ok
-    elsif
-      @user.tourist!
-      @user.accommodations.destroy_all
-    else
-      render json: { error: 'Invalid current password' }, status: :unprocessable_entity
-    end
-  end
 
   # DELETE api/v1/users/{name}
   def destroy
     authorize @user
 
     @user.destroy
+  end
+
+  def change_role
+    authorize @user
+    if @user.tourist?
+      @user.partner!
+
+      render json: { status: 'Role is changed', data: @user }, status: :ok
+    elsif
+    @user.tourist!
+      @user.accommodations.destroy_all
+    else
+      render json: { error: 'Invalid current password' }, status: :unprocessable_entity
+    end
   end
   
   private
@@ -87,6 +80,9 @@ class Api::V1::UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'user id not found' }, status: :not_found
   end
 
   def authorize_policy

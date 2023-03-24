@@ -1,7 +1,8 @@
 class Api::V1::AccommodationsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
-  before_action :set_accommodation, only: %i[show update destroy confirm]
+  before_action :set_accommodation, only: %i[show update destroy change_status]
   before_action :authorize_policy
+  # before_action :set_user
 
   # GET /api/v1/accommodations
   def index
@@ -63,16 +64,14 @@ class Api::V1::AccommodationsController < ApplicationController
     end
   end
 
-  # PUT /api/v1/accommodations/1/change_status
   def change_status
     authorize @accommodation
-    
+
     if @accommodation.unpublished?
       @accommodation.published!
-      render json: { status: 'Status is changed', data: @accommodation }, status: :ok
     else
       @accommodation.unpublished!
-      render json: @accommodation.errors, status: :unprocessable_entity
+      render json: { status: 'Status is changed', data: @accommodation }, status: :ok
     end
   end
 
@@ -95,6 +94,10 @@ class Api::V1::AccommodationsController < ApplicationController
     logger.info e
     render json: { message: 'accommodation id not found' }, status: :not_found
   end
+
+  # def set_user
+  #   @user = User.find(params[:id])
+  # end
 
   # def available_rooms
   #   @available_rooms = Accommodation.joins(:rooms).where('places >= ?', @number_of_peoples)

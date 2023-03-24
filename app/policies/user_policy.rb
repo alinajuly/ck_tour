@@ -34,11 +34,11 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
-  def create_admin?
-    user.admin?
-  end
-
   def change_role?
     true
+  end
+
+  def create_admin?
+    user.admin?
   end
 end
