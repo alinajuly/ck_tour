@@ -1,6 +1,6 @@
 class Api::V1::AccommodationsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
-  before_action :set_accommodation, only: %i[show update destroy change_status]
+  before_action :set_accommodation, only: %i[show update destroy]
   before_action :authorize_policy
   # before_action :set_user
 
@@ -65,14 +65,15 @@ class Api::V1::AccommodationsController < ApplicationController
   end
 
   def change_status
+    @accommodation = Accommodation.find(params[:accommodation_id])
     authorize @accommodation
 
     if @accommodation.unpublished?
       @accommodation.published!
     else
       @accommodation.unpublished!
-      render json: { status: 'Status is changed', data: @accommodation }, status: :ok
     end
+    render json: { status: 'Status is changed', data: @accommodation }, status: :ok
   end
 
   # DELETE /api/v1/accommodations/1
