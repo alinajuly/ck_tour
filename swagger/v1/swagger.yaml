@@ -192,12 +192,14 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/admins":
+  "/api/v1/admins/create_admin":
     post:
       summary: create admin
       tags:
       - Admin
       description: Creates a new admin
+      security:
+      - jwt_auth: []
       parameters: []
       responses:
         '201':
