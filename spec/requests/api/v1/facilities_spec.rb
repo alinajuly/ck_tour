@@ -1,15 +1,54 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-RSpec.describe "Api::V1::Facilities", type: :request do
+RSpec.describe 'Api::V1::Facilities', type: :request do
   path '/api/v1/accommodations/{accommodation_id}/facilities' do
-    # You'll want to customize the parameter types...
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
+
+    get('list facilities') do
+      tags 'Facility'
+      response(200, 'successful') do
+        let(:accommodation_id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+      end
+
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+      end
+    end
 
     post('create facility') do
       tags 'Facility'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :facility,
                 in: :body,
                 required: true,
@@ -25,7 +64,7 @@ RSpec.describe "Api::V1::Facilities", type: :request do
                     wi_fi: { type: :boolean },
                     breakfast: { type: :boolean },
                     pets: { type: :boolean }
-                  },
+                  }
                 }
 
       response(201, 'successful created') do
@@ -46,7 +85,7 @@ RSpec.describe "Api::V1::Facilities", type: :request do
           expect(response.status).to eq(201)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -70,54 +109,12 @@ RSpec.describe "Api::V1::Facilities", type: :request do
   path '/api/v1/accommodations/{accommodation_id}/facilities/{id}' do
     # You'll want to customize the parameter types...
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
-    parameter name: 'id', in: :path, type: :string, description: 'id'
-
-    get('show facility') do
-      tags 'Facility'
-
-      response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-
-      response(200, 'successful') do
-        it 'should returns status response' do
-          expect(response.status).to eq(200)
-        end
-      end
-            
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
-      end
-    end
+    parameter name: 'id', in: :path, type: :string, description: 'facility_id'
 
     put('update facility') do
       tags 'Facility'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :facility,
                 in: :body,
                 schema: {
@@ -155,7 +152,7 @@ RSpec.describe "Api::V1::Facilities", type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -177,8 +174,8 @@ RSpec.describe "Api::V1::Facilities", type: :request do
 
     delete('delete facility') do
       tags 'Facility'
-      security [ jwt_auth: [] ]
-      
+      security [jwt_auth: []]
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -198,7 +195,7 @@ RSpec.describe "Api::V1::Facilities", type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)

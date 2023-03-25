@@ -9,7 +9,9 @@ Rails.application.routes.draw do
       end
 
       resources :users do
-        resources :bookings
+        resources :bookings do
+          put '/confirm', to: 'bookings#confirm'
+        end
       end
 
       post '/auth/login', to: 'authentication#login'

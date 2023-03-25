@@ -1,5 +1,5 @@
 class AmenityPolicy < ApplicationPolicy
-  def show?
+  def index?
     true
   end
 

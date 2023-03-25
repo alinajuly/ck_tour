@@ -241,6 +241,19 @@ paths:
       required: true
       schema:
         type: string
+    get:
+      summary: list amenities
+      tags:
+      - Amenity
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     post:
       summary: create amenity
       tags:
@@ -294,19 +307,12 @@ paths:
       required: true
       schema:
         type: string
-    get:
-      summary: show amenity
-      tags:
-      - Amenity
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
+    - name: id
+      in: path
+      description: amenity_id
+      required: true
+      schema:
+        type: string
     put:
       summary: update amenity
       tags:
@@ -345,7 +351,6 @@ paths:
                   type: boolean
                 inclusive:
                   type: boolean
-              required: false
     delete:
       summary: delete amenity
       tags:
@@ -524,7 +529,7 @@ paths:
         required: true
   "/api/v1/users/{id}/bookings":
     parameters:
-    - name: user_id
+    - name: id
       in: path
       description: user id
       required: true
@@ -578,14 +583,15 @@ paths:
                   format: date
                 note:
                   type: string
-                confirmation:
+                room_id:
                   type: integer
               required:
               - number_of_peoples
               - check_in
               - check_out
+              - room_id
         required: true
-  "/api/v1/users/{id}/bookings/{id}":
+  "/api/v1/users/{user_id}/bookings/{id}":
     parameters:
     - name: user_id
       in: path
@@ -593,7 +599,7 @@ paths:
       required: true
       schema:
         type: string
-    - name: booking_id
+    - name: id
       in: path
       description: booking id
       required: true
@@ -646,16 +652,47 @@ paths:
                   format: date
                 note:
                   type: string
-                confirmation:
-                  type: integer
-              required: false
-        required: true
     delete:
       summary: delete booking
       tags:
       - Booking
       security:
       - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/users/{user_id}/bookings/{id}/confirm":
+    parameters:
+    - name: user_id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: booking id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: confirmations
+      tags:
+      - Booking
+      security:
+      - jwt_auth: []
+      parameters:
+      - name: confirmation
+        in: query
+        schema:
+          type: integer
+        description: approve - 1, cancel - 2
       responses:
         '200':
           description: successful
@@ -773,6 +810,19 @@ paths:
       required: true
       schema:
         type: string
+    get:
+      summary: list facilities
+      tags:
+      - Facility
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     post:
       summary: create facility
       tags:
@@ -828,23 +878,10 @@ paths:
         type: string
     - name: id
       in: path
-      description: id
+      description: facility_id
       required: true
       schema:
         type: string
-    get:
-      summary: show facility
-      tags:
-      - Facility
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     put:
       summary: update facility
       tags:
@@ -977,7 +1014,22 @@ paths:
       summary: list rooms
       tags:
       - Room
-      parameters: []
+      parameters:
+      - name: check_in
+        in: query
+        schema:
+          type: string
+        description: Guests Check-in f.e. 2023-05-15
+      - name: check_out
+        in: query
+        schema:
+          type: string
+        description: Guests Check-out f.e. 2023-05-17
+      - name: number_of_peoples
+        in: query
+        schema:
+          type: string
+        description: Guests quantity
       responses:
         '200':
           description: successful
@@ -987,20 +1039,6 @@ paths:
           description: not found
         '422':
           description: invalid request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                check_in:
-                  type: string
-                check_out:
-                  type: string
-                number_of_peoples:
-                  type: string
-              required: false
-        required: true
     post:
       summary: create room
       tags:
@@ -1051,7 +1089,7 @@ paths:
       required: true
       schema:
         type: string
-    - name: room_id
+    - name: id
       in: path
       description: room_id
       required: true

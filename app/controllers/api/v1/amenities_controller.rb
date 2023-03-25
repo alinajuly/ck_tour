@@ -1,14 +1,15 @@
 class Api::V1::AmenitiesController < ApplicationController
   before_action :set_accommodation
   before_action :set_room
-  before_action :set_amenity, only: %i[show destroy]
-  skip_before_action :authenticate_request, only: %i[show]
+  before_action :set_amenity, only: %i[update destroy]
+  skip_before_action :authenticate_request, only: %i[index]
   before_action :authorize_policy
 
-  def show
-    authorize @amenity
+  def index
+    @amenities = @room.amenities.all
+    authorize @amenities
 
-    render json: @amenity, status: :ok
+    render json: @amenities, status: :ok
   end
 
   # POST /api/v1/amenities
@@ -56,7 +57,7 @@ class Api::V1::AmenitiesController < ApplicationController
   end
 
   def set_room
-    @room = Room.find(params[:id])
+    @room = Room.find(params[:room_id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'room id not found' }, status: :not_found

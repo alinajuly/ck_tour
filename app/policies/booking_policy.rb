@@ -18,4 +18,8 @@ class BookingPolicy < ApplicationPolicy
   def destroy?
     true
   end
+
+  def confirm?
+    user.partner?
+  end
 end
