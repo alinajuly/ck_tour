@@ -1366,39 +1366,6 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/users/create_admin":
-    post:
-      summary: create admin
-      tags:
-      - User
-      description: Creates a new admin
-      parameters: []
-      responses:
-        '201':
-          description: successful created
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
-              required:
-              - name
-              - email
-              - password
-        required: true
 servers:
 - url: http://{defaultHost}
   variables:
