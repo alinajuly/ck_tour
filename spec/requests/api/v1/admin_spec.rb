@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/admins', type: :request do
-  path '/api/v1/admins' do
+  path '/api/v1/admins/create_admin' do
     post('create admin') do
       tags 'Admin'
       description 'Creates a new admin'
