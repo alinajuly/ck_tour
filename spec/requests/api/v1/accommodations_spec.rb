@@ -6,7 +6,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     get('list accommodations') do
       tags 'Accommodation'
       produces 'application/json'
-      parameter name: :toponyms, in: :query, schema: { type: :string },
+      parameter name: :geolocations, in: :query, schema: { type: :string },
                 description: 'Locality'
       parameter name: :check_in, in: :query, schema: { type: :string },
                 description: 'Date of check in'

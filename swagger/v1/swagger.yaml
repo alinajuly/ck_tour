@@ -10,7 +10,7 @@ paths:
       tags:
       - Accommodation
       parameters:
-      - name: toponyms
+      - name: geolocations
         in: query
         schema:
           type: string
@@ -395,7 +395,7 @@ paths:
       tags:
       - Attraction
       parameters:
-      - name: toponyms
+      - name: geolocations
         in: query
         schema:
           type: string
@@ -748,7 +748,7 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/{parentable_type}/{parentable_id}/coordinates":
+  "/api/v1/{parentable_type}/{parentable_id}/geolocations":
     parameters:
     - name: parentable_type
       in: path
@@ -763,9 +763,9 @@ paths:
       schema:
         type: string
     post:
-      summary: create coordinate
+      summary: create geolocation
       tags:
-      - Coordinate
+      - Geolocation
       security:
       - jwt_auth: []
       parameters: []
@@ -784,20 +784,29 @@ paths:
             schema:
               type: object
               properties:
+                locality:
+                  type: string
                 latitude:
                   type: string
                   format: decimal
                 longitude:
                   type: string
                   format: decimal
+                street:
+                  type: string
+                suite:
+                  type: string
+                zip_code:
+                  type: string
               required:
+              - locality
               - latitude
               - longitude
         required: true
     get:
-      summary: show coordinate
+      summary: show geolocation
       tags:
-      - Coordinate
+      - Geolocation
       responses:
         '200':
           description: successful
@@ -806,9 +815,9 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update coordinate
+      summary: update geolocation
       tags:
-      - Coordinate
+      - Geolocation
       security:
       - jwt_auth: []
       parameters: []
@@ -827,16 +836,24 @@ paths:
             schema:
               type: object
               properties:
+                locality:
+                  type: string
                 latitude:
                   type: string
                   format: decimal
                 longitude:
                   type: string
                   format: decimal
+                street:
+                  type: string
+                suite:
+                  type: string
+                zip_code:
+                  type: string
     delete:
-      summary: delete coordinate
+      summary: delete geolocation
       tags:
-      - Coordinate
+      - Geolocation
       security:
       - jwt_auth: []
       responses:
@@ -1193,110 +1210,6 @@ paths:
       summary: delete room
       tags:
       - Room
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/toponyms":
-    get:
-      summary: list toponyms
-      tags:
-      - Toponym
-      responses:
-        '200':
-          description: successful
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/{parentable_type}/{parentable_id}/toponyms":
-    parameters:
-    - name: parentable_type
-      in: path
-      description: f.e. attractions, accommodations
-      required: true
-      schema:
-        type: string
-    - name: parentable_id
-      in: path
-      description: f.e. attractions_id, accommodations_id
-      required: true
-      schema:
-        type: string
-    post:
-      summary: create toponym
-      tags:
-      - Toponym
-      security:
-      - jwt_auth: []
-      parameters: []
-      responses:
-        '201':
-          description: successful created
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                locality:
-                  type: string
-              required:
-              - latitude
-              - longitude
-        required: true
-    get:
-      summary: show toponym
-      tags:
-      - Toponym
-      responses:
-        '200':
-          description: successful
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-    put:
-      summary: update toponym
-      tags:
-      - Toponym
-      security:
-      - jwt_auth: []
-      parameters: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                locality:
-                  type: string
-    delete:
-      summary: delete toponym
-      tags:
-      - Toponym
       security:
       - jwt_auth: []
       responses:

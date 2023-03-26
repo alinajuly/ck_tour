@@ -1,18 +1,18 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-RSpec.describe 'api/v1/coordinates', type: :request do
+RSpec.describe 'api/v1/geolocations', type: :request do
 
-  path '/api/v1/{parentable_type}/{parentable_id}/coordinates' do
+  path '/api/v1/{parentable_type}/{parentable_id}/geolocations' do
     # You'll want to customize the parameter types...
     parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations'
     parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attractions_id, accommodations_id'
 
-    post('create coordinate') do
-      tags 'Coordinate'
+    post('create geolocation') do
+      tags 'Geolocation'
       consumes 'application/json'
       security [ jwt_auth: [] ]
-      parameter name: :coordinate,
+      parameter name: :geolocation,
                 in: :body,
                 required: true,
                 schema: {
@@ -49,8 +49,8 @@ RSpec.describe 'api/v1/coordinates', type: :request do
       end
     end
 
-    get('show coordinate') do
-      tags 'Coordinate'
+    get('show geolocation') do
+      tags 'Geolocation'
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
@@ -85,11 +85,11 @@ RSpec.describe 'api/v1/coordinates', type: :request do
       end
     end
 
-    put('update coordinate') do
-      tags 'Coordinate'
+    put('update geolocation') do
+      tags 'Geolocation'
       consumes 'application/json'
       security [ jwt_auth: [] ]
-      parameter name: :coordinate,
+      parameter name: :geolocation,
                 in: :body,
                 required: false,
                 schema: {
@@ -133,8 +133,8 @@ RSpec.describe 'api/v1/coordinates', type: :request do
       end
     end
 
-    delete('delete coordinate') do
-      tags 'Coordinate'
+    delete('delete geolocation') do
+      tags 'Geolocation'
       security [ jwt_auth: [] ]
       
       response(200, 'successful') do

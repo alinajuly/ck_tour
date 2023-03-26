@@ -5,8 +5,8 @@ class Api::V1::AttractionsController < ApplicationController
 
   # GET /api/v1/attractions
   def index
-    @attractions = if params[:toponyms].present?
-                     Attraction.toponym_filter(params[:toponyms])
+    @attractions = if params[:geolocations].present?
+                     Attraction.geolocation_filter(params[:geolocations])
                    else
                      Attraction.all
                    end
@@ -15,7 +15,7 @@ class Api::V1::AttractionsController < ApplicationController
 
     if @attractions
       # render json: { data: @attractions }, status: :ok
-      render json: @attractions.as_json(include: :coordinates), status: :ok
+      render json: @attractions.as_json(include: :geolocations), status: :ok
     else
       render json: @attractions.errors, status: :bad_request
     end
@@ -25,8 +25,8 @@ class Api::V1::AttractionsController < ApplicationController
   def show
     authorize @attraction
 
-    render json: @attraction.as_json(include: :coordinates), status: :ok
-    # render json: @attraction.as_json(include: :toponyms), status: :ok
+    render json: @attraction.as_json(include: :geolocations), status: :ok
+    # render json: @attraction.as_json(include: :geolocations), status: :ok
   end
 
   # POST /api/v1/attractions
@@ -67,7 +67,7 @@ class Api::V1::AttractionsController < ApplicationController
   def search
     authorize @attraction
 
-    @result = Attraction.all.joins(:toponyms).where('title||description||locality ILIKE ?', "%#{params[:req]}%")
+    @result = Attraction.all.joins(:geolocations).where('title||description||locality ILIKE ?', "%#{params[:req]}%")
     if @result.blank?
       render json: { message: 'Attraction not found' }, status: :ok
     else
