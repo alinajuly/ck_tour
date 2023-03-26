@@ -1,10 +1,11 @@
 class Api::V1::FacilitiesController < ApplicationController
   before_action :set_accommodation
-  before_action :set_facility, only: %i[show destroy]
-  skip_before_action :authenticate_request, only: %i[show]
+  before_action :set_facility, only: %i[update destroy]
+  skip_before_action :authenticate_request, only: %i[index]
 
-  def show
-    render json: @facility, status: :ok
+  def index
+    @facilities = @accommodation.facilities.all
+    render json: @facilities, status: :ok
   end
 
   # POST /api/v1/facilities
@@ -45,10 +46,7 @@ class Api::V1::FacilitiesController < ApplicationController
   end
 
   def set_facility
-    @facility = facility.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'facility id not found' }, status: :not_found
+    @facility = @accommodation.facilities
   end
 
   # Only allow a list of trusted parameters through.

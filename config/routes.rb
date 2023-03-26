@@ -9,7 +9,10 @@ Rails.application.routes.draw do
       end
 
       resources :users do
-        resources :bookings
+        resources :bookings do
+          put '/confirm', to: 'bookings#confirm'
+          put '/cancel', to: 'bookings#cancel'
+        end
       end
 
       post '/auth/login', to: 'authentication#login'
@@ -19,7 +22,7 @@ Rails.application.routes.draw do
       post 'admins/create_admin', to: 'admins#create_admin'
 
       get '/toponyms', to: 'toponyms#index'
-      
+
       resources :tours
       resources :comments
       resources :rates

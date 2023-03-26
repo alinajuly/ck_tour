@@ -4,23 +4,16 @@ require 'swagger_helper'
 RSpec.describe 'api/v1/rooms', type: :request do
 
   path '/api/v1/accommodations/{accommodation_id}/rooms' do
-    # You'll want to customize the parameter types...
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     get('list rooms') do
       tags 'Room'
-      consumes 'application/json'
-      parameter name: :room,
-                in: :body,
-                required: true,
-                schema: {
-                  type: :object,
-                  properties: {
-                    check_in: { type: :string },
-                    check_out: { type: :string },
-                    number_of_peoples: { type: :string },
-                  },
-                  required: false
-                }
+      produces 'application/json'
+      parameter name: :check_in, in: :query, schema: { type: :string },
+                description: 'Guests Check-in f.e. 2023-05-15'
+      parameter name: :check_out, in: :query, schema: { type: :string },
+                description: 'Guests Check-out f.e. 2023-05-17'
+      parameter name: :number_of_peoples, in: :query, schema: { type: :string },
+                description: 'Guests quantity'
 
       response(200, 'successful') do
         let(:accommodation_id) { '1' }
@@ -40,7 +33,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -98,7 +91,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
           expect(response.status).to eq(201)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -122,14 +115,14 @@ RSpec.describe 'api/v1/rooms', type: :request do
   path '/api/v1/accommodations/{accommodation_id}/rooms/{id}' do
     # You'll want to customize the parameter types...
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
-    parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
+    parameter name: 'id', in: :path, type: :string, description: 'room_id'
 
     get('show room') do
       tags 'Room'
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
-        let(:room_id) { '123' }
+        let(:id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {

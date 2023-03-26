@@ -1,10 +1,11 @@
 class Api::V1::BookingsController < ApplicationController
   before_action :authenticate_request
+  before_action :set_user
   before_action :set_booking, only: %i[show update destroy]
   before_action :authorize_policy
 
   def index
-    @bookings = @current_user.bookings
+    @bookings = @user.bookings.all
 
     authorize @bookings
     if @bookings
@@ -38,7 +39,7 @@ class Api::V1::BookingsController < ApplicationController
   def update
     authorize @booking
 
-    if @booking.update(room_params)
+    if @booking.update(booking_params)
       render json: { status: 'Update', data: @booking }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity
@@ -55,10 +56,39 @@ class Api::V1::BookingsController < ApplicationController
     end
   end
 
+  def confirm
+    @booking = Booking.find(params[:booking_id])
+    authorize @booking
+
+    if @booking.approved!
+      render json: { status: 'Confirmed', data: @booking }, status: :ok
+    else
+      render json: @booking.errors, status: :unprocessable_entity
+    end
+  end
+
+  def cancel
+    @booking = Booking.find(params[:booking_id])
+    authorize @booking
+
+    if @booking.cancelled!
+      render json: { status: 'Cancelled', data: @booking }, status: :ok
+    else
+      render json: @booking.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_booking
-    @booking = Booking.find(params[:id])
+    @booking = @user.bookings.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'booking id not found' }, status: :not_found
+  end
+
+  def set_user
+    @user = User.find(params[:user_id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'booking id not found' }, status: :not_found
