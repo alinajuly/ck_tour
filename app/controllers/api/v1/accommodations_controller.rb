@@ -64,17 +64,28 @@ class Api::V1::AccommodationsController < ApplicationController
     end
   end
 
-  def change_status
+  def publish
     @accommodation = Accommodation.find(params[:accommodation_id])
     authorize @accommodation
 
-    if @accommodation.unpublished?
-      @accommodation.published!
+    if @accommodation.published!
+      render json: { status: 'Item is published', data: @accommodation }, status: :ok
     else
-      @accommodation.unpublished!
+      render json: @accommodation.errors, status: :unprocessable_entity
     end
-    render json: { status: 'Status is changed', data: @accommodation }, status: :ok
   end
+
+  def unpublish
+    @accommodation = Accommodation.find(params[:accommodation_id])
+    authorize @accommodation
+
+    if @accommodation.unpublished!
+      render json: { status: 'Item is hidden', data: @accommodation }, status: :ok
+    else
+      render json: @accommodation.errors, status: :unprocessable_entity
+    end
+  end
+
 
   # DELETE /api/v1/accommodations/1
   def destroy

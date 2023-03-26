@@ -47,7 +47,8 @@ Rails.application.routes.draw do
         resources :rooms do
           resources :amenities
         end
-        put '/change_status', to: 'accommodations#change_status'
+        put '/publish', to: 'accommodations#publish'
+        put '/unpublish', to: 'accommodations#unpublish'
       end
 
       resources :accommodations do

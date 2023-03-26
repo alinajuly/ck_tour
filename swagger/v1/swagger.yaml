@@ -169,7 +169,7 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/accommodations/{id}/change_status":
+  "/api/v1/accommodations/{id}/publish":
     parameters:
     - name: id
       in: path
@@ -178,7 +178,30 @@ paths:
       schema:
         type: string
     put:
-      summary: change_status
+      summary: publish
+      tags:
+      - Accommodation
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/accommodations/{id}/unpublish":
+    parameters:
+    - name: id
+      in: path
+      description: accommodation id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: unpublish
       tags:
       - Accommodation
       security:

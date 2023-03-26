@@ -29,7 +29,11 @@ class AccommodationPolicy < ApplicationPolicy
     user.partner? || user.admin?
   end
 
-  def change_status?
+  def publish?
+    user.admin? # Only an admin can confirm a partner's create accommodations
+  end
+
+  def unpublish?
     user.admin? # Only an admin can confirm a partner's create accommodations
   end
 end
