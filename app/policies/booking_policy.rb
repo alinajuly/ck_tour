@@ -22,4 +22,8 @@ class BookingPolicy < ApplicationPolicy
   def confirm?
     user.partner?
   end
+
+  def cancel?
+    user.partner?
+  end
 end

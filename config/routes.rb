@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :users do
         resources :bookings do
           put '/confirm', to: 'bookings#confirm'
+          put '/cancel', to: 'bookings#cancel'
         end
       end
 
@@ -21,7 +22,7 @@ Rails.application.routes.draw do
       post 'admins/create_admin', to: 'admins#create_admin'
 
       get '/toponyms', to: 'toponyms#index'
-      
+
       resources :tours
       resources :comments
       resources :rates

@@ -687,12 +687,35 @@ paths:
       - Booking
       security:
       - jwt_auth: []
-      parameters:
-      - name: confirmation
-        in: query
-        schema:
-          type: integer
-        description: approve - 1, cancel - 2
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/users/{user_id}/bookings/{id}/cancel":
+    parameters:
+    - name: user_id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: booking id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: cancelling
+      tags:
+      - Booking
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful

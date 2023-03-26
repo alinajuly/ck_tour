@@ -62,7 +62,16 @@ class Api::V1::BookingsController < ApplicationController
 
     if @booking.approved!
       render json: { status: 'Confirmed', data: @booking }, status: :ok
-    elsif @booking.cancelled!
+    else
+      render json: @booking.errors, status: :unprocessable_entity
+    end
+  end
+
+  def cancel
+    @booking = Booking.find(params[:booking_id])
+    authorize @booking
+
+    if @booking.cancelled!
       render json: { status: 'Cancelled', data: @booking }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity
