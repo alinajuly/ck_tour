@@ -1,8 +1,4 @@
-class ToponymPolicy < ApplicationPolicy
-  def index?
-    true
-  end
-  
+class GeolocationPolicy < ApplicationPolicy
   def show?
     true
   end

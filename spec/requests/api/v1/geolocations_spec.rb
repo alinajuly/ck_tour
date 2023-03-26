@@ -1,52 +1,32 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-RSpec.describe 'api/v1/toponyms', type: :request do
-  path '/api/v1/toponyms' do
-    get('list toponyms') do
-      tags 'Toponym'
-      produces 'application/json'
+RSpec.describe 'api/v1/geolocations', type: :request do
 
-      response(200, 'successful') do
-        it 'should returns status response' do
-          expect(response.status).to eq(200)
-        end
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
-      end
-    end
-  end
-
-
-  path '/api/v1/{parentable_type}/{parentable_id}/toponyms' do
+  path '/api/v1/{parentable_type}/{parentable_id}/geolocations' do
     # You'll want to customize the parameter types...
     parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations'
     parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attractions_id, accommodations_id'
 
-    post('create toponym') do
-      tags 'Toponym'
+    post('create geolocation') do
+      tags 'Geolocation'
       consumes 'application/json'
-      security [jwt_auth: []]
-      parameter name: :toponym,
-              in: :body,
-              required: true,
-              schema: {
-                type: :object,
-                properties: {
-                  locality: { type: :string }
-                },
-                required: %i[latitude longitude]
-              }
+      security [ jwt_auth: [] ]
+      parameter name: :geolocation,
+                in: :body,
+                required: true,
+                schema: {
+                  type: :object,
+                  properties: {
+                    locality: { type: :string },
+                    latitude: { type: :string, format: :decimal },
+                    longitude: { type: :string, format: :decimal },
+                    street: { type: :string },
+                    suite: { type: :string },
+                    zip_code: { type: :string }
+                  },
+                  required: %i[locality latitude longitude]
+                }
 
       response(201, 'successful created') do
         it 'should returns status response' do
@@ -73,8 +53,9 @@ RSpec.describe 'api/v1/toponyms', type: :request do
       end
     end
 
-    get('show toponym') do
-      tags 'Toponym'
+    get('show geolocation') do
+      tags 'Geolocation'
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:id) { '123' }
@@ -108,17 +89,22 @@ RSpec.describe 'api/v1/toponyms', type: :request do
       end
     end
 
-    put('update toponym') do
-      tags 'Toponym'
+    put('update geolocation') do
+      tags 'Geolocation'
       consumes 'application/json'
-      security [jwt_auth: []]
-      parameter name: :coordinate,
+      security [ jwt_auth: [] ]
+      parameter name: :geolocation,
                 in: :body,
                 required: false,
                 schema: {
                   type: :object,
                   properties: {
-                    locality: { type: :string }
+                    locality: { type: :string },
+                    latitude: { type: :string, format: :decimal },
+                    longitude: { type: :string, format: :decimal },
+                    street: { type: :string },
+                    suite: { type: :string },
+                    zip_code: { type: :string }
                   }
                 }
 
@@ -155,9 +141,24 @@ RSpec.describe 'api/v1/toponyms', type: :request do
       end
     end
 
-    delete('delete toponym') do
-      tags 'Toponym'
-      security [jwt_auth: []]
+    delete('delete geolocation') do
+      tags 'Geolocation'
+      security [ jwt_auth: [] ]
+
+      response(200, 'successful') do
+        let(:accommodation_id) { '123' }
+        let(:id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)

@@ -1,6 +1,5 @@
 class Place < ApplicationRecord
   has_many :comments, as: :commentable
-  has_many :toponyms, as: :toponymable
   has_many :rates, as: :ratable
   has_many_attached :image do |attachable|
     attachable.variant :thumb, resize_to_limit: [100, 100]

@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_21_211201) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "accommodations", force: :cascade do |t|
     t.string "name"
-    t.string "address"
     t.string "description"
     t.string "kind"
     t.integer "status", default: 0
@@ -107,16 +106,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_21_211201) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
-  create_table "coordinates", force: :cascade do |t|
-    t.decimal "latitude", precision: 10, scale: 6
-    t.decimal "longitude", precision: 10, scale: 6
-    t.string "coordinatable_type", null: false
-    t.bigint "coordinatable_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["coordinatable_type", "coordinatable_id"], name: "index_coordinates_on_coordinatable"
-  end
-
   create_table "facilities", force: :cascade do |t|
     t.datetime "checkin_start", precision: nil
     t.datetime "checkin_end", precision: nil
@@ -131,6 +120,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_21_211201) do
     t.boolean "breakfast", default: false
     t.boolean "pets", default: false
     t.index ["accommodation_id"], name: "index_facilities_on_accommodation_id"
+  end
+
+  create_table "geolocations", force: :cascade do |t|
+    t.string "locality"
+    t.string "street"
+    t.string "suite"
+    t.string "zip_code"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.string "geolocationable_type", null: false
+    t.bigint "geolocationable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["geolocationable_type", "geolocationable_id"], name: "index_geolocations_on_geolocationable"
   end
 
   create_table "places", force: :cascade do |t|
@@ -164,15 +167,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_21_211201) do
     t.string "name"
     t.integer "quantity"
     t.index ["accommodation_id"], name: "index_rooms_on_accommodation_id"
-  end
-
-  create_table "toponyms", force: :cascade do |t|
-    t.string "locality"
-    t.string "toponymable_type", null: false
-    t.bigint "toponymable_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["toponymable_type", "toponymable_id"], name: "index_toponyms_on_toponymable"
   end
 
   create_table "tours", force: :cascade do |t|

@@ -21,8 +21,6 @@ Rails.application.routes.draw do
 
       post 'admins/create_admin', to: 'admins#create_admin'
 
-      get '/toponyms', to: 'toponyms#index'
-
       resources :tours
       resources :comments
       resources :rates
@@ -32,14 +30,10 @@ Rails.application.routes.draw do
       get 'search', to: 'attractions#search'
 
       resources :attractions do
-        resources :coordinates, only: %i[create]
-        get '/coordinates', to: 'coordinates#show'
-        put '/coordinates', to: 'coordinates#update'
-        delete '/coordinates', to: 'coordinates#destroy'
-        resources :toponyms, only: %i[create]
-        get '/toponyms', to: 'toponyms#show'
-        put '/toponyms', to: 'toponyms#update'
-        delete '/toponyms', to: 'toponyms#destroy'
+        resources :geolocations, only: %i[create]
+        get '/geolocations', to: 'geolocations#show'
+        put '/geolocations', to: 'geolocations#update'
+        delete '/geolocations', to: 'geolocations#destroy'
       end
 
       resources :accommodations do
@@ -47,18 +41,15 @@ Rails.application.routes.draw do
         resources :rooms do
           resources :amenities
         end
-        put '/change_status', to: 'accommodations#change_status'
+        put '/publish', to: 'accommodations#publish'
+        put '/unpublish', to: 'accommodations#unpublish'
       end
 
       resources :accommodations do
-        resources :coordinates, only: %i[create]
-        get '/coordinates', to: 'coordinates#show'
-        put '/coordinates', to: 'coordinates#update'
-        delete '/coordinates', to: 'coordinates#destroy'
-        resources :toponyms, only: %i[create]
-        get '/toponyms', to: 'toponyms#show'
-        put '/toponyms', to: 'toponyms#update'
-        delete '/toponyms', to: 'toponyms#destroy'
+        resources :geolocations, only: %i[create]
+        get '/geolocations', to: 'geolocations#show'
+        put '/geolocations', to: 'geolocations#update'
+        delete '/geolocations', to: 'geolocations#destroy'
       end
 
     end

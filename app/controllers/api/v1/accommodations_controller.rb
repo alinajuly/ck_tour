@@ -10,16 +10,16 @@ class Api::V1::AccommodationsController < ApplicationController
     check_out = params[:check_out]
     number_of_peoples = params[:number_of_peoples]
 
-    @accommodations = if params[:toponyms].present? && params[:check_in].present? && params[:check_out].present? && params[:number_of_peoples].present?
+    @accommodations = if params[:geolocations].present? && params[:check_in].present? && params[:check_out].present? && params[:number_of_peoples].present?
                         Accommodation.joins(:rooms)
                                      .where('rooms.places >= ?', number_of_peoples)
-                                     .toponym_filter(params[:toponyms]).distinct
+                                     .geolocation_filter(params[:geolocations]).distinct
                         # Accommodation.joins(rooms: :bookings)
                                      # .where.not(bookings: { check_in: ..check_out, check_out: check_in.. })
                                      # .where('rooms.places >= ?', number_of_peoples)
                                      # .tag_filter(params[:tags]).distinct
-                      elsif params[:toponyms].present?
-                        Accommodation.toponym_filter(params[:toponyms])
+                      elsif params[:geolocations].present?
+                        Accommodation.geolocation_filter(params[:geolocations])
                       else
                         Accommodation.all
                       end
@@ -64,17 +64,28 @@ class Api::V1::AccommodationsController < ApplicationController
     end
   end
 
-  def change_status
+  def publish
     @accommodation = Accommodation.find(params[:accommodation_id])
     authorize @accommodation
 
-    if @accommodation.unpublished?
-      @accommodation.published!
+    if @accommodation.published!
+      render json: { status: 'Item is published', data: @accommodation }, status: :ok
     else
-      @accommodation.unpublished!
+      render json: @accommodation.errors, status: :unprocessable_entity
     end
-    render json: { status: 'Status is changed', data: @accommodation }, status: :ok
   end
+
+  def unpublish
+    @accommodation = Accommodation.find(params[:accommodation_id])
+    authorize @accommodation
+
+    if @accommodation.unpublished!
+      render json: { status: 'Item is hidden', data: @accommodation }, status: :ok
+    else
+      render json: @accommodation.errors, status: :unprocessable_entity
+    end
+  end
+
 
   # DELETE /api/v1/accommodations/1
   def destroy

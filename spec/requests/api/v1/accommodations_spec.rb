@@ -6,7 +6,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     get('list accommodations') do
       tags 'Accommodation'
       produces 'application/json'
-      parameter name: :toponyms, in: :query, schema: { type: :string },
+      parameter name: :geolocations, in: :query, schema: { type: :string },
                 description: 'Locality'
       parameter name: :check_in, in: :query, schema: { type: :string },
                 description: 'Date of check in'
@@ -219,10 +219,10 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     end
   end
 
-  path '/api/v1/accommodations/{id}/change_status' do
+  path '/api/v1/accommodations/{id}/publish' do
     parameter name: :id, in: :path, type: :string, description: 'accommodation id'
 
-    put('change_status') do
+    put('publish') do
       tags 'Accommodation'
       consumes 'application/json'
       security [ jwt_auth: [] ]
@@ -245,6 +245,52 @@ RSpec.describe 'api/v1/accommodations', type: :request do
         end
       end
             
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+      end
+    end
+  end
+
+  path '/api/v1/accommodations/{id}/unpublish' do
+    parameter name: :id, in: :path, type: :string, description: 'accommodation id'
+
+    put('unpublish') do
+      tags 'Accommodation'
+      consumes 'application/json'
+      security [ jwt_auth: [] ]
+
+      response(200, 'successful') do
+        let(:id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+      end
+
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+      end
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
