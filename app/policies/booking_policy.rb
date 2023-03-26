@@ -8,7 +8,7 @@ class BookingPolicy < ApplicationPolicy
   end
 
   def create?
-    user.tourist?
+    user.tourist? || user.partner?
   end
 
   def update?

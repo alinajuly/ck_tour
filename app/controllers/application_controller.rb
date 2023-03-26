@@ -10,7 +10,7 @@ class ApplicationController < ActionController::API
 
   def authenticate_request
     header = request.headers['Authorization']
-    if header.present?
+    if header.present? && header.split(' ').first == 'Bearer'
       token = header.split(' ').last
       decoded = jwt_decode(token)
       @current_user = User.find(decoded[:user_id])
