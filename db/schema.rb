@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_26_220008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -136,13 +136,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
     t.index ["geolocationable_type", "geolocationable_id"], name: "index_geolocations_on_geolocationable"
   end
 
+  create_table "orders", force: :cascade do |t|
+    t.integer "number_of_peoples"
+    t.bigint "user_id", null: false
+    t.bigint "tour_id", null: false
+    t.integer "confirmation", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tour_id"], name: "index_orders_on_tour_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
   create_table "places", force: :cascade do |t|
-    t.string "title"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "latitude", precision: 10, scale: 6
-    t.decimal "longitude", precision: 10, scale: 6
+    t.bigint "tour_id", null: false
+    t.string "name"
+    t.index ["tour_id"], name: "index_places_on_tour_id"
   end
 
   create_table "rates", force: :cascade do |t|
@@ -171,10 +182,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
 
   create_table "tours", force: :cascade do |t|
     t.string "title"
-    t.text "body"
-    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.string "reg_code"
+    t.string "address_owner"
+    t.string "person"
+    t.text "description"
+    t.integer "seats"
+    t.decimal "price_per_one"
+    t.datetime "time_start"
+    t.datetime "time_end"
+    t.string "email"
+    t.integer "status", default: 0
+    t.string "phone"
+    t.index ["user_id"], name: "index_tours_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -196,6 +218,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
   add_foreign_key "bookings", "users"
   add_foreign_key "comments", "users"
   add_foreign_key "facilities", "accommodations"
+  add_foreign_key "orders", "tours"
+  add_foreign_key "orders", "users"
+  add_foreign_key "places", "tours"
   add_foreign_key "rates", "users"
   add_foreign_key "rooms", "accommodations"
+  add_foreign_key "tours", "users"
 end
