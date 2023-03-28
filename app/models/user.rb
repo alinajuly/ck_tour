@@ -1,7 +1,9 @@
 class User < ApplicationRecord
   require 'securerandom'
   has_many :accommodations, dependent: :destroy
+  has_many :tours, dependent: :destroy
   has_many :bookings, dependent: :destroy
+  has_many :appointments, dependent: :destroy
 
   has_secure_password
 
