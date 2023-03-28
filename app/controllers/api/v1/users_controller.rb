@@ -79,7 +79,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def set_user
-    @user = User.find(params[:id])
+    @user = policy_scope(User).find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'user id not found' }, status: :not_found

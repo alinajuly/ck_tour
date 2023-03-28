@@ -129,8 +129,7 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
                     wi_fi: { type: :boolean },
                     breakfast: { type: :boolean },
                     pets: { type: :boolean }
-                  },
-                  required: false
+                  }
                 }
 
       response(200, 'successful') do

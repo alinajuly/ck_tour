@@ -131,7 +131,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
                     nice_view: { type: :boolean },
                     inclusive: { type: :boolean }
                   }
-                  # required: false
                 }
 
       response(200, 'successful') do

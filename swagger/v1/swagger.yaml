@@ -6,10 +6,15 @@ info:
 paths:
   "/api/v1/accommodations":
     get:
-      summary: list accommodations
+      summary: list published accommodation for all
       tags:
       - Accommodation
       parameters:
+      - name: status
+        in: query
+        schema:
+          type: integer
+        description: 0 - unpublished only, 1 - published only
       - name: geolocations
         in: query
         schema:
@@ -40,7 +45,7 @@ paths:
         '422':
           description: invalid request
     post:
-      summary: create accommodation
+      summary: create new accommodation - for partner only
       tags:
       - Accommodation
       description: Creates a new accommodation
@@ -66,30 +71,30 @@ paths:
                   type: string
                 description:
                   type: string
-                address:
+                address_owner:
                   type: string
                 phone:
                   type: string
                 email:
                   type: string
-                  format: email
                 kind:
                   type: string
-                  enum:
-                  - hotel
-                  - hostel
-                  - apartment
-                  - greenhouse
                 user_id:
+                  type: string
+                reg_code:
+                  type: string
+                person:
                   type: string
               required:
               - name
               - description
-              - address
+              - address_owner
               - phone
               - email
               - kind
               - user_id
+              - reg_code
+              - person
         required: true
   "/api/v1/accommodations/{id}":
     parameters:
@@ -100,7 +105,7 @@ paths:
       schema:
         type: string
     get:
-      summary: show accommodation
+      summary: show published accommodation for all
       tags:
       - Accommodation
       responses:
@@ -113,7 +118,7 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update accommodation
+      summary: update accommodation - for admin all, for partner his own only
       tags:
       - Accommodation
       security:
@@ -138,24 +143,22 @@ paths:
                   type: string
                 description:
                   type: string
-                address:
+                address_owner:
                   type: string
                 phone:
                   type: string
                 email:
                   type: string
-                  format: email
                 kind:
                   type: string
-                  enum:
-                  - hotel
-                  - hostel
-                  - apartment
-                  - greenhouse
-              required: false
-        required: true
+                user_id:
+                  type: string
+                reg_code:
+                  type: string
+                person:
+                  type: string
     delete:
-      summary: delete accommodation
+      summary: delete accommodation - for admin all, for partner his own only
       tags:
       - Accommodation
       security:
@@ -178,7 +181,7 @@ paths:
       schema:
         type: string
     put:
-      summary: publish
+      summary: publish accommodation - for admin only
       tags:
       - Accommodation
       security:
@@ -201,7 +204,46 @@ paths:
       schema:
         type: string
     put:
-      summary: unpublish
+      summary: unpublish accommodation - for admin only
+      tags:
+      - Accommodation
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/accommodations_unpublished":
+    get:
+      summary: list unpublished (for admin - all, for partner - his own only)
+      tags:
+      - Accommodation
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/accommodations/{id}/show_unpublished":
+    parameters:
+    - name: id
+      in: path
+      description: accommodation id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list unpublished (for admin - all, for partner - his own only)
       tags:
       - Accommodation
       security:
@@ -483,8 +525,6 @@ paths:
                   type: string
                 description:
                   type: string
-              required: false
-        required: true
     delete:
       summary: delete attraction
       tags:
@@ -989,7 +1029,6 @@ paths:
                   type: boolean
                 pets:
                   type: boolean
-              required: false
     delete:
       summary: delete facility
       tags:
@@ -1205,7 +1244,6 @@ paths:
                   type: string
                 price_per_night:
                   type: integer
-              required: false
     delete:
       summary: delete room
       tags:

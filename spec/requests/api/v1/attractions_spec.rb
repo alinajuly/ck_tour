@@ -115,14 +115,12 @@ RSpec.describe 'api/v1/attractions', type: :request do
       security [ jwt_auth: [] ]
       parameter name: :attraction,
                 in: :body,
-                required: true,
                 schema: {
                   type: :object,
                   properties: {
                     title: { type: :string },
                     description: { type: :string }
-                  },
-                  required: false
+                  }
                 }
 
       response(200, 'successful') do
