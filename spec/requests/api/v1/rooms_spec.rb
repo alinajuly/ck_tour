@@ -2,7 +2,6 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/rooms', type: :request do
-
   path '/api/v1/accommodations/{accommodation_id}/rooms' do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     get('list rooms') do
@@ -56,7 +55,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
     post('create room') do
       tags 'Room'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :room,
                 in: :body,
                 required: true,
@@ -70,7 +69,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
                     bed: { type: :string },
                     price_per_night: { type: :integer }
                   },
-                  required: [ :name, :places, :bed, :description, :quantity, :price_per_night ]
+                  required: %i[name places bed description quantity price_per_night]
                 }
 
       response(201, 'successful created') do
@@ -139,7 +138,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -162,21 +161,20 @@ RSpec.describe 'api/v1/rooms', type: :request do
     put('update room') do
       tags 'Room'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :room,
-              in: :body,
-              schema: {
-                type: :object,
-                properties: {
-                  name: { type: :string },
-                  places: { type: :integer },
-                  quantity: { type: :integer },
-                  description: { type: :string },
-                  bed: { type: :string },
-                  price_per_night: { type: :integer }
-                },
-                required: false
-              }
+                in: :body,
+                schema: {
+                  type: :object,
+                  properties: {
+                    name: { type: :string },
+                    places: { type: :integer },
+                    quantity: { type: :integer },
+                    description: { type: :string },
+                    bed: { type: :string },
+                    price_per_night: { type: :integer }
+                  }
+                }
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
@@ -197,7 +195,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -219,8 +217,8 @@ RSpec.describe 'api/v1/rooms', type: :request do
 
     delete('delete room') do
       tags 'Room'
-      security [ jwt_auth: [] ]
-      
+      security [jwt_auth: []]
+
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
         let(:room_id) { '123' }
@@ -240,7 +238,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)

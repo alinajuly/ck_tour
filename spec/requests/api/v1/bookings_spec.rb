@@ -104,13 +104,13 @@ RSpec.describe 'api/v1/bookings', type: :request do
         end
         run_test!
       end
-    
+
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
