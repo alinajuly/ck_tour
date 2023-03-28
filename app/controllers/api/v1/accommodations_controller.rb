@@ -1,8 +1,8 @@
 class Api::V1::AccommodationsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
-  before_action :set_accommodation, only: %i[show update destroy]
+  before_action :set_accommodation, only: %i[update destroy]
+  before_action :set_for_publish, only: %i[publish unpublish]
   before_action :authorize_policy
-  # before_action :set_user
 
   # GET /api/v1/accommodations
   def index
@@ -13,16 +13,29 @@ class Api::V1::AccommodationsController < ApplicationController
     @accommodations = if params[:geolocations].present? && params[:check_in].present? && params[:check_out].present? && params[:number_of_peoples].present?
                         Accommodation.joins(:rooms)
                                      .where('rooms.places >= ?', number_of_peoples)
-                                     .geolocation_filter(params[:geolocations]).distinct
+                                     .geolocation_filter(params[:geolocations]).distinct.published
                         # Accommodation.joins(rooms: :bookings)
                                      # .where.not(bookings: { check_in: ..check_out, check_out: check_in.. })
                                      # .where('rooms.places >= ?', number_of_peoples)
                                      # .tag_filter(params[:tags]).distinct
                       elsif params[:geolocations].present?
-                        Accommodation.geolocation_filter(params[:geolocations])
+                        Accommodation.geolocation_filter(params[:geolocations]).published
                       else
-                        Accommodation.all
+                        Accommodation.all.published
                       end
+
+    authorize @accommodations
+
+    if @accommodations
+      render json: { data: @accommodations }, status: :ok
+    else
+      render json: @accommodations.errors, status: :bad_request
+    end
+  end
+
+  def index_unpublished
+    @accommodations = policy_scope(Accommodation).all.unpublished
+
     authorize @accommodations
 
     if @accommodations
@@ -34,11 +47,24 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # GET /api/v1/accommodations/1
   def show
+    @accommodation = Accommodation.find(params[:id])
     authorize @accommodation
 
     @rooms = @accommodation.rooms
     render json: { data: @accommodation, rooms: @rooms }, status: :ok
   end
+
+  def show_unpublished
+    @accommodation = policy_scope(Accommodation).find(params[:accommodation_id])
+    authorize @accommodation
+
+    if @accommodation
+      render json: { data: @accommodation }, status: :ok
+    else
+      render json: @accommodation.errors, status: :bad_request
+    end
+  end
+
 
   # POST /api/v1/accommodations
   def create
@@ -55,9 +81,10 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # PUT /api/v1/accommodations/1
   def update
+    @accommodation = policy_scope(Accommodation).find(params[:id])
     authorize @accommodation
 
-    if @accommodation.update(accommodation_params)
+    if @accommodation.update(accommodation_params.except(:status))
       render json: { status: 'Update', data: @accommodation }, status: :ok
     else
       render json: @accommodation.errors, status: :unprocessable_entity
@@ -65,7 +92,6 @@ class Api::V1::AccommodationsController < ApplicationController
   end
 
   def publish
-    @accommodation = Accommodation.find(params[:accommodation_id])
     authorize @accommodation
 
     if @accommodation.published!
@@ -76,7 +102,6 @@ class Api::V1::AccommodationsController < ApplicationController
   end
 
   def unpublish
-    @accommodation = Accommodation.find(params[:accommodation_id])
     authorize @accommodation
 
     if @accommodation.unpublished!
@@ -85,7 +110,6 @@ class Api::V1::AccommodationsController < ApplicationController
       render json: @accommodation.errors, status: :unprocessable_entity
     end
   end
-
 
   # DELETE /api/v1/accommodations/1
   def destroy
@@ -101,15 +125,18 @@ class Api::V1::AccommodationsController < ApplicationController
   private
 
   def set_accommodation
-    @accommodation = Accommodation.find(params[:id])
+    @accommodation = policy_scope(Accommodation).find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'accommodation id not found' }, status: :not_found
   end
 
-  # def set_user
-  #   @user = User.find(params[:id])
-  # end
+  def set_for_publish
+    @accommodation = Accommodation.find(params[:accommodation_id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'accommodation id not found' }, status: :not_found
+  end
 
   # def available_rooms
   #   @available_rooms = Accommodation.joins(:rooms).where('places >= ?', @number_of_peoples)
@@ -119,7 +146,7 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def accommodation_params
-    params.permit(:name, :description, :address, :kind, :phone, :email, :status, :user_id)
+    params.permit(:name, :description, :kind, :phone, :email, :status, :reg_code, :address_owner, :person, :user_id)
   end
 
   def authorize_policy

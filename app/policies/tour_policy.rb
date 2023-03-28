@@ -1,15 +1,13 @@
-class AccommodationPolicy < ApplicationPolicy
-  class Scope < Scope
-    def resolve
-      if user.admin?
-        scope.all
-      elsif user.partner?
-        scope.where(user_id: user.id)
-      else
-        scope.where(status: published)
-      end
-    end
-  end
+class TourPolicy < ApplicationPolicy
+  # class Scope < Scope
+  #   def resolve
+  #     if user.admin?
+  #       scope.all
+  #     else
+  #       scope.published
+  #     end
+  #   end
+  # end
 
   def index?
     true
@@ -37,13 +35,5 @@ class AccommodationPolicy < ApplicationPolicy
 
   def unpublish?
     user.admin? # Only an admin can confirm a partner's create accommodations
-  end
-
-  def index_unpublished?
-    user.partner? || user.admin?
-  end
-
-  def show_unpublished?
-    user.partner? || user.admin?
   end
 end

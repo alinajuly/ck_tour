@@ -3,9 +3,7 @@ class UserPolicy < ApplicationPolicy
     def resolve
       if user.admin?
         scope.all
-      elsif user.partner?
-        scope.where(id: user.id)
-      elsif user.tourist?
+      elsif user.partner? || user.tourist?
         scope.where(id: user.id)
       else
         scope.none
@@ -19,7 +17,7 @@ class UserPolicy < ApplicationPolicy
 
   def show?
     true
-    # user.admin? || user.id == record.id || user.partner? || user.tourist?
+    # @user.admin? || @user.id == @current_user.id || @user.partner? || @user.tourist?
   end
 
   def create?

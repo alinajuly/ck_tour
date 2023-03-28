@@ -43,7 +43,9 @@ Rails.application.routes.draw do
         end
         put '/publish', to: 'accommodations#publish'
         put '/unpublish', to: 'accommodations#unpublish'
+        get '/show_unpublished', to: 'accommodations#show_unpublished'
       end
+      get 'accommodations_unpublished', to: 'accommodations#index_unpublished'
 
       resources :accommodations do
         resources :geolocations, only: %i[create]
