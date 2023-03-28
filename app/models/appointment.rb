@@ -1,4 +1,4 @@
-class Order < ApplicationRecord
+class Appointment < ApplicationRecord
   belongs_to :user
   belongs_to :tour
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_26_220008) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_28_154701) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -71,6 +71,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_220008) do
     t.datetime "updated_at", null: false
     t.bigint "room_id", null: false
     t.index ["room_id"], name: "index_amenities_on_room_id"
+  end
+
+  create_table "appointments", force: :cascade do |t|
+    t.integer "number_of_peoples"
+    t.bigint "user_id", null: false
+    t.bigint "tour_id", null: false
+    t.integer "confirmation", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tour_id"], name: "index_appointments_on_tour_id"
+    t.index ["user_id"], name: "index_appointments_on_user_id"
   end
 
   create_table "attractions", force: :cascade do |t|
@@ -134,17 +145,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_220008) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["geolocationable_type", "geolocationable_id"], name: "index_geolocations_on_geolocationable"
-  end
-
-  create_table "orders", force: :cascade do |t|
-    t.integer "number_of_peoples"
-    t.bigint "user_id", null: false
-    t.bigint "tour_id", null: false
-    t.integer "confirmation", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["tour_id"], name: "index_orders_on_tour_id"
-    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "places", force: :cascade do |t|
@@ -214,12 +214,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_220008) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "amenities", "rooms"
+  add_foreign_key "appointments", "tours"
+  add_foreign_key "appointments", "users"
   add_foreign_key "bookings", "rooms"
   add_foreign_key "bookings", "users"
   add_foreign_key "comments", "users"
   add_foreign_key "facilities", "accommodations"
-  add_foreign_key "orders", "tours"
-  add_foreign_key "orders", "users"
   add_foreign_key "places", "tours"
   add_foreign_key "rates", "users"
   add_foreign_key "rooms", "accommodations"
