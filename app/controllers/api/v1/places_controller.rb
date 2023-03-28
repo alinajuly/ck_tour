@@ -1,51 +1,69 @@
 class Api::V1::PlacesController < ApplicationController
-  before_action :set_api_v1_place, only: %i[show update destroy]
+  before_action :set_tour
+  before_action :set_place, only: %i[show update destroy]
 
-  # GET /api/v1/places
   def index
-    @api_v1_places = Place.all
+    @places = @tour.places.all
 
-    render json: @api_v1_places
+    authorize @places
+    render json: @places.as_json(include: :geolocations), status: :ok
   end
 
-  # GET /api/v1/places/1
   def show
-    render json: @api_v1_place
+    authorize @place
+
+    render json: @place.as_json(include: :geolocations), status: :ok
   end
 
-  # POST /api/v1/places
   def create
-    @api_v1_place = Api::V1::Place.new(api_v1_place_params)
+    @place = @tour.places.new(place_params)
 
-    if @api_v1_place.save
-      render json: @api_v1_place, status: :created, location: @api_v1_place
+    authorize @place
+
+    if @place.save
+      render json: { data: @place }, status: :created
     else
-      render json: @api_v1_place.errors, status: :unprocessable_entity
+      render json: @place.errors, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /api/v1/places/1
   def update
-    if @api_v1_place.update(api_v1_place_params)
-      render json: @api_v1_place
+    authorize @place
+
+    if @place.update(attraction_params)
+      render json: { status: 'Update', data: @place }, status: :ok
     else
-      render json: @api_v1_place.errors, status: :unprocessable_entity
+      render json: @place.errors, status: :unprocessable_entity
     end
   end
 
-  # DELETE /api/v1/places/1
   def destroy
-    @api_v1_place.destroy
+    authorize @place
+
+    if @place.destroy!
+      render json: { status: 'Delete' }, status: :ok
+    else
+      render json: @place.errors, status: :unprocessable_entity
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_api_v1_place
-      @api_v1_place = Api::V1::Place.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def api_v1_place_params
-      params.fetch(:api_v1_place, {})
-    end
+  def set_tour
+    @tour = Tour.find_by_id(params[:tour_id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'tour id not found' }, status: :not_found
+  end
+
+  def set_place
+    @place = Place.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'place id not found' }, status: :not_found
+  end
+
+  def place_params
+    params.permit(:name, :body, :tour_id)
+  end
 end

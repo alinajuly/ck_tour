@@ -10,11 +10,6 @@ paths:
       tags:
       - Accommodation
       parameters:
-      - name: status
-        in: query
-        schema:
-          type: integer
-        description: 0 - unpublished only, 1 - published only
       - name: geolocations
         in: query
         schema:
@@ -35,6 +30,11 @@ paths:
         schema:
           type: integer
         description: Number of peoples
+      - name: user_id
+        in: query
+        schema:
+          type: integer
+        description: Filter on partner
       responses:
         '200':
           description: successful
@@ -431,6 +431,186 @@ paths:
           description: not found
         '422':
           description: invalid request
+  "/api/v1/users/{id}/appointments":
+    parameters:
+    - name: id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list appointment
+      tags:
+      - Appointment
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    post:
+      summary: create appointment
+      tags:
+      - Appointment
+      description: Creates a new appointment
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number_of_peoples:
+                  type: integer
+                tour_id:
+                  type: integer
+              required:
+              - number_of_peoples
+              - tour_id
+        required: true
+  "/api/v1/users/{user_id}/appointments/{id}":
+    parameters:
+    - name: user_id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: appointment id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show appointment
+      tags:
+      - Appointment
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    put:
+      summary: update appointment
+      tags:
+      - Appointment
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number_of_peoples:
+                  type: integer
+    delete:
+      summary: delete appointment
+      tags:
+      - Appointment
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/users/{user_id}/appointments/{id}/confirm":
+    parameters:
+    - name: user_id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: appointment id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: confirmations
+      tags:
+      - Appointment
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/users/{user_id}/appointments/{id}/cancel":
+    parameters:
+    - name: user_id
+      in: path
+      description: user id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: appointment id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: cancelling
+      tags:
+      - Appointment
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/attractions":
     get:
       summary: list attractions
@@ -788,123 +968,6 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/{parentable_type}/{parentable_id}/geolocations":
-    parameters:
-    - name: parentable_type
-      in: path
-      description: f.e. attractions, accommodations
-      required: true
-      schema:
-        type: string
-    - name: parentable_id
-      in: path
-      description: f.e. attractions_id, accommodations_id
-      required: true
-      schema:
-        type: string
-    post:
-      summary: create geolocation
-      tags:
-      - Geolocation
-      security:
-      - jwt_auth: []
-      parameters: []
-      responses:
-        '201':
-          description: successful created
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                locality:
-                  type: string
-                latitude:
-                  type: string
-                  format: decimal
-                longitude:
-                  type: string
-                  format: decimal
-                street:
-                  type: string
-                suite:
-                  type: string
-                zip_code:
-                  type: string
-              required:
-              - locality
-              - latitude
-              - longitude
-        required: true
-    get:
-      summary: show geolocation
-      tags:
-      - Geolocation
-      responses:
-        '200':
-          description: successful
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-    put:
-      summary: update geolocation
-      tags:
-      - Geolocation
-      security:
-      - jwt_auth: []
-      parameters: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                locality:
-                  type: string
-                latitude:
-                  type: string
-                  format: decimal
-                longitude:
-                  type: string
-                  format: decimal
-                street:
-                  type: string
-                suite:
-                  type: string
-                zip_code:
-                  type: string
-    delete:
-      summary: delete geolocation
-      tags:
-      - Geolocation
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
   "/api/v1/accommodations/{accommodation_id}/facilities":
     parameters:
     - name: accommodation_id
@@ -1044,6 +1107,240 @@ paths:
           description: not found
         '422':
           description: invalid request
+  "/api/v1/{parentable_type}/{parentable_id}/geolocations":
+    parameters:
+    - name: parentable_type
+      in: path
+      description: f.e. attractions, accommodations
+      required: true
+      schema:
+        type: string
+    - name: parentable_id
+      in: path
+      description: f.e. attractions_id, accommodations_id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: create geolocation
+      tags:
+      - Geolocation
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locality:
+                  type: string
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
+                street:
+                  type: string
+                suite:
+                  type: string
+                zip_code:
+                  type: string
+              required:
+              - locality
+              - latitude
+              - longitude
+        required: true
+    get:
+      summary: show geolocation
+      tags:
+      - Geolocation
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    put:
+      summary: update geolocation
+      tags:
+      - Geolocation
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locality:
+                  type: string
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
+                street:
+                  type: string
+                suite:
+                  type: string
+                zip_code:
+                  type: string
+    delete:
+      summary: delete geolocation
+      tags:
+      - Geolocation
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/tours/{tour_id}/places/{place_id}/geolocations":
+    parameters:
+    - name: tour_id
+      in: path
+      description: tour id
+      required: true
+      schema:
+        type: string
+    - name: place_id
+      in: path
+      description: place id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: create geolocation
+      tags:
+      - Geolocation
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locality:
+                  type: string
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
+                street:
+                  type: string
+                suite:
+                  type: string
+                zip_code:
+                  type: string
+              required:
+              - locality
+              - latitude
+              - longitude
+        required: true
+    get:
+      summary: show geolocation
+      tags:
+      - Geolocation
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    put:
+      summary: update geolocation
+      tags:
+      - Geolocation
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locality:
+                  type: string
+                latitude:
+                  type: string
+                  format: decimal
+                longitude:
+                  type: string
+                  format: decimal
+                street:
+                  type: string
+                suite:
+                  type: string
+                zip_code:
+                  type: string
+    delete:
+      summary: delete geolocation
+      tags:
+      - Geolocation
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/password/forgot":
     post:
       summary: forgot password
@@ -1104,6 +1401,125 @@ paths:
               required:
               - email
               - password
+  "/api/v1/tours/{tour_id}/places":
+    parameters:
+    - name: tour_id
+      in: path
+      description: tour_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list places
+      tags:
+      - Place
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    post:
+      summary: create place
+      tags:
+      - Place
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                body:
+                  type: string
+              required:
+              - name
+              - body
+        required: true
+  "/api/v1/tours/{tour_id}/places/{id}":
+    parameters:
+    - name: tour_id
+      in: path
+      description: tour_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: place_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show place
+      tags:
+      - Place
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    put:
+      summary: update place
+      tags:
+      - Place
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                body:
+                  type: string
+    delete:
+      summary: delete place
+      tags:
+      - Place
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/accommodations/{accommodation_id}/rooms":
     parameters:
     - name: accommodation_id
@@ -1248,6 +1664,264 @@ paths:
       summary: delete room
       tags:
       - Room
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/tours":
+    get:
+      summary: list published tour for all
+      tags:
+      - Tour
+      parameters:
+      - name: geolocations
+        in: query
+        schema:
+          type: string
+        description: Locality
+      - name: user_id
+        in: query
+        schema:
+          type: integer
+        description: Filter on partner
+      - name: archived
+        in: query
+        schema:
+          type: string
+        description: Archive of old tours
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    post:
+      summary: create new tour - for partner only
+      tags:
+      - Tour
+      description: Creates a new tour
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                seats:
+                  type: integer
+                price_per_one:
+                  type: decimal
+                time_start:
+                  type: string
+                time_end:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                address_owner:
+                  type: string
+                reg_code:
+                  type: string
+                person:
+                  type: string
+                user_id:
+                  type: string
+              required:
+              - title
+              - description
+              - seats
+              - address_owner
+              - phone
+              - email
+              - price_per_one
+              - user_id
+              - reg_code
+              - person
+              - time_start
+              - time_end
+        required: true
+  "/api/v1/tours/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: tour id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show published tour for all
+      tags:
+      - Tour
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    put:
+      summary: update tour - for admin all, for partner his own only
+      tags:
+      - Tour
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                seats:
+                  type: integer
+                price_per_one:
+                  type: decimal
+                time_start:
+                  type: string
+                time_end:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                address_owner:
+                  type: string
+                reg_code:
+                  type: string
+                person:
+                  type: string
+                user_id:
+                  type: string
+    delete:
+      summary: delete tour - for admin all, for partner his own only
+      tags:
+      - Tour
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/tours/{id}/publish":
+    parameters:
+    - name: id
+      in: path
+      description: tour id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: publish tour - for admin only
+      tags:
+      - Tour
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/tours/{id}/unpublish":
+    parameters:
+    - name: id
+      in: path
+      description: tour id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: unpublish tour - for admin only
+      tags:
+      - Tour
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/tours_unpublished":
+    get:
+      summary: list unpublished (for admin - all, for partner - his own only)
+      tags:
+      - Tour
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/tours/{id}/show_unpublished":
+    parameters:
+    - name: id
+      in: path
+      description: tour id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list unpublished (for admin - all, for partner - his own only)
+      tags:
+      - Tour
       security:
       - jwt_auth: []
       responses:

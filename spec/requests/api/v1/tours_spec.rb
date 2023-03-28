@@ -1,21 +1,17 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-RSpec.describe 'api/v1/accommodations', type: :request do
-  path '/api/v1/accommodations' do
-    get('list published accommodation for all') do
-      tags 'Accommodation'
+RSpec.describe 'api/v1/tours', type: :request do
+  path '/api/v1/tours' do
+    get('list published tour for all') do
+      tags 'Tour'
       produces 'application/json'
       parameter name: :geolocations, in: :query, schema: { type: :string },
                 description: 'Locality'
-      parameter name: :check_in, in: :query, schema: { type: :string },
-                description: 'Date of check in'
-      parameter name: :check_out, in: :query, schema: { type: :string },
-                description: 'Date of check in'
-      parameter name: :number_of_peoples, in: :query, schema: { type: :integer },
-                description: 'Number of peoples'
       parameter name: :user_id, in: :query, schema: { type: :integer },
                 description: 'Filter on partner'
+      parameter name: :archived, in: :query, schema: { type: :string },
+                description: 'Archive of old tours'
 
       response(200, 'successful') do
         it 'should returns status response' do
@@ -42,28 +38,32 @@ RSpec.describe 'api/v1/accommodations', type: :request do
       end
     end
 
-    post('create new accommodation - for partner only') do
-      tags 'Accommodation'
-      description 'Creates a new accommodation'
+    post('create new tour - for partner only') do
+      tags 'Tour'
+      description 'Creates a new tour'
       consumes 'application/json'
       security [ jwt_auth: [] ]
-      parameter name: :accommodation,
+      parameter name: :tour,
                 in: :body,
                 required: true,
                 schema: {
                   type: :object,
                   properties: {
-                    name: { type: :string },
+                    title: { type: :string },
                     description: { type: :string },
-                    address_owner: { type: :string },
+                    seats: { type: :integer },
+                    price_per_one: { type: :decimal },
+                    time_start: { type: :string },
+                    time_end: { type: :string },
                     phone: { type: :string },
                     email: { type: :string },
-                    kind: { type: :string },
-                    user_id: { type: :string },
+                    address_owner: { type: :string },
                     reg_code: { type: :string },
-                    person: { type: :string }
+                    person: { type: :string },
+                    user_id: { type: :string }
                   },
-                  required: [ :name, :description, :address_owner, :phone, :email, :kind, :user_id, :reg_code, :person ]
+                  required: [ :title, :description, :seats, :address_owner, :phone, :email, :price_per_one,
+                              :user_id, :reg_code, :person, :time_start, :time_end ]
                 }
 
       response(201, 'successful created') do
@@ -92,12 +92,12 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     end
   end
 
-  path '/api/v1/accommodations/{id}' do
+  path '/api/v1/tours/{id}' do
     # You'll want to customize the parameter types...
-    parameter name: :id, in: :path, type: :string, description: 'accommodation id'
+    parameter name: :id, in: :path, type: :string, description: 'tour id'
 
-    get('show published accommodation for all') do
-      tags 'Accommodation'
+    get('show published tour for all') do
+      tags 'Tour'
 
       response(200, 'successful') do
         let(:id) { '123' }
@@ -136,24 +136,27 @@ RSpec.describe 'api/v1/accommodations', type: :request do
       end
     end
 
-    put('update accommodation - for admin all, for partner his own only') do
-      tags 'Accommodation'
+    put('update tour - for admin all, for partner his own only') do
+      tags 'Tour'
       consumes 'application/json'
       security [ jwt_auth: [] ]
-      parameter name: :accommodation,
+      parameter name: :tour,
                 in: :body,
                 schema: {
                   type: :object,
                   properties: {
-                    name: { type: :string },
+                    title: { type: :string },
                     description: { type: :string },
-                    address_owner: { type: :string },
+                    seats: { type: :integer },
+                    price_per_one: { type: :decimal },
+                    time_start: { type: :string },
+                    time_end: { type: :string },
                     phone: { type: :string },
                     email: { type: :string },
-                    kind: { type: :string },
-                    user_id: { type: :string },
+                    address_owner: { type: :string },
                     reg_code: { type: :string },
-                    person: { type: :string }
+                    person: { type: :string },
+                    user_id: { type: :string }
                   }
                 }
 
@@ -194,8 +197,8 @@ RSpec.describe 'api/v1/accommodations', type: :request do
       end
     end
 
-    delete('delete accommodation - for admin all, for partner his own only') do
-      tags 'Accommodation'
+    delete('delete tour - for admin all, for partner his own only') do
+      tags 'Tour'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -224,11 +227,11 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     end
   end
 
-  path '/api/v1/accommodations/{id}/publish' do
-    parameter name: :id, in: :path, type: :string, description: 'accommodation id'
+  path '/api/v1/tours/{id}/publish' do
+    parameter name: :id, in: :path, type: :string, description: 'tour id'
 
-    put('publish accommodation - for admin only') do
-      tags 'Accommodation'
+    put('publish tour - for admin only') do
+      tags 'Tour'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -270,11 +273,11 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     end
   end
 
-  path '/api/v1/accommodations/{id}/unpublish' do
-    parameter name: :id, in: :path, type: :string, description: 'accommodation id'
+  path '/api/v1/tours/{id}/unpublish' do
+    parameter name: :id, in: :path, type: :string, description: 'tour id'
 
-    put('unpublish accommodation - for admin only') do
-      tags 'Accommodation'
+    put('unpublish tour - for admin only') do
+      tags 'Tour'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -316,9 +319,9 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     end
   end
 
-  path '/api/v1/accommodations_unpublished' do
+  path '/api/v1/tours_unpublished' do
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Accommodation'
+      tags 'Tour'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -358,11 +361,11 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     end
   end
 
-  path '/api/v1/accommodations/{id}/show_unpublished' do
-    parameter name: :id, in: :path, type: :string, description: 'accommodation id'
+  path '/api/v1/tours/{id}/show_unpublished' do
+    parameter name: :id, in: :path, type: :string, description: 'tour id'
 
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Accommodation'
+      tags 'Tour'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
