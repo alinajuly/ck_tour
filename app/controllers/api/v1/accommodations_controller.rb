@@ -20,6 +20,8 @@ class Api::V1::AccommodationsController < ApplicationController
                                      # .tag_filter(params[:tags]).distinct
                       elsif params[:geolocations].present?
                         Accommodation.geolocation_filter(params[:geolocations]).published
+                      elsif params[:user_id].present?
+                        Accommodation.where(params[:user_id]).published
                       else
                         Accommodation.all.published
                       end
@@ -47,11 +49,15 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # GET /api/v1/accommodations/1
   def show
-    @accommodation = Accommodation.find(params[:id])
-    authorize @accommodation
+    @accommodation = Accommodation.find(params[:id]) if Accommodation.find(params[:id]).published?
+    if @accommodation.present?
+      authorize @accommodation
 
-    @rooms = @accommodation.rooms
-    render json: { data: @accommodation, rooms: @rooms }, status: :ok
+      @rooms = @accommodation.rooms
+      render json: { data: @accommodation, rooms: @rooms }, status: :ok
+    else
+      render json: { message: 'accommodation id not found' }, status: :not_found
+    end
   end
 
   def show_unpublished
@@ -64,7 +70,6 @@ class Api::V1::AccommodationsController < ApplicationController
       render json: @accommodation.errors, status: :bad_request
     end
   end
-
 
   # POST /api/v1/accommodations
   def create
@@ -81,7 +86,6 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # PUT /api/v1/accommodations/1
   def update
-    @accommodation = policy_scope(Accommodation).find(params[:id])
     authorize @accommodation
 
     if @accommodation.update(accommodation_params.except(:status))
