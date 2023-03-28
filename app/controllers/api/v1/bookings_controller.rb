@@ -1,5 +1,4 @@
 class Api::V1::BookingsController < ApplicationController
-  before_action :authenticate_request
   before_action :set_user
   before_action :set_booking, only: %i[show update destroy]
   before_action :authorize_policy
@@ -39,7 +38,7 @@ class Api::V1::BookingsController < ApplicationController
   def update
     authorize @booking
 
-    if @booking.update(booking_params)
+    if @booking.update(booking_params.except(:confirmation))
       render json: { status: 'Update', data: @booking }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity
@@ -91,12 +90,12 @@ class Api::V1::BookingsController < ApplicationController
     @user = User.find(params[:user_id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
-    render json: { message: 'booking id not found' }, status: :not_found
+    render json: { message: 'user id not found' }, status: :not_found
   end
 
   # Only allow a list of trusted parameters through.
   def booking_params
-    params.permit(:number_of_peoples, :check_in, :check_out, :note, :confirmation, :room_id)
+    params.permit(:number_of_peoples, :check_in, :check_out, :note, :room_id)
   end
 
   def authorize_policy
