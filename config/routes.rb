@@ -21,6 +21,8 @@ Rails.application.routes.draw do
           put '/cancel', to: 'appointments#cancel'
         end
       end
+      
+      root 'api/v1/attractions#index'
 
       resources :attractions do
         resources :geolocations, only: %i[create]
@@ -64,8 +66,6 @@ Rails.application.routes.draw do
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
   # Defines the root path route ("/")
-  root 'api/v1/attractions#index'
   # root 'authentication#login'
 end
