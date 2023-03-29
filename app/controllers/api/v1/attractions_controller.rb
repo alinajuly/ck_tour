@@ -1,6 +1,6 @@
 class Api::V1::AttractionsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[show index search]
-  before_action :set_attraction, only: %i[show update destroy]
+  before_action :set_attraction, only: %i[show update destroy upload_image update_image]
   before_action :authorize_policy
 
   # GET /api/v1/attractions
@@ -73,6 +73,17 @@ class Api::V1::AttractionsController < ApplicationController
     else
       render json: { data: @result }, status: :ok
     end
+  end
+
+  def upload_image
+    @attraction.image.attach(params[:file])
+    render json: { url: url_for(@attraction.image.variant(:main)) }
+  end
+
+  def update_image
+    @attraction.image.attach(params[:blob_id])
+    @attraction.update(image_url: params[:image_url])
+    render json: { message: 'Image updated successfully' }
   end
 
   private
