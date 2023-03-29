@@ -23,6 +23,8 @@ Rails.application.routes.draw do
       end
 
       resources :attractions do
+        post :upload_image
+        patch :update_image
         resources :geolocations, only: %i[create]
         get '/geolocations', to: 'geolocations#show'
         put '/geolocations', to: 'geolocations#update'
