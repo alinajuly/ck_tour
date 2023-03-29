@@ -1940,6 +1940,12 @@ paths:
       - User
       security:
       - jwt_auth: []
+      parameters:
+      - name: role
+        in: query
+        schema:
+          type: string
+        description: admin/partner/tourist
       responses:
         '200':
           description: successful
