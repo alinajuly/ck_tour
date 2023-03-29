@@ -33,8 +33,9 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-# accept payments online
+# Accept payments online
 gem 'stripe', '~> 8.3'
+gem 'stripe-rails', '~> 2.4'
 
 # Use Active Storage variants
 gem 'image_processing', '~> 1.12', '>= 1.12.2'
