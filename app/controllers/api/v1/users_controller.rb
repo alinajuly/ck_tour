@@ -6,6 +6,7 @@ class Api::V1::UsersController < ApplicationController
   # GET api/v1/users
   def index
     @users = User.all
+    @users = @users.role_filter(params[:role]) if params[:role].present?
 
     authorize @users
 

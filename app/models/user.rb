@@ -23,6 +23,8 @@ class User < ApplicationRecord
 
   enum role: { tourist: 0, partner: 1, admin: 2 }
 
+  scope :role_filter, ->(role) { where(role: role) }
+
   def generate_password_token!
     self.reset_password_token = generate_token
     self.reset_password_sent_at = Time.now.utc
