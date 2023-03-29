@@ -5,6 +5,7 @@ class ApplicationController < ActionController::API
   before_action :authenticate_request
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from Stripe::CardError, with: :stripe_card_error
 
   private
 

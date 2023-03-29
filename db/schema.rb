@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_29_170750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -106,6 +106,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "customers", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.bigint "user_id", null: false
+    t.string "stripe_customer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_customers_on_user_id"
+  end
+
   create_table "facilities", force: :cascade do |t|
     t.datetime "checkin_start", precision: nil
     t.datetime "checkin_end", precision: nil
@@ -145,6 +155,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
     t.decimal "longitude", precision: 10, scale: 6
   end
 
+  create_table "prices", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.string "stripe_price_id"
+    t.integer "unit_amount"
+    t.string "currency"
+    t.string "recurring"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_prices_on_product_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "name"
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "rates", force: :cascade do |t|
     t.integer "rating"
     t.datetime "created_at", null: false
@@ -167,6 +195,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
     t.string "name"
     t.integer "quantity"
     t.index ["accommodation_id"], name: "index_rooms_on_accommodation_id"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.bigint "price_id", null: false
+    t.string "stripe_subscription_id"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_subscriptions_on_customer_id"
+    t.index ["price_id"], name: "index_subscriptions_on_price_id"
   end
 
   create_table "tours", force: :cascade do |t|
@@ -195,7 +234,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_195821) do
   add_foreign_key "bookings", "rooms"
   add_foreign_key "bookings", "users"
   add_foreign_key "comments", "users"
+  add_foreign_key "customers", "users"
   add_foreign_key "facilities", "accommodations"
+  add_foreign_key "prices", "products"
   add_foreign_key "rates", "users"
   add_foreign_key "rooms", "accommodations"
+  add_foreign_key "subscriptions", "customers"
+  add_foreign_key "subscriptions", "prices"
 end
