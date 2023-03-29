@@ -7,6 +7,8 @@ RSpec.describe 'api/v1/users', type: :request do
       tags 'User'
       produces 'application/json'
       security [ jwt_auth: [] ]
+      parameter name: :role, in: :query, schema: { type: :string },
+                description: 'admin/partner/tourist'
 
       response(200, 'successful') do
         it 'should returns status response' do
