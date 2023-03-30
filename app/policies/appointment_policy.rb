@@ -1,4 +1,14 @@
 class AppointmentPolicy < ApplicationPolicy
+  # class Scope < Scope
+  #   def resolve
+  #     if user.admin?
+  #       scope.all
+  #     elsif user.partner?
+  #       # scope.where(user_id: user.id)
+  #     end
+  #   end
+  # end
+
   def index?
     true
   end
@@ -24,6 +34,10 @@ class AppointmentPolicy < ApplicationPolicy
   end
 
   def cancel?
+    user.partner?
+  end
+
+  def index_partner?
     user.partner?
   end
 end

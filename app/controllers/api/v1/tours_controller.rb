@@ -6,7 +6,7 @@ class Api::V1::ToursController < ApplicationController
 
   # GET /api/v1/tours
   def index
-    @tours = Tour.all.where('time_start > ?', Time.now).published
+    @tours = Tour.all.where('time_start >= ?', Time.now).published
     @tours = Tour.geolocation_filter(params[:geolocations]).published if params[:geolocations].present?
     @tours = Tour.where(params[:user_id]).published if params[:user_id].present?
     @tours = Tour.all.where('time_start < ?', Time.now).published if params[:archived].present?
@@ -123,7 +123,7 @@ class Api::V1::ToursController < ApplicationController
   end
 
   def set_for_publish
-    @tour = Accommodation.find(params[:tour_id])
+    @tour = Tour.find(params[:tour_id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'tour id not found' }, status: :not_found
