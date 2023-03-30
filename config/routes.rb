@@ -12,14 +12,8 @@ Rails.application.routes.draw do
 
       resources :users do
         put '/change_role', to: 'users#change_role'
-        resources :bookings do
-          put '/confirm', to: 'bookings#confirm'
-          put '/cancel', to: 'bookings#cancel'
-        end
-        resources :appointments do
-          put '/confirm', to: 'appointments#confirm'
-          put '/cancel', to: 'appointments#cancel'
-        end
+        resources :bookings
+        resources :appointments
       end
 
       resources :attractions do
@@ -36,6 +30,11 @@ Rails.application.routes.draw do
         resources :facilities
         resources :rooms do
           resources :amenities
+          get '/bookings', to: 'bookings#index_partner'
+          resources :bookings do
+            put '/confirm', to: 'bookings#confirm'
+            put '/cancel', to: 'bookings#cancel'
+          end
         end
         put '/publish', to: 'accommodations#publish'
         put '/unpublish', to: 'accommodations#unpublish'
@@ -60,6 +59,11 @@ Rails.application.routes.draw do
         put '/publish', to: 'tours#publish'
         put '/unpublish', to: 'tours#unpublish'
         get '/show_unpublished', to: 'tours#show_unpublished'
+        get '/appointments', to: 'appointments#index_partner'
+        resources :appointments do
+          put '/confirm', to: 'appointments#confirm'
+          put '/cancel', to: 'appointments#cancel'
+        end
       end
       get 'tours_unpublished', to: 'tours#index_unpublished'
 

@@ -1,10 +1,26 @@
 class Api::V1::BookingsController < ApplicationController
-  before_action :set_user
+  before_action :set_user, except: %i[index_partner confirm cancel]
+  before_action :set_accommodation, only: %i[index_partner confirm cancel]
+  before_action :set_room, only: %i[index_partner confirm cancel]
   before_action :set_booking, only: %i[show update destroy]
+  before_action :set_partner, only: %i[confirm cancel]
   before_action :authorize_policy
 
   def index
-    @bookings = @user.bookings.all
+    @bookings = @user.bookings.all.where('check_out >= ?', Time.now)
+    @bookings = @user.bookings.all.where('check_out < ?', Time.now) if params[:archived].present?
+
+    authorize @bookings
+    if @bookings
+      render json: { data: @bookings }, status: :ok
+    else
+      render json: @bookings.errors, status: :bad_request
+    end
+  end
+
+  def index_partner
+    @bookings = @room.bookings.all.where('check_out >= ?', Time.now)
+    @bookings = @accommodation.rooms.bookings.all.where('check_out < ?', Time.now) if params[:archived].present?
 
     authorize @bookings
     if @bookings
@@ -56,7 +72,6 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def confirm
-    @booking = Booking.find(params[:booking_id])
     authorize @booking
 
     if @booking.approved!
@@ -67,7 +82,6 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def cancel
-    @booking = Booking.find(params[:booking_id])
     authorize @booking
 
     if @booking.cancelled!
@@ -91,6 +105,27 @@ class Api::V1::BookingsController < ApplicationController
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'user id not found' }, status: :not_found
+  end
+
+  def set_accommodation
+    @accommodation = Accommodation.find(params[:accommodation_id])
+    # params[:accommodation_id] = @room.accommodation_id
+    # @accommodation = Accommodation.joins(:rooms).find(params[:accommodation_id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'accommodation id not found' }, status: :not_found
+  end
+
+  def set_room
+    @room = @accommodation.rooms.find(params[:room_id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'room id not found' }, status: :not_found
+  end
+
+  def set_partner
+    @booking = Booking.find(params[:booking_id])
+    @user_id = @booking.room.accommodation.user_id
   end
 
   # Only allow a list of trusted parameters through.
