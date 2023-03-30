@@ -10,6 +10,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
       tags 'Appointment'
       produces 'application/json'
       security [ jwt_auth: [] ]
+      parameter name: :archived, in: :query, schema: { type: :string },
+                description: 'Archive of old appointments'
 
       response(200, 'successful') do
         it 'should returns status response' do
@@ -195,8 +197,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
     end
   end
 
-  path '/api/v1/users/{user_id}/appointments/{id}/confirm' do
-    parameter name: 'user_id', in: :path, type: :string, description: 'user id'
+  path '/api/v1/tours/{tour_id}/appointments/{id}/confirm' do
+    parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
     parameter name: 'id', in: :path, type: :string, description: 'appointment id'
 
     put('confirmations') do
@@ -242,8 +244,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
     end
   end
 
-  path '/api/v1/users/{user_id}/appointments/{id}/cancel' do
-    parameter name: 'user_id', in: :path, type: :string, description: 'user id'
+  path '/api/v1/tours/{tour_id}/appointments/{id}/cancel' do
+    parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
     parameter name: 'id', in: :path, type: :string, description: 'appointment id'
 
     put('cancelling') do
@@ -262,6 +264,42 @@ RSpec.describe 'api/v1/appointments', type: :request do
           }
         end
       end
+
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+      end
+
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+      end
+    end
+  end
+
+  path '/api/v1/tours/{tour_id}/appointments' do
+    parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
+
+    get('list appointments for partner') do
+      tags 'Appointment'
+      produces 'application/json'
+      security [ jwt_auth: [] ]
+      parameter name: :archived, in: :query, schema: { type: :string },
+                description: 'Archive of old appointments'
 
       response(200, 'successful') do
         it 'should returns status response' do

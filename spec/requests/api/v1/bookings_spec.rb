@@ -10,6 +10,8 @@ RSpec.describe 'api/v1/bookings', type: :request do
       tags 'Booking'
       produces 'application/json'
       security [ jwt_auth: [] ]
+      parameter name: :archived, in: :query, schema: { type: :string },
+                description: 'Archive of old bookings'
       
       response(200, 'successful') do
         it 'should returns status response' do
@@ -201,8 +203,9 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
   end
 
-  path '/api/v1/users/{user_id}/bookings/{id}/confirm' do
-    parameter name: 'user_id', in: :path, type: :string, description: 'user id'
+  path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings/{id}/confirm' do
+    parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
+    parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
     parameter name: 'id', in: :path, type: :string, description: 'booking id'
 
     put('confirmations') do
@@ -248,8 +251,9 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
   end
 
-  path '/api/v1/users/{user_id}/bookings/{id}/cancel' do
-    parameter name: 'user_id', in: :path, type: :string, description: 'user id'
+  path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings/{id}/cancel' do
+    parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
+    parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
     parameter name: 'id', in: :path, type: :string, description: 'booking id'
 
     put('cancelling') do
@@ -268,6 +272,43 @@ RSpec.describe 'api/v1/bookings', type: :request do
           }
         end
       end
+
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+      end
+
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+      end
+    end
+  end
+
+  path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings' do
+    parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
+    parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
+
+    get('list bookings for partner') do
+      tags 'Booking'
+      produces 'application/json'
+      security [ jwt_auth: [] ]
+      parameter name: :archived, in: :query, schema: { type: :string },
+                description: 'Archive of old bookings'
 
       response(200, 'successful') do
         it 'should returns status response' do

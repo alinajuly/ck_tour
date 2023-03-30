@@ -1,10 +1,25 @@
 class Api::V1::AppointmentsController < ApplicationController
-  before_action :set_user
+  before_action :set_user, except: %i[index_partner confirm cancel]
+  before_action :set_tour, only: %i[index_partner confirm cancel]
   before_action :set_appointment, only: %i[show update destroy]
+  before_action :set_partner, only: %i[confirm cancel]
   before_action :authorize_policy
 
   def index
-    @appointments = @user.appointments.all
+    @appointments = @user.appointments.all.joins(:tour).where('time_end >= ?', Time.now)
+    @appointments = @user.appointments.all.joins(:tour).where('time_end < ?', Time.now) if params[:archived].present?
+
+    authorize @appointments
+    if @appointments
+      render json: { data: @appointments }, status: :ok
+    else
+      render json: @appointments.errors, status: :bad_request
+    end
+  end
+
+  def index_partner
+    @appointments = @tour.appointments.all.joins(:tour).where('time_end >= ?', Time.now)
+    @appointments = @tour.appointments.all.joins(:tour).where('time_end < ?', Time.now) if params[:archived].present?
 
     authorize @appointments
     if @appointments
@@ -55,7 +70,6 @@ class Api::V1::AppointmentsController < ApplicationController
   end
 
   def confirm
-    @appointment = Appointment.find(params[:appointment_id])
     authorize @appointment
 
     if @appointment.approved!
@@ -66,7 +80,6 @@ class Api::V1::AppointmentsController < ApplicationController
   end
 
   def cancel
-    @appointment = Appointment.find(params[:appointment_id])
     authorize @appointment
 
     if @appointment.cancelled!
@@ -90,6 +103,18 @@ class Api::V1::AppointmentsController < ApplicationController
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'user id not found' }, status: :not_found
+  end
+
+  def set_tour
+    @tour = Tour.find(params[:tour_id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'tour id not found' }, status: :not_found
+  end
+
+  def set_partner
+    @appointment = @tour.appointments.find(params[:appointment_id])
+    @partner_id = @appointment.tour.user_id
   end
 
   # Only allow a list of trusted parameters through.

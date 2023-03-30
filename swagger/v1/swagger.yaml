@@ -445,6 +445,12 @@ paths:
       - Appointment
       security:
       - jwt_auth: []
+      parameters:
+      - name: archived
+        in: query
+        schema:
+          type: string
+        description: Archive of old appointments
       responses:
         '200':
           description: successful
@@ -553,11 +559,11 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/users/{user_id}/appointments/{id}/confirm":
+  "/api/v1/tours/{tour_id}/appointments/{id}/confirm":
     parameters:
-    - name: user_id
+    - name: tour_id
       in: path
-      description: user id
+      description: tour id
       required: true
       schema:
         type: string
@@ -582,11 +588,11 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/users/{user_id}/appointments/{id}/cancel":
+  "/api/v1/tours/{tour_id}/appointments/{id}/cancel":
     parameters:
-    - name: user_id
+    - name: tour_id
       in: path
-      description: user id
+      description: tour id
       required: true
       schema:
         type: string
@@ -602,6 +608,35 @@ paths:
       - Appointment
       security:
       - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/tours/{tour_id}/appointments":
+    parameters:
+    - name: tour_id
+      in: path
+      description: tour id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list appointments for partner
+      tags:
+      - Appointment
+      security:
+      - jwt_auth: []
+      parameters:
+      - name: archived
+        in: query
+        schema:
+          type: string
+        description: Archive of old appointments
       responses:
         '200':
           description: successful
@@ -842,6 +877,12 @@ paths:
       - Booking
       security:
       - jwt_auth: []
+      parameters:
+      - name: archived
+        in: query
+        schema:
+          type: string
+        description: Archive of old bookings
       responses:
         '200':
           description: successful
@@ -968,11 +1009,17 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/users/{user_id}/bookings/{id}/confirm":
+  "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings/{id}/confirm":
     parameters:
-    - name: user_id
+    - name: accommodation_id
       in: path
-      description: user id
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    - name: room_id
+      in: path
+      description: room_id
       required: true
       schema:
         type: string
@@ -997,11 +1044,17 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/users/{user_id}/bookings/{id}/cancel":
+  "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings/{id}/cancel":
     parameters:
-    - name: user_id
+    - name: accommodation_id
       in: path
-      description: user id
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    - name: room_id
+      in: path
+      description: room_id
       required: true
       schema:
         type: string
@@ -1017,6 +1070,41 @@ paths:
       - Booking
       security:
       - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+  "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings":
+    parameters:
+    - name: accommodation_id
+      in: path
+      description: accommodation_id
+      required: true
+      schema:
+        type: string
+    - name: room_id
+      in: path
+      description: room_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list bookings for partner
+      tags:
+      - Booking
+      security:
+      - jwt_auth: []
+      parameters:
+      - name: archived
+        in: query
+        schema:
+          type: string
+        description: Archive of old bookings
       responses:
         '200':
           description: successful
