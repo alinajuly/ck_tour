@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_28_154701) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_02_183242) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -105,6 +105,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_154701) do
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
 
+  create_table "caterings", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "kind"
+    t.string "phone"
+    t.integer "places"
+    t.string "email"
+    t.string "reg_code"
+    t.string "address_owner"
+    t.string "person"
+    t.integer "status", default: 0
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_caterings_on_user_id"
+  end
+
   create_table "comments", force: :cascade do |t|
     t.string "body"
     t.integer "status"
@@ -167,6 +184,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_154701) do
     t.index ["user_id"], name: "index_rates_on_user_id"
   end
 
+  create_table "reservations", force: :cascade do |t|
+    t.integer "number_of_peoples"
+    t.datetime "check_in"
+    t.datetime "check_out"
+    t.string "note"
+    t.bigint "user_id", null: false
+    t.bigint "catering_id", null: false
+    t.integer "confirmation", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["catering_id"], name: "index_reservations_on_catering_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.integer "places"
     t.string "bed"
@@ -218,10 +249,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_154701) do
   add_foreign_key "appointments", "users"
   add_foreign_key "bookings", "rooms"
   add_foreign_key "bookings", "users"
+  add_foreign_key "caterings", "users"
   add_foreign_key "comments", "users"
   add_foreign_key "facilities", "accommodations"
   add_foreign_key "places", "tours"
   add_foreign_key "rates", "users"
+  add_foreign_key "reservations", "caterings"
+  add_foreign_key "reservations", "users"
   add_foreign_key "rooms", "accommodations"
   add_foreign_key "tours", "users"
 end

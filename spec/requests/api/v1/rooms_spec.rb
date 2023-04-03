@@ -4,8 +4,8 @@ require 'swagger_helper'
 RSpec.describe 'api/v1/rooms', type: :request do
   path '/api/v1/accommodations/{accommodation_id}/rooms' do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
-    get('list rooms') do
-      tags 'Room'
+    get('list rooms of accommodation for all') do
+      tags 'Accommodation'
       produces 'application/json'
       parameter name: :check_in, in: :query, schema: { type: :string },
                 description: 'Guests Check-in f.e. 2023-05-15'
@@ -52,8 +52,8 @@ RSpec.describe 'api/v1/rooms', type: :request do
       end
     end
 
-    post('create room') do
-      tags 'Room'
+    post('create room of accommodation by partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :room,
@@ -112,12 +112,11 @@ RSpec.describe 'api/v1/rooms', type: :request do
   end
 
   path '/api/v1/accommodations/{accommodation_id}/rooms/{id}' do
-    # You'll want to customize the parameter types...
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     parameter name: 'id', in: :path, type: :string, description: 'room_id'
 
-    get('show room') do
-      tags 'Room'
+    get('show room of accommodation for all') do
+      tags 'Accommodation'
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
@@ -158,8 +157,8 @@ RSpec.describe 'api/v1/rooms', type: :request do
       end
     end
 
-    put('update room') do
-      tags 'Room'
+    put('update room of accommodation by partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :room,
@@ -215,8 +214,8 @@ RSpec.describe 'api/v1/rooms', type: :request do
       end
     end
 
-    delete('delete room') do
-      tags 'Room'
+    delete('delete room of accommodation by partner') do
+      tags 'Partner'
       security [jwt_auth: []]
 
       response(200, 'successful') do

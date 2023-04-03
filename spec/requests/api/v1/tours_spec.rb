@@ -39,7 +39,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     end
 
     post('create new tour - for partner only') do
-      tags 'Tour'
+      tags 'Partner'
       description 'Creates a new tour'
       consumes 'application/json'
       security [ jwt_auth: [] ]
@@ -93,7 +93,6 @@ RSpec.describe 'api/v1/tours', type: :request do
   end
 
   path '/api/v1/tours/{id}' do
-    # You'll want to customize the parameter types...
     parameter name: :id, in: :path, type: :string, description: 'tour id'
 
     get('show published tour for all') do
@@ -137,7 +136,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     end
 
     put('update tour - for admin all, for partner his own only') do
-      tags 'Tour'
+      tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :tour,
@@ -198,7 +197,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     end
 
     delete('delete tour - for admin all, for partner his own only') do
-      tags 'Tour'
+      tags 'Partner'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -231,7 +230,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'tour id'
 
     put('publish tour - for admin only') do
-      tags 'Tour'
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -277,7 +276,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'tour id'
 
     put('unpublish tour - for admin only') do
-      tags 'Tour'
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -321,7 +320,7 @@ RSpec.describe 'api/v1/tours', type: :request do
 
   path '/api/v1/tours_unpublished' do
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Tour'
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -365,7 +364,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'tour id'
 
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Tour'
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 

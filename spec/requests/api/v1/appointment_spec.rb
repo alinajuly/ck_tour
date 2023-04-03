@@ -6,8 +6,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
   path '/api/v1/users/{id}/appointments' do
     parameter name: 'id', in: :path, type: :string, description: 'user id'
 
-    get('list appointment') do
-      tags 'Appointment'
+    get('list tour appointment for tourist') do
+      tags 'Tourist'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },
@@ -38,9 +38,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
       end
     end
 
-    post('create appointment') do
-      tags 'Appointment'
-      description 'Creates a new appointment'
+    post('create tour appointment by tourist') do
+      tags 'Tourist'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :appointment,
@@ -82,12 +81,11 @@ RSpec.describe 'api/v1/appointments', type: :request do
   end
 
   path '/api/v1/users/{user_id}/appointments/{id}' do
-    # You'll want to customize the parameter types...
     parameter name: 'user_id', in: :path, type: :string, description: 'user id'
     parameter name: 'id', in: :path, type: :string, description: 'appointment id'
 
-    get('show appointment') do
-      tags 'Appointment'
+    get('show tour appointment for tourist') do
+      tags 'Tourist'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -129,8 +127,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
       end
     end
 
-    put('update appointment') do
-      tags 'Appointment'
+    put('update tour appointment by tourist') do
+      tags 'Tourist'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :appointment,
@@ -167,8 +165,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
       end
     end
 
-    delete('delete appointment') do
-      tags 'Appointment'
+    delete('delete tour appointment by tourist') do
+      tags 'Tourist'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -201,8 +199,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
     parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
     parameter name: 'id', in: :path, type: :string, description: 'appointment id'
 
-    put('confirmations') do
-      tags 'Appointment'
+    put('confirmations of tour appointment for partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -248,8 +246,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
     parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
     parameter name: 'id', in: :path, type: :string, description: 'appointment id'
 
-    put('cancelling') do
-      tags 'Appointment'
+    put('cancelling of tour appointment for partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -294,8 +292,8 @@ RSpec.describe 'api/v1/appointments', type: :request do
   path '/api/v1/tours/{tour_id}/appointments' do
     parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
 
-    get('list appointments for partner') do
-      tags 'Appointment'
+    get('list appointments of tour for partner') do
+      tags 'Partner'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },

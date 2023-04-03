@@ -267,8 +267,33 @@ place = Place.create(name: 'Черкаси',
 
 place.geolocations.create(locality: 'палац Дружби Народів', latitude: 49.437380, longitude: 32.072098)
 
+# Caterings create
 
+user = User.create(name: 'partner4', email: 'partner4@test.com', password: 'Partner456!', role: 1)
 
+catering = Catering.create(name: 'YOSHI', description: 'Ресторан японської кухні', kind: 'ресторан',
+                           address_owner: 'м.Черкаси, вул. Різдвяна 25', reg_code: '170999', person: 'Кияшко Роман Петрович',
+                           places: 64, phone: '0472-383030', email: 'info@yoshi-fujiwara.ua', user_id: user.id)
 
+catering.geolocations.create(locality: 'Черкаси', latitude: 49.441896, longitude: 32.064889, street: 'бул. Шевченка',
+                             suite: '205', zip_code: '18001')
 
+user = User.create(name: 'partner5', email: 'partner5@test.com', password: 'Partner567!', role: 1)
 
+catering = Catering.create(name: 'Coffee House', description: 'Кафе в центрі міста Умань', kind: 'кафе',
+                           address_owner: 'м.Умань, вул. Незалежності 75', reg_code: '171111', person: 'Іваненко Степан Петрович',
+                           places: 24, phone: '+380 93 774 4124', email: 'info@coffeehouse.com.ua', user_id: user.id)
+
+catering.geolocations.create(locality: 'Умань', latitude: 48.750112, longitude: 30.220777, street: 'вул. Небесної Сотні',
+                             suite: '5', zip_code: '20300')
+
+user = User.create(name: 'partner6', email: 'partner6@test.com', password: 'Partner678!', role: 1)
+
+catering = Catering.create(name: 'Вітряк', kind: 'ресторан',
+                           description: 'У ресторані представлені страви української кухні. Ви можете скуштувати тут смачний борщ, вареники та салати.',
+                           address_owner: 'м.Корсунь-Шевченківський, вул. Незалежності 12', reg_code: '172222',
+                           person: 'Симоненко Віктор Іванович', places: 118, phone: '+380 67 474 0168',
+                           email: 'info@vitriak.com.ua', user_id: user.id)
+
+catering.geolocations.create(locality: 'Корсунь-Шевченківський', latitude: 49.403294, longitude: 31.265759,
+                             street: 'вул. Марценюка', suite: '2', zip_code: '19401')

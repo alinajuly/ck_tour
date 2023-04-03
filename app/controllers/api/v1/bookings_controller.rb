@@ -7,8 +7,8 @@ class Api::V1::BookingsController < ApplicationController
   before_action :authorize_policy
 
   def index
-    @bookings = @user.bookings.all.where('check_out >= ?', Time.now)
-    @bookings = @user.bookings.all.where('check_out < ?', Time.now) if params[:archived].present?
+    @bookings = @user.bookings.where('check_out >= ?', Time.now)
+    @bookings = @user.bookings.where('check_out < ?', Time.now) if params[:archived].present?
 
     authorize @bookings
     if @bookings
@@ -19,8 +19,9 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def index_partner
-    @bookings = @room.bookings.all.where('check_out >= ?', Time.now)
-    @bookings = @accommodation.rooms.bookings.all.where('check_out < ?', Time.now) if params[:archived].present?
+    # @booking = Booking.joins(room: :accommodation).where()
+    @bookings = @accommodation.room.bookings.where('check_out >= ?', Time.now)
+    @bookings = @accommodation.room.bookings.where('check_out < ?', Time.now) if params[:archived].present?
 
     authorize @bookings
     if @bookings

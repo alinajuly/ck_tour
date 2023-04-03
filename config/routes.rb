@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         put '/change_role', to: 'users#change_role'
         resources :bookings
         resources :appointments
+        resources :reservations
       end
 
       resources :attractions do
@@ -28,6 +29,10 @@ Rails.application.routes.draw do
 
       resources :accommodations do
         resources :facilities
+        resources :geolocations, only: %i[create]
+        get '/geolocations', to: 'geolocations#show'
+        put '/geolocations', to: 'geolocations#update'
+        delete '/geolocations', to: 'geolocations#destroy'
         resources :rooms do
           resources :amenities
           get '/bookings', to: 'bookings#index_partner'
@@ -42,12 +47,21 @@ Rails.application.routes.draw do
       end
       get 'accommodations_unpublished', to: 'accommodations#index_unpublished'
 
-      resources :accommodations do
-        resources :geolocations, only: %i[create]
+      resources :caterings do
+        post '/geolocations', to: 'geolocations#create'
         get '/geolocations', to: 'geolocations#show'
         put '/geolocations', to: 'geolocations#update'
         delete '/geolocations', to: 'geolocations#destroy'
+        put '/publish', to: 'caterings#publish'
+        put '/unpublish', to: 'caterings#unpublish'
+        get '/show_unpublished', to: 'caterings#show_unpublished'
+        get '/reservations', to: 'reservations#index_partner'
+        resources :reservations do
+          put '/confirm', to: 'reservations#confirm'
+          put '/cancel', to: 'reservations#cancel'
+        end
       end
+      get 'caterings_unpublished', to: 'caterings#index_unpublished'
 
       resources :tours do
         resources :places do
