@@ -22,6 +22,7 @@ class Api::V1::AppointmentsController < ApplicationController
     @appointments = @tour.appointments.all.joins(:tour).where('time_end < ?', Time.now) if params[:archived].present?
 
     authorize @appointments
+    # authorize @tours, :index_partner?
     if @appointments
       render json: { data: @appointments }, status: :ok
     else
@@ -124,5 +125,6 @@ class Api::V1::AppointmentsController < ApplicationController
 
   def authorize_policy
     authorize Appointment
+    # authorize Tour
   end
 end

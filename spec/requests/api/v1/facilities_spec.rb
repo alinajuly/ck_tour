@@ -5,8 +5,8 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
   path '/api/v1/accommodations/{accommodation_id}/facilities' do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
 
-    get('list facilities') do
-      tags 'Facility'
+    get('list facilities for all') do
+      tags 'Accommodation'
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
 
@@ -45,8 +45,8 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
       end
     end
 
-    post('create facility') do
-      tags 'Facility'
+    post('create facility for accommodation by partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :facility,
@@ -107,12 +107,11 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
   end
 
   path '/api/v1/accommodations/{accommodation_id}/facilities/{id}' do
-    # You'll want to customize the parameter types...
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     parameter name: 'id', in: :path, type: :string, description: 'facility_id'
 
-    put('update facility') do
-      tags 'Facility'
+    put('update facility of accommodation by partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :facility,
@@ -171,8 +170,8 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
       end
     end
 
-    delete('delete facility') do
-      tags 'Facility'
+    delete('delete facility of accommodation by partner') do
+      tags 'Partner'
       security [jwt_auth: []]
 
       response(200, 'successful') do

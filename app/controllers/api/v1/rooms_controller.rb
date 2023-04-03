@@ -15,9 +15,9 @@ class Api::V1::RoomsController < ApplicationController
              else
                 @accommodation.rooms.all
              end
-    
+
     authorize @rooms
-             
+
     if @rooms
       render json: { data: @rooms }, status: :ok
     else
@@ -59,7 +59,7 @@ class Api::V1::RoomsController < ApplicationController
   # DELETE /api/v1/rooms/1
   def destroy
     authorize @room
-    
+
     if @room.destroy!
       render json: { status: 'Delete' }, status: :ok
     else

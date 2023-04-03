@@ -8,8 +8,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations'
     parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attractions_id, accommodations_id'
 
-    post('create geolocation') do
-      tags 'Geolocation'
+    post('create geolocation by admin (attraction) or partner (catering/tour)') do
+      tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :geolocation,
@@ -53,8 +53,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       end
     end
 
-    get('show geolocation') do
-      tags 'Geolocation'
+    get('show geolocation for all') do
+      tags 'Map'
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
@@ -89,8 +89,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       end
     end
 
-    put('update geolocation') do
-      tags 'Geolocation'
+    put('update geolocation by admin or partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :geolocation,
@@ -141,8 +141,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       end
     end
 
-    delete('delete geolocation') do
-      tags 'Geolocation'
+    delete('delete geolocation by admin or partner') do
+      tags 'Partner'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -186,12 +186,11 @@ RSpec.describe 'api/v1/geolocations', type: :request do
   end
 
   path '/api/v1/tours/{tour_id}/places/{place_id}/geolocations' do
-    # You'll want to customize the parameter types...
     parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
     parameter name: 'place_id', in: :path, type: :string, description: 'place id'
 
-    post('create geolocation') do
-      tags 'Geolocation'
+    post('create geolocation for tour by partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :geolocation,
@@ -235,8 +234,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       end
     end
 
-    get('show geolocation') do
-      tags 'Geolocation'
+    get('show geolocation for tour for all') do
+      tags 'Map'
 
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
@@ -271,8 +270,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       end
     end
 
-    put('update geolocation') do
-      tags 'Geolocation'
+    put('update geolocation for tour by partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :geolocation,
@@ -323,8 +322,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       end
     end
 
-    delete('delete geolocation') do
-      tags 'Geolocation'
+    delete('delete geolocation for tour by partner') do
+      tags 'Partner'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do

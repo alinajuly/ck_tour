@@ -1,17 +1,21 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-RSpec.describe 'api/v1/bookings', type: :request do
-
-  path '/api/v1/users/{id}/bookings' do
-    parameter name: 'id', in: :path, type: :string, description: 'user id'
-
-    get('list booking for tourist') do
-      tags 'Tourist'
+RSpec.describe 'api/v1/caterings', type: :request do
+  path '/api/v1/caterings' do
+    get('list published catering for all') do
+      tags 'Catering'
       produces 'application/json'
-      security [ jwt_auth: [] ]
-      parameter name: :archived, in: :query, schema: { type: :string },
-                description: 'Archive of old bookings'
+      parameter name: :geolocations, in: :query, schema: { type: :string },
+                description: 'Locality'
+      parameter name: :user_id, in: :query, schema: { type: :integer },
+                description: 'Filter on partner'
+      parameter name: :check_in, in: :query, schema: { type: :string },
+                description: 'Guests Check-in f.e. 2023-05-15-18-00'
+      parameter name: :check_out, in: :query, schema: { type: :string },
+                description: 'Guests Check-out f.e. 2023-05-15-21-00'
+      parameter name: :number_of_peoples, in: :query, schema: { type: :string },
+                description: 'Guests quantity'
 
       response(200, 'successful') do
         it 'should returns status response' do
@@ -38,23 +42,30 @@ RSpec.describe 'api/v1/bookings', type: :request do
       end
     end
 
-    post('create booking by tourist') do
-      tags 'Tourist'
+    post('create new catering - for partner only') do
+      tags 'Partner'
+      description 'Creates a new catering'
       consumes 'application/json'
       security [ jwt_auth: [] ]
-      parameter name: :booking,
+      parameter name: :catering,
                 in: :body,
                 required: true,
                 schema: {
                   type: :object,
                   properties: {
-                    number_of_peoples: { type: :integer },
-                    check_in: { type: :string, format: :date },
-                    check_out: { type: :string, format: :date },
-                    note: { type: :string },
-                    room_id: { type: :integer }
+                    name: { type: :string },
+                    description: { type: :string },
+                    places: { type: :integer },
+                    kind: { type: :string },
+                    phone: { type: :string },
+                    email: { type: :string },
+                    address_owner: { type: :string },
+                    reg_code: { type: :string },
+                    person: { type: :string },
+                    user_id: { type: :string }
                   },
-                  required: [ :number_of_peoples, :check_in, :check_out, :room_id ]
+                  required: [ :name, :description, :places, :address_owner, :phone, :email, :kind,
+                              :user_id, :reg_code, :person ]
                 }
 
       response(201, 'successful created') do
@@ -83,17 +94,14 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
   end
 
-  path '/api/v1/users/{user_id}/bookings/{id}' do
-    parameter name: 'user_id', in: :path, type: :string, description: 'user id'
-    parameter name: 'id', in: :path, type: :string, description: 'booking id'
+  path '/api/v1/caterings/{id}' do
+    parameter name: :id, in: :path, type: :string, description: 'catering id'
 
-    get('show booking for tourist') do
-      tags 'Tourist'
-      security [ jwt_auth: [] ]
+    get('show published catering for all') do
+      tags 'Catering'
 
       response(200, 'successful') do
-        let(:user_id) { '123' }
-        let(:booking_id) { '123' }
+        let(:id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -102,7 +110,6 @@ RSpec.describe 'api/v1/bookings', type: :request do
             }
           }
         end
-        run_test!
       end
 
       response(200, 'successful') do
@@ -130,23 +137,41 @@ RSpec.describe 'api/v1/bookings', type: :request do
       end
     end
 
-    put('update booking by tourist') do
-      tags 'Tourist'
+    put('update catering - for admin all, for partner his own only') do
+      tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
-      parameter name: :booking,
+      parameter name: :catering,
                 in: :body,
                 schema: {
                   type: :object,
                   properties: {
-                    number_of_peoples: { type: :integer },
-                    check_in: { type: :string, format: :date },
-                    check_out: { type: :string, format: :date },
-                    note: { type: :string }
+                    name: { type: :string },
+                    description: { type: :string },
+                    places: { type: :integer },
+                    kind: { type: :string },
+                    phone: { type: :string },
+                    email: { type: :string },
+                    address_owner: { type: :string },
+                    reg_code: { type: :string },
+                    person: { type: :string },
+                    user_id: { type: :string }
                   }
                 }
 
       response(200, 'successful') do
+        let(:id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+      end
+
+      response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
@@ -171,8 +196,8 @@ RSpec.describe 'api/v1/bookings', type: :request do
       end
     end
 
-    delete('delete booking by tourist') do
-      tags 'Tourist'
+    delete('delete catering - for admin all, for partner his own only') do
+      tags 'Partner'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -201,13 +226,11 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
   end
 
-  path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings/{id}/confirm' do
-    parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
-    parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
-    parameter name: 'id', in: :path, type: :string, description: 'booking id'
+  path '/api/v1/caterings/{id}/publish' do
+    parameter name: :id, in: :path, type: :string, description: 'catering id'
 
-    put('confirmations of accommodation booking by partner') do
-      tags 'Partner'
+    put('publish catering - for admin only') do
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -249,13 +272,11 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
   end
 
-  path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings/{id}/cancel' do
-    parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
-    parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
-    parameter name: 'id', in: :path, type: :string, description: 'booking id'
+  path '/api/v1/caterings/{id}/unpublish' do
+    parameter name: :id, in: :path, type: :string, description: 'catering id'
 
-    put('cancelling of accommodation booking by partner') do
-      tags 'Partner'
+    put('unpublish catering - for admin only') do
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -297,16 +318,65 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
   end
 
-  path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings' do
-    parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
-    parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
-
-    get('list bookings for partner') do
-      tags 'Partner'
-      produces 'application/json'
+  path '/api/v1/caterings_unpublished' do
+    get('list unpublished (for admin - all, for partner - his own only)') do
+      tags 'Admin'
+      consumes 'application/json'
       security [ jwt_auth: [] ]
-      parameter name: :archived, in: :query, schema: { type: :string },
-                description: 'Archive of old bookings'
+
+      response(200, 'successful') do
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+      end
+
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+      end
+
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+      end
+    end
+  end
+
+  path '/api/v1/caterings/{id}/show_unpublished' do
+    parameter name: :id, in: :path, type: :string, description: 'catering id'
+
+    get('list unpublished (for admin - all, for partner - his own only)') do
+      tags 'Admin'
+      consumes 'application/json'
+      security [ jwt_auth: [] ]
+
+      response(200, 'successful') do
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+      end
 
       response(200, 'successful') do
         it 'should returns status response' do

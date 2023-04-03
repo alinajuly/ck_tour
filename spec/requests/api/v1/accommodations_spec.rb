@@ -43,7 +43,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     end
 
     post('create new accommodation - for partner only') do
-      tags 'Accommodation'
+      tags 'Partner'
       description 'Creates a new accommodation'
       consumes 'application/json'
       security [ jwt_auth: [] ]
@@ -93,7 +93,6 @@ RSpec.describe 'api/v1/accommodations', type: :request do
   end
 
   path '/api/v1/accommodations/{id}' do
-    # You'll want to customize the parameter types...
     parameter name: :id, in: :path, type: :string, description: 'accommodation id'
 
     get('show published accommodation for all') do
@@ -137,7 +136,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     end
 
     put('update accommodation - for admin all, for partner his own only') do
-      tags 'Accommodation'
+      tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :accommodation,
@@ -195,7 +194,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     end
 
     delete('delete accommodation - for admin all, for partner his own only') do
-      tags 'Accommodation'
+      tags 'Partner'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -228,7 +227,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'accommodation id'
 
     put('publish accommodation - for admin only') do
-      tags 'Accommodation'
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -274,7 +273,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'accommodation id'
 
     put('unpublish accommodation - for admin only') do
-      tags 'Accommodation'
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -318,7 +317,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
 
   path '/api/v1/accommodations_unpublished' do
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Accommodation'
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -362,7 +361,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'accommodation id'
 
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Accommodation'
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 

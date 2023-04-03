@@ -1,14 +1,14 @@
 class BookingPolicy < ApplicationPolicy
-  # class Scope < Scope
-  #   def resolve
-  #     if user.admin?
-  #       scope.all
-  #     elsif user.partner?
-  #       scope.joins(accommodation: :room).where(user_id: user.id)
-  #       # scope.where(booking.room.accommodation.user_id == user.id)
-  #     end
-  #   end
-  # end
+  class Scope < Scope
+    def resolve
+      if user.admin?
+        scope.all
+      elsif user.partner?
+        # scope.joins(accommodation: :room).where(user_id: user.id)
+        scope.joins(room: :accommodation).where(accommodations: { user_id: user.id })
+      end
+    end
+  end
 
   def index?
     true

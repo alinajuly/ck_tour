@@ -1,13 +1,15 @@
 class AppointmentPolicy < ApplicationPolicy
-  # class Scope < Scope
-  #   def resolve
-  #     if user.admin?
-  #       scope.all
-  #     elsif user.partner?
-  #       # scope.where(user_id: user.id)
-  #     end
-  #   end
-  # end
+  class Scope < Scope
+    def resolve
+      if user.admin?
+        scope.all
+      elsif user.partner?
+        scope.joins(tour:).where(tour: { user_id: user.id })
+        # scope.where(tour.user_id == user.id)
+        # scope.where(user_id: user.id)
+      end
+    end
+  end
 
   def index?
     true
