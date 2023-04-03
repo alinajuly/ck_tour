@@ -6,7 +6,7 @@ info:
 paths:
   "/api/v1/accommodations":
     get:
-      summary: list published accommodation for all
+      summary: list ACCOMMODATION - published for all
       tags:
       - Accommodation
       parameters:
@@ -45,7 +45,7 @@ paths:
         '422':
           description: invalid request
     post:
-      summary: create new accommodation - for partner only
+      summary: create new ACCOMMODATION - for partner only
       tags:
       - Partner
       description: Creates a new accommodation
@@ -105,7 +105,7 @@ paths:
       schema:
         type: string
     get:
-      summary: show published accommodation for all
+      summary: show ACCOMMODATION published - for all
       tags:
       - Accommodation
       responses:
@@ -118,7 +118,8 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update accommodation - for admin all, for partner his own only
+      summary: 'update ACCOMMODATION: status by admin: published/unpublished , other
+        attr. by partner his own only'
       tags:
       - Partner
       security:
@@ -151,62 +152,17 @@ paths:
                   type: string
                 kind:
                   type: string
-                user_id:
-                  type: string
                 reg_code:
                   type: string
                 person:
                   type: string
+                status:
+                  type: string
+        description: ''
     delete:
-      summary: delete accommodation - for admin all, for partner his own only
+      summary: delete ACCOMMODATION - for admin all, for partner his own only
       tags:
       - Partner
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/accommodations/{id}/publish":
-    parameters:
-    - name: id
-      in: path
-      description: accommodation id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: publish accommodation - for admin only
-      tags:
-      - Admin
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/accommodations/{id}/unpublish":
-    parameters:
-    - name: id
-      in: path
-      description: accommodation id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: unpublish accommodation - for admin only
-      tags:
-      - Admin
       security:
       - jwt_auth: []
       responses:
@@ -440,7 +396,7 @@ paths:
       schema:
         type: string
     get:
-      summary: list tour appointment for tourist
+      summary: list TOUR APPOINTMENT for tourist
       tags:
       - Tourist
       security:
@@ -461,7 +417,7 @@ paths:
         '422':
           description: invalid request
     post:
-      summary: create tour appointment by tourist
+      summary: create TOUR APPOINTMENT by tourist
       tags:
       - Tourist
       security:
@@ -505,7 +461,7 @@ paths:
       schema:
         type: string
     get:
-      summary: show tour appointment for tourist
+      summary: show TOUR APPOINTMENT for tourist
       tags:
       - Tourist
       security:
@@ -520,7 +476,8 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update tour appointment by tourist
+      summary: 'update TOUR APPOINTMENT: confirmation (approved/cancelled) - partner
+        only, other attr. by tourist'
       tags:
       - Tourist
       security:
@@ -543,68 +500,12 @@ paths:
               properties:
                 number_of_peoples:
                   type: integer
+                confirmation:
+                  type: string
     delete:
-      summary: delete tour appointment by tourist
+      summary: delete TOUR APPOINTMENT by tourist
       tags:
       - Tourist
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/tours/{tour_id}/appointments/{id}/confirm":
-    parameters:
-    - name: tour_id
-      in: path
-      description: tour id
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      description: appointment id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: confirmations of tour appointment for partner
-      tags:
-      - Partner
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/tours/{tour_id}/appointments/{id}/cancel":
-    parameters:
-    - name: tour_id
-      in: path
-      description: tour id
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      description: appointment id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: cancelling of tour appointment for partner
-      tags:
-      - Partner
       security:
       - jwt_auth: []
       responses:
@@ -625,7 +526,7 @@ paths:
       schema:
         type: string
     get:
-      summary: list appointments of tour for partner
+      summary: list TOUR APPOINTMENT for partner
       tags:
       - Partner
       security:
@@ -871,7 +772,7 @@ paths:
       schema:
         type: string
     get:
-      summary: list booking for tourist
+      summary: list ACCOMMODATION BOOKING for tourist
       tags:
       - Tourist
       security:
@@ -892,7 +793,7 @@ paths:
         '422':
           description: invalid request
     post:
-      summary: create booking by tourist
+      summary: create ACCOMMODATION BOOKING by tourist
       tags:
       - Tourist
       security:
@@ -946,7 +847,7 @@ paths:
       schema:
         type: string
     get:
-      summary: show booking for tourist
+      summary: show ACCOMMODATION BOOKING for tourist
       tags:
       - Tourist
       security:
@@ -961,7 +862,8 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update booking by tourist
+      summary: 'update ACCOMMODATION BOOKING: confirmation (approved/cancelled) -
+        partner only, other attr. by tourist'
       tags:
       - Tourist
       security:
@@ -992,80 +894,12 @@ paths:
                   format: date
                 note:
                   type: string
+                confirmation:
+                  type: string
     delete:
-      summary: delete booking by tourist
+      summary: delete ACCOMMODATION BOOKING by tourist
       tags:
       - Tourist
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings/{id}/confirm":
-    parameters:
-    - name: accommodation_id
-      in: path
-      description: accommodation_id
-      required: true
-      schema:
-        type: string
-    - name: room_id
-      in: path
-      description: room_id
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      description: booking id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: confirmations of accommodation booking by partner
-      tags:
-      - Partner
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/bookings/{id}/cancel":
-    parameters:
-    - name: accommodation_id
-      in: path
-      description: accommodation_id
-      required: true
-      schema:
-        type: string
-    - name: room_id
-      in: path
-      description: room_id
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      description: booking id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: cancelling of accommodation booking by partner
-      tags:
-      - Partner
       security:
       - jwt_auth: []
       responses:
@@ -1092,7 +926,7 @@ paths:
       schema:
         type: string
     get:
-      summary: list bookings for partner
+      summary: list ACCOMMODATION BOOKING for partner
       tags:
       - Partner
       security:
@@ -1114,7 +948,7 @@ paths:
           description: invalid request
   "/api/v1/caterings":
     get:
-      summary: list published catering for all
+      summary: list CATERING - published for all
       tags:
       - Catering
       parameters:
@@ -1153,7 +987,7 @@ paths:
         '422':
           description: invalid request
     post:
-      summary: create new catering - for partner only
+      summary: create new CATERING - for partner only
       tags:
       - Partner
       description: Creates a new catering
@@ -1216,7 +1050,7 @@ paths:
       schema:
         type: string
     get:
-      summary: show published catering for all
+      summary: show CATERING - published for all
       tags:
       - Catering
       responses:
@@ -1229,7 +1063,8 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update catering - for admin all, for partner his own only
+      summary: 'update CATERING: status by admin: published/unpublished , other attr.
+        by partner his own only'
       tags:
       - Partner
       security:
@@ -1271,55 +1106,9 @@ paths:
                 user_id:
                   type: string
     delete:
-      summary: delete catering - for admin all, for partner his own only
+      summary: delete CATERING - for admin all, for partner his own only
       tags:
       - Partner
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/caterings/{id}/publish":
-    parameters:
-    - name: id
-      in: path
-      description: catering id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: publish catering - for admin only
-      tags:
-      - Admin
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/caterings/{id}/unpublish":
-    parameters:
-    - name: id
-      in: path
-      description: catering id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: unpublish catering - for admin only
-      tags:
-      - Admin
       security:
       - jwt_auth: []
       responses:
@@ -1931,7 +1720,7 @@ paths:
       schema:
         type: string
     get:
-      summary: list reservation for tourist
+      summary: list CATERING RESERVATION for tourist
       tags:
       - Tourist
       security:
@@ -1952,7 +1741,7 @@ paths:
         '422':
           description: invalid request
     post:
-      summary: create reservation by tourist
+      summary: create CATERING RESERVATION by tourist
       tags:
       - Tourist
       security:
@@ -2006,7 +1795,7 @@ paths:
       schema:
         type: string
     get:
-      summary: show reservation for tourist
+      summary: show CATERING RESERVATION for tourist
       tags:
       - Tourist
       security:
@@ -2021,7 +1810,8 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update reservation by tourist
+      summary: 'update CATERING RESERVATION: confirmation (approved/cancelled) - partner
+        only, other attr. by tourist'
       tags:
       - Tourist
       security:
@@ -2052,68 +1842,12 @@ paths:
                   format: datetime
                 note:
                   type: string
+                confirmation:
+                  type: string
     delete:
-      summary: delete reservation by tourist
+      summary: delete CATERING RESERVATION by tourist
       tags:
       - Tourist
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/caterings/{catering_id}/reservations/{id}/confirm":
-    parameters:
-    - name: catering_id
-      in: path
-      description: catering_id
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      description: reservation id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: confirmations of catering reservation by partner
-      tags:
-      - Partner
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/caterings/{catering_id}/reservations/{id}/cancel":
-    parameters:
-    - name: catering_id
-      in: path
-      description: catering_id
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      description: reservation id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: cancelling of catering reservation by partner
-      tags:
-      - Partner
       security:
       - jwt_auth: []
       responses:
@@ -2134,7 +1868,7 @@ paths:
       schema:
         type: string
     get:
-      summary: list reservations for partner
+      summary: list CATERING RESERVATION for partner
       tags:
       - Partner
       security:
@@ -2311,7 +2045,7 @@ paths:
           description: invalid request
   "/api/v1/tours":
     get:
-      summary: list published tour for all
+      summary: list TOUR - published for all
       tags:
       - Tour
       parameters:
@@ -2340,7 +2074,7 @@ paths:
         '422':
           description: invalid request
     post:
-      summary: create new tour - for partner only
+      summary: create new TOUR - for partner only
       tags:
       - Partner
       description: Creates a new tour
@@ -2409,7 +2143,7 @@ paths:
       schema:
         type: string
     get:
-      summary: show published tour for all
+      summary: show TOUR - published for all
       tags:
       - Tour
       responses:
@@ -2422,7 +2156,8 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update tour - for admin all, for partner his own only
+      summary: 'update TOUR: status by admin: published/unpublished , other attr.
+        by partner his own only'
       tags:
       - Partner
       security:
@@ -2465,58 +2200,12 @@ paths:
                   type: string
                 person:
                   type: string
-                user_id:
+                status:
                   type: string
     delete:
-      summary: delete tour - for admin all, for partner his own only
+      summary: delete TOUR - for admin all, for partner his own only
       tags:
       - Partner
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/tours/{id}/publish":
-    parameters:
-    - name: id
-      in: path
-      description: tour id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: publish tour - for admin only
-      tags:
-      - Admin
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/tours/{id}/unpublish":
-    parameters:
-    - name: id
-      in: path
-      description: tour id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: unpublish tour - for admin only
-      tags:
-      - Admin
       security:
       - jwt_auth: []
       responses:

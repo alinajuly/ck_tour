@@ -11,6 +11,14 @@ class AccommodationPolicy < ApplicationPolicy
     end
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:status]
+    elsif user.partner?
+      %i[name description kind phone email reg_code address_owner person user_id]
+    end
+  end
+
   def index?
     true
   end
@@ -29,14 +37,6 @@ class AccommodationPolicy < ApplicationPolicy
 
   def destroy?
     user.partner? || user.admin?
-  end
-
-  def publish?
-    user.admin? # Only an admin can confirm a partner's create accommodations
-  end
-
-  def unpublish?
-    user.admin? # Only an admin can confirm a partner's create accommodations
   end
 
   def index_unpublished?
