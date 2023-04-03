@@ -1,4 +1,4 @@
-class TourPolicy < ApplicationPolicy
+class CateringPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       if user.admin?

@@ -4,8 +4,8 @@ require 'swagger_helper'
 RSpec.describe 'api/v1/places', type: :request do
   path '/api/v1/tours/{tour_id}/places' do
     parameter name: 'tour_id', in: :path, type: :string, description: 'tour_id'
-    get('list places') do
-      tags 'Place'
+    get('list places of tour for all') do
+      tags 'Tour'
       produces 'application/json'
 
       response(200, 'successful') do
@@ -46,8 +46,8 @@ RSpec.describe 'api/v1/places', type: :request do
       end
     end
 
-    post('create place') do
-      tags 'Place'
+    post('create place for tour by partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :place,
@@ -102,12 +102,11 @@ RSpec.describe 'api/v1/places', type: :request do
   end
 
   path '/api/v1/tours/{tour_id}/places/{id}' do
-    # You'll want to customize the parameter types...
     parameter name: 'tour_id', in: :path, type: :string, description: 'tour_id'
     parameter name: 'id', in: :path, type: :string, description: 'place_id'
 
-    get('show place') do
-      tags 'Place'
+    get('show place of tour for all') do
+      tags 'Tour'
 
       response(200, 'successful') do
         let(:tour_id) { '123' }
@@ -148,8 +147,8 @@ RSpec.describe 'api/v1/places', type: :request do
       end
     end
 
-    put('update place') do
-      tags 'Place'
+    put('update place of tour by partner') do
+      tags 'Partner'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :place,
@@ -201,8 +200,8 @@ RSpec.describe 'api/v1/places', type: :request do
       end
     end
 
-    delete('delete place') do
-      tags 'Place'
+    delete('delete place of tour by partner') do
+      tags 'Partner'
       security [jwt_auth: []]
 
       response(200, 'successful') do

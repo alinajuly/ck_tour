@@ -49,7 +49,7 @@ class Api::V1::GeolocationsController < ApplicationController
   end
 
   def geolocation_params
-    params.permit(:latitude, :longitude)
+    params.permit(:locality, :latitude, :longitude)
   end
 
   def authorize_policy

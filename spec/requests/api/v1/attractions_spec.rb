@@ -3,7 +3,7 @@ require 'swagger_helper'
 
 RSpec.describe 'api/v1/attractions', type: :request do
   path '/api/v1/attractions' do
-    get('list attractions') do
+    get('list attractions for all') do
       tags 'Attraction'
       produces 'application/json'
       parameter name: :geolocations, in: :query, schema: { type: :string },
@@ -28,8 +28,8 @@ RSpec.describe 'api/v1/attractions', type: :request do
       end
     end
 
-    post('create attraction') do
-      tags 'Attraction'
+    post('create attraction by admin') do
+      tags 'Admin'
       description 'Creates a new attraction'
       consumes 'application/json'
       security [ jwt_auth: [] ]
@@ -75,7 +75,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
     # You'll want to customize the parameter types...
     parameter name: :id, in: :path, type: :string, description: 'attraction id'
 
-    get('show attraction') do
+    get('show attraction for all') do
       tags 'Attraction'
 
       response(200, 'successful') do
@@ -109,8 +109,8 @@ RSpec.describe 'api/v1/attractions', type: :request do
       end
     end
 
-    put('update attraction') do
-      tags 'Attraction'
+    put('update attraction by admin') do
+      tags 'Admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :attraction,
@@ -160,8 +160,8 @@ RSpec.describe 'api/v1/attractions', type: :request do
       end
     end
 
-    delete('delete attraction') do
-      tags 'Attraction'
+    delete('delete attraction by admin') do
+      tags 'Admin'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -190,7 +190,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
     end
 
     path '/api/v1/search' do
-      get('search article') do
+      get('search attraction for all') do
         tags 'Attraction'
         consumes 'application/json'
         parameter name: :req, in: :query, schema: { type: :string },
@@ -234,9 +234,9 @@ RSpec.describe 'api/v1/attractions', type: :request do
   end
 
   path '/api/v1/attractions/{attraction_id}/upload_image' do
-    post('upload image') do
+    post('upload image of attraction by admin') do
       parameter name: :attraction_id, in: :path, type: :string, description: 'attraction id'
-      tags 'Attraction'
+      tags 'Admin'
       consumes 'multipart/form-data'
       security [ jwt_auth: [] ]
       parameter name: 'image', in: :formData, type: :file, description: 'Image file to upload'
@@ -285,9 +285,9 @@ RSpec.describe 'api/v1/attractions', type: :request do
   end
 
   path '/api/v1/attractions/{attraction_id}/update_image' do
-    put('update image') do
+    put('update image by admin') do
       parameter name: :attraction_id, in: :path, type: :string, description: 'attraction id'
-      tags 'Attraction'
+      tags 'Admin'
       consumes 'multipart/form-data'
       security [ jwt_auth: [] ]
       parameter name: 'image', in: :formData, type: :file, description: 'Image file to upload'
