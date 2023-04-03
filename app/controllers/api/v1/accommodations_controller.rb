@@ -1,7 +1,6 @@
 class Api::V1::AccommodationsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :set_accommodation, only: %i[update destroy]
-  before_action :set_for_publish, only: %i[publish unpublish]
   before_action :authorize_policy
 
   # GET /api/v1/accommodations
@@ -88,29 +87,10 @@ class Api::V1::AccommodationsController < ApplicationController
   def update
     authorize @accommodation
 
-    if @accommodation.update(accommodation_params.except(:status))
+    if @accommodation.update(accommodation_params)
       render json: { status: 'Update', data: @accommodation }, status: :ok
     else
-      render json: @accommodation.errors, status: :unprocessable_entity
-    end
-  end
-
-  def publish
-    authorize @accommodation
-
-    if @accommodation.published!
-      render json: { status: 'Item is published', data: @accommodation }, status: :ok
-    else
-      render json: @accommodation.errors, status: :unprocessable_entity
-    end
-  end
-
-  def unpublish
-    authorize @accommodation
-
-    if @accommodation.unpublished!
-      render json: { status: 'Item is hidden', data: @accommodation }, status: :ok
-    else
+      # render :edit
       render json: @accommodation.errors, status: :unprocessable_entity
     end
   end
@@ -135,13 +115,6 @@ class Api::V1::AccommodationsController < ApplicationController
     render json: { message: 'accommodation id not found' }, status: :not_found
   end
 
-  def set_for_publish
-    @accommodation = Accommodation.find(params[:accommodation_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'accommodation id not found' }, status: :not_found
-  end
-
   # def available_rooms
   #   @available_rooms = Accommodation.joins(:rooms).where('places >= ?', @number_of_peoples)
   #                                   # .joins(:bookings)
@@ -150,7 +123,8 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def accommodation_params
-    params.permit(:name, :description, :kind, :phone, :email, :status, :reg_code, :address_owner, :person, :user_id)
+    params.require(:accommodation).permit(policy(@accommodation).permitted_attributes)
+    # params.permit(:name, :description, :kind, :phone, :email, :status, :reg_code, :address_owner, :person, :user_id)
   end
 
   def authorize_policy

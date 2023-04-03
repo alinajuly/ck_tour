@@ -1,8 +1,7 @@
 class Api::V1::AppointmentsController < ApplicationController
-  before_action :set_user, except: %i[index_partner confirm cancel]
-  before_action :set_tour, only: %i[index_partner confirm cancel]
+  before_action :set_user, except: :list_for_partner
+  before_action :set_tour, only: :list_for_partner
   before_action :set_appointment, only: %i[show update destroy]
-  before_action :set_partner, only: %i[confirm cancel]
   before_action :authorize_policy
 
   def index
@@ -17,7 +16,7 @@ class Api::V1::AppointmentsController < ApplicationController
     end
   end
 
-  def index_partner
+  def list_for_partner
     @appointments = @tour.appointments.all.joins(:tour).where('time_end >= ?', Time.now)
     @appointments = @tour.appointments.all.joins(:tour).where('time_end < ?', Time.now) if params[:archived].present?
 
@@ -53,7 +52,7 @@ class Api::V1::AppointmentsController < ApplicationController
   def update
     authorize @appointment
 
-    if @appointment.update(appointment_params.except(:confirmation))
+    if @appointment.update(appointment_params)
       render json: { status: 'Update', data: @appointment }, status: :ok
     else
       render json: @appointment.errors, status: :unprocessable_entity
@@ -65,26 +64,6 @@ class Api::V1::AppointmentsController < ApplicationController
 
     if @appointment.destroy!
       render json: { status: 'Delete' }, status: :ok
-    else
-      render json: @appointment.errors, status: :unprocessable_entity
-    end
-  end
-
-  def confirm
-    authorize @appointment
-
-    if @appointment.approved!
-      render json: { status: 'Confirmed', data: @appointment }, status: :ok
-    else
-      render json: @appointment.errors, status: :unprocessable_entity
-    end
-  end
-
-  def cancel
-    authorize @appointment
-
-    if @appointment.cancelled!
-      render json: { status: 'Cancelled', data: @appointment }, status: :ok
     else
       render json: @appointment.errors, status: :unprocessable_entity
     end
@@ -113,14 +92,10 @@ class Api::V1::AppointmentsController < ApplicationController
     render json: { message: 'tour id not found' }, status: :not_found
   end
 
-  def set_partner
-    @appointment = @tour.appointments.find(params[:appointment_id])
-    @partner_id = @appointment.tour.user_id
-  end
-
   # Only allow a list of trusted parameters through.
   def appointment_params
-    params.permit(:number_of_peoples, :tour_id)
+    params.require(:appointment).permit(policy(@appointment).permitted_attributes)
+    # params.permit(:number_of_peoples, :tour_id)
   end
 
   def authorize_policy

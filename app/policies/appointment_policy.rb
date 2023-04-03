@@ -11,6 +11,14 @@ class AppointmentPolicy < ApplicationPolicy
     end
   end
 
+  def permitted_attributes
+    if user.partner?
+      [:confirmation]
+    elsif user.tourist || user.partner?
+      %i[number_of_peoples tour_id]
+    end
+  end
+
   def index?
     true
   end
@@ -31,15 +39,7 @@ class AppointmentPolicy < ApplicationPolicy
     true
   end
 
-  def confirm?
-    user.partner?
-  end
-
-  def cancel?
-    user.partner?
-  end
-
-  def index_partner?
+  def list_for_partner?
     user.partner?
   end
 end

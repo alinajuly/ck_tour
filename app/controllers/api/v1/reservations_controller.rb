@@ -1,8 +1,7 @@
 class Api::V1::ReservationsController < ApplicationController
-  before_action :set_user, except: %i[index_partner confirm cancel]
-  before_action :set_catering, only: %i[index_partner confirm cancel]
+  before_action :set_user, except: :list_for_partner
+  before_action :set_catering, only: :list_for_partner
   before_action :set_reservation, only: %i[show update destroy]
-  before_action :set_partner, only: %i[confirm cancel]
   before_action :authorize_policy
 
   def index
@@ -17,7 +16,7 @@ class Api::V1::ReservationsController < ApplicationController
     end
   end
 
-  def index_partner
+  def list_for_partner
     # @reservation = Reservation.joins(catering: :accommodation).where()
     @reservations = @catering.reservations.where('check_out >= ?', Time.now)
     @reservations = @catering.reservations.where('check_out < ?', Time.now) if params[:archived].present?
@@ -53,7 +52,7 @@ class Api::V1::ReservationsController < ApplicationController
   def update
     authorize @reservation
 
-    if @reservation.update(reservation_params.except(:confirmation))
+    if @reservation.update(reservation_params)
       render json: { status: 'Update', data: @reservation }, status: :ok
     else
       render json: @reservation.errors, status: :unprocessable_entity
@@ -65,26 +64,6 @@ class Api::V1::ReservationsController < ApplicationController
 
     if @reservation.destroy!
       render json: { status: 'Delete' }, status: :ok
-    else
-      render json: @reservation.errors, status: :unprocessable_entity
-    end
-  end
-
-  def confirm
-    authorize @reservation
-
-    if @reservation.approved!
-      render json: { status: 'Confirmed', data: @reservation }, status: :ok
-    else
-      render json: @reservation.errors, status: :unprocessable_entity
-    end
-  end
-
-  def cancel
-    authorize @reservation
-
-    if @reservation.cancelled!
-      render json: { status: 'Cancelled', data: @reservation }, status: :ok
     else
       render json: @reservation.errors, status: :unprocessable_entity
     end
@@ -115,7 +94,8 @@ class Api::V1::ReservationsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def reservation_params
-    params.permit(:number_of_peoples, :check_in, :check_out, :note, :catering_id)
+    params.require(:reservation).permit(policy(@reservation).permitted_attributes)
+    # params.permit(:number_of_peoples, :check_in, :check_out, :note, :catering_id)
   end
 
   def authorize_policy

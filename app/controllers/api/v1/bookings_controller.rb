@@ -1,9 +1,8 @@
 class Api::V1::BookingsController < ApplicationController
-  before_action :set_user, except: %i[index_partner confirm cancel]
-  before_action :set_accommodation, only: %i[index_partner confirm cancel]
-  before_action :set_room, only: %i[index_partner confirm cancel]
+  before_action :set_user, except: :list_for_partner
+  before_action :set_accommodation, only: :list_for_partner
+  before_action :set_room, only: :list_for_partner
   before_action :set_booking, only: %i[show update destroy]
-  before_action :set_partner, only: %i[confirm cancel]
   before_action :authorize_policy
 
   def index
@@ -18,7 +17,7 @@ class Api::V1::BookingsController < ApplicationController
     end
   end
 
-  def index_partner
+  def list_for_partner
     # @booking = Booking.joins(room: :accommodation).where()
     @bookings = @accommodation.room.bookings.where('check_out >= ?', Time.now)
     @bookings = @accommodation.room.bookings.where('check_out < ?', Time.now) if params[:archived].present?
@@ -55,7 +54,7 @@ class Api::V1::BookingsController < ApplicationController
   def update
     authorize @booking
 
-    if @booking.update(booking_params.except(:confirmation))
+    if @booking.update(booking_params)
       render json: { status: 'Update', data: @booking }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity
@@ -67,26 +66,6 @@ class Api::V1::BookingsController < ApplicationController
 
     if @booking.destroy!
       render json: { status: 'Delete' }, status: :ok
-    else
-      render json: @booking.errors, status: :unprocessable_entity
-    end
-  end
-
-  def confirm
-    authorize @booking
-
-    if @booking.approved!
-      render json: { status: 'Confirmed', data: @booking }, status: :ok
-    else
-      render json: @booking.errors, status: :unprocessable_entity
-    end
-  end
-
-  def cancel
-    authorize @booking
-
-    if @booking.cancelled!
-      render json: { status: 'Cancelled', data: @booking }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity
     end
@@ -124,14 +103,10 @@ class Api::V1::BookingsController < ApplicationController
     render json: { message: 'room id not found' }, status: :not_found
   end
 
-  def set_partner
-    @booking = Booking.find(params[:booking_id])
-    @user_id = @booking.room.accommodation.user_id
-  end
-
   # Only allow a list of trusted parameters through.
   def booking_params
-    params.permit(:number_of_peoples, :check_in, :check_out, :note, :room_id)
+    params.require(:booking).permit(policy(@booking).permitted_attributes)
+    # params.permit(:number_of_peoples, :check_in, :check_out, :note, :room_id)
   end
 
   def authorize_policy

@@ -35,14 +35,8 @@ Rails.application.routes.draw do
         delete '/geolocations', to: 'geolocations#destroy'
         resources :rooms do
           resources :amenities
-          get '/bookings', to: 'bookings#index_partner'
-          resources :bookings do
-            put '/confirm', to: 'bookings#confirm'
-            put '/cancel', to: 'bookings#cancel'
-          end
+          get '/bookings', to: 'bookings#list_for_partner'
         end
-        put '/publish', to: 'accommodations#publish'
-        put '/unpublish', to: 'accommodations#unpublish'
         get '/show_unpublished', to: 'accommodations#show_unpublished'
       end
       get 'accommodations_unpublished', to: 'accommodations#index_unpublished'
@@ -52,14 +46,8 @@ Rails.application.routes.draw do
         get '/geolocations', to: 'geolocations#show'
         put '/geolocations', to: 'geolocations#update'
         delete '/geolocations', to: 'geolocations#destroy'
-        put '/publish', to: 'caterings#publish'
-        put '/unpublish', to: 'caterings#unpublish'
         get '/show_unpublished', to: 'caterings#show_unpublished'
-        get '/reservations', to: 'reservations#index_partner'
-        resources :reservations do
-          put '/confirm', to: 'reservations#confirm'
-          put '/cancel', to: 'reservations#cancel'
-        end
+        get '/reservations', to: 'reservations#list_for_partner'
       end
       get 'caterings_unpublished', to: 'caterings#index_unpublished'
 
@@ -70,14 +58,8 @@ Rails.application.routes.draw do
           put '/geolocations', to: 'geolocations#update'
           delete '/geolocations', to: 'geolocations#destroy'
         end
-        put '/publish', to: 'tours#publish'
-        put '/unpublish', to: 'tours#unpublish'
         get '/show_unpublished', to: 'tours#show_unpublished'
-        get '/appointments', to: 'appointments#index_partner'
-        resources :appointments do
-          put '/confirm', to: 'appointments#confirm'
-          put '/cancel', to: 'appointments#cancel'
-        end
+        get '/appointments', to: 'appointments#list_for_partner'
       end
       get 'tours_unpublished', to: 'tours#index_unpublished'
 
