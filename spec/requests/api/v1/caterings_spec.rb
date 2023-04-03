@@ -3,7 +3,7 @@ require 'swagger_helper'
 
 RSpec.describe 'api/v1/caterings', type: :request do
   path '/api/v1/caterings' do
-    get('list published catering for all') do
+    get('list CATERING - published for all') do
       tags 'Catering'
       produces 'application/json'
       parameter name: :geolocations, in: :query, schema: { type: :string },
@@ -42,7 +42,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
       end
     end
 
-    post('create new catering - for partner only') do
+    post('create new CATERING - for partner only') do
       tags 'Partner'
       description 'Creates a new catering'
       consumes 'application/json'
@@ -97,7 +97,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
   path '/api/v1/caterings/{id}' do
     parameter name: :id, in: :path, type: :string, description: 'catering id'
 
-    get('show published catering for all') do
+    get('show CATERING - published for all') do
       tags 'Catering'
 
       response(200, 'successful') do
@@ -137,7 +137,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
       end
     end
 
-    put('update catering - for admin all, for partner his own only') do
+    put('update CATERING: status by admin: published/unpublished , other attr. by partner his own only') do
       tags 'Partner'
       consumes 'application/json'
       security [ jwt_auth: [] ]
@@ -196,101 +196,9 @@ RSpec.describe 'api/v1/caterings', type: :request do
       end
     end
 
-    delete('delete catering - for admin all, for partner his own only') do
+    delete('delete CATERING - for admin all, for partner his own only') do
       tags 'Partner'
       security [ jwt_auth: [] ]
-
-      response(200, 'successful') do
-        it 'should returns status response' do
-          expect(response.status).to eq(200)
-        end
-      end
-
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
-      end
-    end
-  end
-
-  path '/api/v1/caterings/{id}/publish' do
-    parameter name: :id, in: :path, type: :string, description: 'catering id'
-
-    put('publish catering - for admin only') do
-      tags 'Admin'
-      consumes 'application/json'
-      security [ jwt_auth: [] ]
-
-      response(200, 'successful') do
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-      end
-
-      response(200, 'successful') do
-        it 'should returns status response' do
-          expect(response.status).to eq(200)
-        end
-      end
-
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
-      end
-    end
-  end
-
-  path '/api/v1/caterings/{id}/unpublish' do
-    parameter name: :id, in: :path, type: :string, description: 'catering id'
-
-    put('unpublish catering - for admin only') do
-      tags 'Admin'
-      consumes 'application/json'
-      security [ jwt_auth: [] ]
-
-      response(200, 'successful') do
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-      end
 
       response(200, 'successful') do
         it 'should returns status response' do

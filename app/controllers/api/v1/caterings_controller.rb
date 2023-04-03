@@ -1,7 +1,6 @@
 class Api::V1::CateringsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :set_catering, only: %i[update destroy]
-  before_action :set_for_publish, only: %i[publish unpublish]
   before_action :authorize_policy
 
   # GET /api/v1/accommodations/1/caterings
@@ -73,28 +72,8 @@ class Api::V1::CateringsController < ApplicationController
   def update
     authorize @catering
 
-    if @catering.update(catering_params.except(:status))
+    if @catering.update(catering_params)
       render json: { status: 'Update', data: @catering }, status: :ok
-    else
-      render json: @catering.errors, status: :unprocessable_entity
-    end
-  end
-
-  def publish
-    authorize @catering
-
-    if @catering.published!
-      render json: { status: 'Item is published', data: @catering }, status: :ok
-    else
-      render json: @catering.errors, status: :unprocessable_entity
-    end
-  end
-
-  def unpublish
-    authorize @catering
-
-    if @catering.unpublished!
-      render json: { status: 'Item is hidden', data: @catering }, status: :ok
     else
       render json: @catering.errors, status: :unprocessable_entity
     end
@@ -120,13 +99,6 @@ class Api::V1::CateringsController < ApplicationController
     render json: { message: 'catering id not found' }, status: :not_found
   end
 
-  def set_for_publish
-    @catering = Catering.find(params[:catering_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'catering id not found' }, status: :not_found
-  end
-
   def reserved_catering_ids(check_in, check_out)
     Reservation.joins(:catering).where(check_in: ..check_out, check_out: check_in..).pluck(:catering_id)
   end
@@ -140,8 +112,9 @@ class Api::V1::CateringsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def catering_params
-    params.permit(:places, :description, :name, :kind, :phone, :email, :reg_code, :address_owner, :person,
-                  reservations_attributes: %i[id check_in check_out number_of_peoples])
+    params.require(:catering).permit(policy(@catering).permitted_attributes)
+    # params.permit(:places, :description, :name, :kind, :phone, :email, :reg_code, :address_owner, :person,
+    #               reservations_attributes: %i[id check_in check_out number_of_peoples])
   end
 
   def authorize_policy

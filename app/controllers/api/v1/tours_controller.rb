@@ -1,7 +1,6 @@
 class Api::V1::ToursController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :set_tour, only: %i[update destroy]
-  before_action :set_for_publish, only: %i[publish unpublish]
   before_action :authorize_policy
 
   # GET /api/v1/tours
@@ -74,28 +73,8 @@ class Api::V1::ToursController < ApplicationController
   def update
     authorize @tour
 
-    if @tour.update(tour_params.except(:status))
+    if @tour.update(tour_params)
       render json: { status: 'Item is published', data: @tour }, status: :ok
-    else
-      render json: @tour.errors, status: :unprocessable_entity
-    end
-  end
-
-  def publish
-    authorize @tour
-
-    if @tour.published!
-      render json: { status: 'Item is published', data: @tour }, status: :ok
-    else
-      render json: @tour.errors, status: :unprocessable_entity
-    end
-  end
-
-  def unpublish
-    authorize @tour
-
-    if @tour.unpublished!
-      render json: { status: 'Item is hidden', data: @tour }, status: :ok
     else
       render json: @tour.errors, status: :unprocessable_entity
     end
@@ -122,17 +101,11 @@ class Api::V1::ToursController < ApplicationController
     render json: { message: 'tour id not found' }, status: :not_found
   end
 
-  def set_for_publish
-    @tour = Tour.find(params[:tour_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'tour id not found' }, status: :not_found
-  end
-
   # Only allow a list of trusted parameters through.
   def tour_params
-    params.permit(:title, :description, :address_owner, :reg_code, :person, :seats, :price_per_one,
-                  :time_start, :time_end, :phone, :email, :user_id)
+    params.require(:tour).permit(policy(@tour).permitted_attributes)
+    # params.permit(:title, :description, :address_owner, :reg_code, :person, :seats, :price_per_one,
+    #               :time_start, :time_end, :phone, :email, :user_id)
   end
 
   def authorize_policy

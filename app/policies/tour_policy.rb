@@ -11,6 +11,14 @@ class TourPolicy < ApplicationPolicy
     end
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:status]
+    elsif user.partner?
+      %i[title description address_owner reg_code person seats price_per_one time_start time_end phone email user_id]
+    end
+  end
+
   def index?
     true
   end
@@ -31,14 +39,6 @@ class TourPolicy < ApplicationPolicy
     user.partner? || user.admin?
   end
 
-  def publish?
-    user.admin? # Only an admin can confirm a partner's create accommodations
-  end
-
-  def unpublish?
-    user.admin? # Only an admin can confirm a partner's create accommodations
-  end
-
   def index_unpublished?
     user.partner? || user.admin?
   end
@@ -46,8 +46,4 @@ class TourPolicy < ApplicationPolicy
   def show_unpublished?
     user.partner? || user.admin?
   end
-
-  # def index_partner?
-  #   user.partner? && record.user_id == user.id
-  # end
 end
