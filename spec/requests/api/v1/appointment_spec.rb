@@ -7,7 +7,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'user id'
 
     get('list TOUR APPOINTMENT for tourist') do
-      tags 'Tourist'
+      tags 'Tourist Tours'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },
@@ -39,7 +39,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     end
 
     post('create TOUR APPOINTMENT by tourist') do
-      tags 'Tourist'
+      tags 'Tourist Tours'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :appointment,
@@ -85,7 +85,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'appointment id'
 
     get('show TOUR APPOINTMENT for tourist') do
-      tags 'Tourist'
+      tags 'Tourist Tours'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -128,7 +128,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     end
 
     put('update TOUR APPOINTMENT: confirmation (approved/cancelled) - partner only, other attr. by tourist') do
-      tags 'Tourist'
+      tags 'Tourist Tours'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :appointment,
@@ -167,7 +167,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     end
 
     delete('delete TOUR APPOINTMENT by tourist') do
-      tags 'Tourist'
+      tags 'Tourist Tours'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -200,7 +200,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
 
     get('list TOUR APPOINTMENT for partner') do
-      tags 'Partner'
+      tags 'Partner Tours'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },

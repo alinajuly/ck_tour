@@ -43,7 +43,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
     end
 
     post('create new CATERING - for partner only') do
-      tags 'Partner'
+      tags 'Partner Caterings'
       description 'Creates a new catering'
       consumes 'application/json'
       security [ jwt_auth: [] ]
@@ -138,7 +138,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
     end
 
     put('update CATERING: status by admin: published/unpublished , other attr. by partner his own only') do
-      tags 'Partner'
+      tags 'Partner Caterings'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :catering,
@@ -197,7 +197,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
     end
 
     delete('delete CATERING - for admin all, for partner his own only') do
-      tags 'Partner'
+      tags 'Partner Caterings'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -228,7 +228,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
 
   path '/api/v1/caterings_unpublished' do
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Admin'
+      tags 'Admin Caterings'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -272,7 +272,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'catering id'
 
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Admin'
+      tags 'Admin Caterings'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 

@@ -6,7 +6,7 @@ RSpec.describe 'api/v1/password', type: :request do
   path '/api/v1/password/forgot' do
 
     post('forgot password') do
-      tags 'Authentication'
+      tags 'Users'
       description 'forgot users password'
       consumes 'application/json'
       security [ jwt_auth: [] ]
@@ -50,7 +50,7 @@ RSpec.describe 'api/v1/password', type: :request do
   path '/api/v1/password/reset' do
 
     post('reset password') do
-      tags 'Authentication'
+      tags 'Users'
       description 'reset password'
       consumes 'application/json'
       security [ jwt_auth: [] ]

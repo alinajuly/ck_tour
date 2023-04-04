@@ -7,7 +7,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'user id'
 
     get('list ACCOMMODATION BOOKING for tourist') do
-      tags 'Tourist'
+      tags 'Tourist Accommodations'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },
@@ -39,7 +39,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
 
     post('create ACCOMMODATION BOOKING by tourist') do
-      tags 'Tourist'
+      tags 'Tourist Accommodations'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :booking,
@@ -88,7 +88,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'booking id'
 
     get('show ACCOMMODATION BOOKING for tourist') do
-      tags 'Tourist'
+      tags 'Tourist Accommodations'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -131,7 +131,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
 
     put('update ACCOMMODATION BOOKING: confirmation (approved/cancelled) - partner only, other attr. by tourist') do
-      tags 'Tourist'
+      tags 'Tourist Accommodations'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :booking,
@@ -173,7 +173,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     end
 
     delete('delete ACCOMMODATION BOOKING by tourist') do
-      tags 'Tourist'
+      tags 'Tourist Accommodations'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -207,7 +207,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
 
     get('list ACCOMMODATION BOOKING for partner') do
-      tags 'Partner'
+      tags 'Partner Accommodations'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },

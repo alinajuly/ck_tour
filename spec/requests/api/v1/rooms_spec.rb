@@ -53,7 +53,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
     end
 
     post('create room of accommodation by partner') do
-      tags 'Partner'
+      tags 'Partner Accommodations'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :room,
@@ -158,7 +158,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
     end
 
     put('update room of accommodation by partner') do
-      tags 'Partner'
+      tags 'Partner Accommodations'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :room,
@@ -215,7 +215,7 @@ RSpec.describe 'api/v1/rooms', type: :request do
     end
 
     delete('delete room of accommodation by partner') do
-      tags 'Partner'
+      tags 'Partner Accommodations'
       security [jwt_auth: []]
 
       response(200, 'successful') do

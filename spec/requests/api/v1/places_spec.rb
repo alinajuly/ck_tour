@@ -47,7 +47,7 @@ RSpec.describe 'api/v1/places', type: :request do
     end
 
     post('create place for tour by partner') do
-      tags 'Partner'
+      tags 'Partner Tours'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :place,
@@ -148,7 +148,7 @@ RSpec.describe 'api/v1/places', type: :request do
     end
 
     put('update place of tour by partner') do
-      tags 'Partner'
+      tags 'Partner Tours'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :place,
@@ -201,7 +201,7 @@ RSpec.describe 'api/v1/places', type: :request do
     end
 
     delete('delete place of tour by partner') do
-      tags 'Partner'
+      tags 'Partner Tours'
       security [jwt_auth: []]
 
       response(200, 'successful') do
