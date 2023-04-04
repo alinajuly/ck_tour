@@ -14,7 +14,7 @@ class AppointmentPolicy < ApplicationPolicy
   def permitted_attributes
     if user.partner?
       [:confirmation]
-    elsif user.tourist || user.partner?
+    elsif user.tourist? || user.partner?
       %i[number_of_peoples tour_id]
     end
   end

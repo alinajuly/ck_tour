@@ -7,6 +7,8 @@ class Api::V1::AttractionsController < ApplicationController
   def index
     @attractions = if params[:geolocations].present?
                      Attraction.geolocation_filter(params[:geolocations])
+                   elsif params[:search].present?
+                     Attraction.all.joins(:geolocations).where('title||description||locality ILIKE ?', "%#{params[:search]}%")
                    else
                      Attraction.all
                    end
@@ -61,17 +63,6 @@ class Api::V1::AttractionsController < ApplicationController
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @attraction.errors, status: :unprocessable_entity
-    end
-  end
-
-  def search
-    authorize @attraction
-
-    @result = Attraction.all.joins(:geolocations).where('title||description||locality ILIKE ?', "%#{params[:req]}%")
-    if @result.blank?
-      render json: { message: 'Attraction not found' }, status: :ok
-    else
-      render json: { data: @result }, status: :ok
     end
   end
 
