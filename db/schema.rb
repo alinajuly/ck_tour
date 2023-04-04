@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_29_170750) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_02_183242) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -73,6 +73,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_170750) do
     t.index ["room_id"], name: "index_amenities_on_room_id"
   end
 
+  create_table "appointments", force: :cascade do |t|
+    t.integer "number_of_peoples"
+    t.bigint "user_id", null: false
+    t.bigint "tour_id", null: false
+    t.integer "confirmation", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tour_id"], name: "index_appointments_on_tour_id"
+    t.index ["user_id"], name: "index_appointments_on_user_id"
+  end
+
   create_table "attractions", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -94,6 +105,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_170750) do
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
 
+  create_table "caterings", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "kind"
+    t.string "phone"
+    t.integer "places"
+    t.string "email"
+    t.string "reg_code"
+    t.string "address_owner"
+    t.string "person"
+    t.integer "status", default: 0
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_caterings_on_user_id"
+  end
+
   create_table "comments", force: :cascade do |t|
     t.string "body"
     t.integer "status"
@@ -104,16 +132,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_170750) do
     t.bigint "user_id", null: false
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
     t.index ["user_id"], name: "index_comments_on_user_id"
-  end
-
-  create_table "customers", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.bigint "user_id", null: false
-    t.string "stripe_customer_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_customers_on_user_id"
   end
 
   create_table "facilities", force: :cascade do |t|
@@ -147,30 +165,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_170750) do
   end
 
   create_table "places", force: :cascade do |t|
-    t.string "title"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "latitude", precision: 10, scale: 6
-    t.decimal "longitude", precision: 10, scale: 6
-  end
-
-  create_table "prices", force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.string "stripe_price_id"
-    t.integer "unit_amount"
-    t.string "currency"
-    t.string "recurring"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_prices_on_product_id"
-  end
-
-  create_table "products", force: :cascade do |t|
+    t.bigint "tour_id", null: false
     t.string "name"
-    t.string "type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.index ["tour_id"], name: "index_places_on_tour_id"
   end
 
   create_table "rates", force: :cascade do |t|
@@ -182,6 +182,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_170750) do
     t.bigint "ratable_id", null: false
     t.index ["ratable_type", "ratable_id"], name: "index_rates_on_ratable"
     t.index ["user_id"], name: "index_rates_on_user_id"
+  end
+
+  create_table "reservations", force: :cascade do |t|
+    t.integer "number_of_peoples"
+    t.datetime "check_in"
+    t.datetime "check_out"
+    t.string "note"
+    t.bigint "user_id", null: false
+    t.bigint "catering_id", null: false
+    t.integer "confirmation", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["catering_id"], name: "index_reservations_on_catering_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -197,23 +211,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_170750) do
     t.index ["accommodation_id"], name: "index_rooms_on_accommodation_id"
   end
 
-  create_table "subscriptions", force: :cascade do |t|
-    t.bigint "customer_id", null: false
-    t.bigint "price_id", null: false
-    t.string "stripe_subscription_id"
-    t.integer "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["customer_id"], name: "index_subscriptions_on_customer_id"
-    t.index ["price_id"], name: "index_subscriptions_on_price_id"
-  end
-
   create_table "tours", force: :cascade do |t|
     t.string "title"
-    t.text "body"
-    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.string "reg_code"
+    t.string "address_owner"
+    t.string "person"
+    t.text "description"
+    t.integer "seats"
+    t.decimal "price_per_one"
+    t.datetime "time_start"
+    t.datetime "time_end"
+    t.string "email"
+    t.integer "status", default: 0
+    t.string "phone"
+    t.index ["user_id"], name: "index_tours_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -231,14 +245,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_170750) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "amenities", "rooms"
+  add_foreign_key "appointments", "tours"
+  add_foreign_key "appointments", "users"
   add_foreign_key "bookings", "rooms"
   add_foreign_key "bookings", "users"
+  add_foreign_key "caterings", "users"
   add_foreign_key "comments", "users"
-  add_foreign_key "customers", "users"
   add_foreign_key "facilities", "accommodations"
-  add_foreign_key "prices", "products"
+  add_foreign_key "places", "tours"
   add_foreign_key "rates", "users"
+  add_foreign_key "reservations", "caterings"
+  add_foreign_key "reservations", "users"
   add_foreign_key "rooms", "accommodations"
-  add_foreign_key "subscriptions", "customers"
-  add_foreign_key "subscriptions", "prices"
+  add_foreign_key "tours", "users"
 end
