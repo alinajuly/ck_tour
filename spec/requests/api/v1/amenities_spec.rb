@@ -6,7 +6,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
 
-    get('list amenities') do
+    get('list amenities of room') do
       tags 'Accommodation'
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
@@ -46,8 +46,8 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       end
     end
 
-    post('create amenity - for partner only') do
-      tags 'Partner'
+    post('create amenity of room - for partner only') do
+      tags 'Partner Accommodations'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :amenity,
@@ -111,8 +111,8 @@ RSpec.describe "Api::V1::Amenities", type: :request do
     parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
     parameter name: 'id', in: :path, type: :string, description: 'amenity_id'
 
-    put('update amenity - for partner only') do
-      tags 'Partner'
+    put('update amenity of room - for partner only') do
+      tags 'Partner Accommodations'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :amenity,
@@ -170,8 +170,8 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       end
     end
 
-    delete('delete amenity - for partner only') do
-      tags 'Partner'
+    delete('delete amenity of room - for partner only') do
+      tags 'Partner Accommodations'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do

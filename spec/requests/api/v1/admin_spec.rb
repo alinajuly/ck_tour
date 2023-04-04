@@ -4,7 +4,7 @@ require 'swagger_helper'
 RSpec.describe 'api/v1/admins', type: :request do
   path '/api/v1/admins/create_admin' do
     post('create admin') do
-      tags 'Admin'
+      tags 'Users Admin'
       description 'Creates a new admin'
       consumes 'application/json'
       security [ jwt_auth: [] ]

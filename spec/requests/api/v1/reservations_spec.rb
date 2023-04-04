@@ -6,7 +6,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'user id'
 
     get('list CATERING RESERVATION for tourist') do
-      tags 'Tourist'
+      tags 'Tourist Caterings'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },
@@ -38,7 +38,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     end
 
     post('create CATERING RESERVATION by tourist') do
-      tags 'Tourist'
+      tags 'Tourist Caterings'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :reservation,
@@ -87,7 +87,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'reservation id'
 
     get('show CATERING RESERVATION for tourist') do
-      tags 'Tourist'
+      tags 'Tourist Caterings'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -130,7 +130,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     end
 
     put('update CATERING RESERVATION: confirmation (approved/cancelled) - partner only, other attr. by tourist') do
-      tags 'Tourist'
+      tags 'Tourist Caterings'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :reservation,
@@ -172,7 +172,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     end
 
     delete('delete CATERING RESERVATION by tourist') do
-      tags 'Tourist'
+      tags 'Tourist Caterings'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -205,7 +205,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     parameter name: 'catering_id', in: :path, type: :string, description: 'catering_id'
 
     get('list CATERING RESERVATION for partner') do
-      tags 'Partner'
+      tags 'Partner Caterings'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },
