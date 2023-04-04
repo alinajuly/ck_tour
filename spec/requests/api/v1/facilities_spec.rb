@@ -46,7 +46,7 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
     end
 
     post('create facility for accommodation by partner') do
-      tags 'Partner'
+      tags 'Partner Accommodations'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :facility,
@@ -111,7 +111,7 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'facility_id'
 
     put('update facility of accommodation by partner') do
-      tags 'Partner'
+      tags 'Partner Accommodations'
       consumes 'application/json'
       security [jwt_auth: []]
       parameter name: :facility,
@@ -171,7 +171,7 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
     end
 
     delete('delete facility of accommodation by partner') do
-      tags 'Partner'
+      tags 'Partner Accommodations'
       security [jwt_auth: []]
 
       response(200, 'successful') do

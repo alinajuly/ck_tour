@@ -3,6 +3,43 @@ openapi: 3.0.1
 info:
   title: API V1
   version: v1
+tags:
+  - name: Users
+    description: User operating for all roles
+  - name: Users Tourist
+    description: User operating for tourist
+  - name: Users Admin
+    description: User operating for admin
+  - name: Attraction
+    description: Views of attractions for all
+  - name: Admin Attractions
+    description: operate with attractions by admin
+  - name: Accommodation
+    description: Views of accommodations for all
+  - name: Partner Accommodations
+    description: operate with accommodations by partner
+  - name: Tourist Accommodations
+    description: operate with accommodations by tourist
+  - name: Admin Accommodations
+    description: operate with accommodations by admin
+  - name: Catering
+    description: Views of caterings for all
+  - name: Partner Caterings
+    description: operate with caterings by partner
+  - name: Tourist Caterings
+    description: operate with caterings by tourist
+  - name: Admin Caterings
+    description: operate with caterings by admin
+  - name: Tour
+    description: Views of tours for all
+  - name: Partner Tours
+    description: operate with tours by partner
+  - name: Tourist Tours
+    description: operate with tours by tourist
+  - name: Admin Tours
+    description: operate with tours by admin
+  - name: Map
+    description: operate with maps
 paths:
   "/api/v1/accommodations":
     get:
@@ -47,7 +84,7 @@ paths:
     post:
       summary: create new ACCOMMODATION - for partner only
       tags:
-      - Partner
+      - Partner Accommodations
       description: Creates a new accommodation
       security:
       - jwt_auth: []
@@ -121,7 +158,7 @@ paths:
       summary: 'update ACCOMMODATION: status by admin: published/unpublished , other
         attr. by partner his own only'
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       parameters: []
@@ -162,7 +199,7 @@ paths:
     delete:
       summary: delete ACCOMMODATION - for admin all, for partner his own only
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       responses:
@@ -178,7 +215,7 @@ paths:
     get:
       summary: list unpublished (for admin - all, for partner - his own only)
       tags:
-      - Admin
+      - Admin Accommodations
       security:
       - jwt_auth: []
       responses:
@@ -201,7 +238,7 @@ paths:
     get:
       summary: list unpublished (for admin - all, for partner - his own only)
       tags:
-      - Admin
+      - Admin Accommodations
       security:
       - jwt_auth: []
       responses:
@@ -217,7 +254,7 @@ paths:
     post:
       summary: create admin
       tags:
-      - Admin
+      - Users Admin
       description: Creates a new admin
       security:
       - jwt_auth: []
@@ -263,7 +300,7 @@ paths:
       schema:
         type: string
     get:
-      summary: list amenities
+      summary: list amenities of room
       tags:
       - Accommodation
       responses:
@@ -276,9 +313,9 @@ paths:
         '422':
           description: invalid request
     post:
-      summary: create amenity - for partner only
+      summary: create amenity of room - for partner only
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       parameters: []
@@ -335,9 +372,9 @@ paths:
       schema:
         type: string
     put:
-      summary: update amenity - for partner only
+      summary: update amenity of room - for partner only
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       parameters: []
@@ -373,9 +410,9 @@ paths:
                 inclusive:
                   type: boolean
     delete:
-      summary: delete amenity - for partner only
+      summary: delete amenity of room - for partner only
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       responses:
@@ -398,7 +435,7 @@ paths:
     get:
       summary: list TOUR APPOINTMENT for tourist
       tags:
-      - Tourist
+      - Tourist Tours
       security:
       - jwt_auth: []
       parameters:
@@ -419,7 +456,7 @@ paths:
     post:
       summary: create TOUR APPOINTMENT by tourist
       tags:
-      - Tourist
+      - Tourist Tours
       security:
       - jwt_auth: []
       parameters: []
@@ -463,7 +500,7 @@ paths:
     get:
       summary: show TOUR APPOINTMENT for tourist
       tags:
-      - Tourist
+      - Tourist Tours
       security:
       - jwt_auth: []
       responses:
@@ -479,7 +516,7 @@ paths:
       summary: 'update TOUR APPOINTMENT: confirmation (approved/cancelled) - partner
         only, other attr. by tourist'
       tags:
-      - Tourist
+      - Tourist Tours
       security:
       - jwt_auth: []
       parameters: []
@@ -505,7 +542,7 @@ paths:
     delete:
       summary: delete TOUR APPOINTMENT by tourist
       tags:
-      - Tourist
+      - Tourist Tours
       security:
       - jwt_auth: []
       responses:
@@ -528,7 +565,7 @@ paths:
     get:
       summary: list TOUR APPOINTMENT for partner
       tags:
-      - Partner
+      - Partner Tours
       security:
       - jwt_auth: []
       parameters:
@@ -567,7 +604,7 @@ paths:
     post:
       summary: create attraction by admin
       tags:
-      - Admin
+      - Admin Attractions
       description: Creates a new attraction
       security:
       - jwt_auth: []
@@ -617,7 +654,7 @@ paths:
     put:
       summary: update attraction by admin
       tags:
-      - Admin
+      - Admin Attractions
       security:
       - jwt_auth: []
       parameters: []
@@ -643,7 +680,7 @@ paths:
     delete:
       summary: delete attraction by admin
       tags:
-      - Admin
+      - Admin Attractions
       security:
       - jwt_auth: []
       responses:
@@ -686,7 +723,7 @@ paths:
         schema:
           type: string
       tags:
-      - Admin
+      - Admin Attractions
       security:
       - jwt_auth: []
       responses:
@@ -715,7 +752,7 @@ paths:
         schema:
           type: string
       tags:
-      - Admin
+      - Admin Attractions
       security:
       - jwt_auth: []
       responses:
@@ -737,7 +774,7 @@ paths:
     post:
       summary: authentication user
       tags:
-      - Authentication
+      - Users
       description: authentication user
       parameters: []
       responses:
@@ -774,7 +811,7 @@ paths:
     get:
       summary: list ACCOMMODATION BOOKING for tourist
       tags:
-      - Tourist
+      - Tourist Accommodations
       security:
       - jwt_auth: []
       parameters:
@@ -795,7 +832,7 @@ paths:
     post:
       summary: create ACCOMMODATION BOOKING by tourist
       tags:
-      - Tourist
+      - Tourist Accommodations
       security:
       - jwt_auth: []
       parameters: []
@@ -849,7 +886,7 @@ paths:
     get:
       summary: show ACCOMMODATION BOOKING for tourist
       tags:
-      - Tourist
+      - Tourist Accommodations
       security:
       - jwt_auth: []
       responses:
@@ -865,7 +902,7 @@ paths:
       summary: 'update ACCOMMODATION BOOKING: confirmation (approved/cancelled) -
         partner only, other attr. by tourist'
       tags:
-      - Tourist
+      - Tourist Accommodations
       security:
       - jwt_auth: []
       parameters: []
@@ -899,7 +936,7 @@ paths:
     delete:
       summary: delete ACCOMMODATION BOOKING by tourist
       tags:
-      - Tourist
+      - Tourist Accommodations
       security:
       - jwt_auth: []
       responses:
@@ -928,7 +965,7 @@ paths:
     get:
       summary: list ACCOMMODATION BOOKING for partner
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       parameters:
@@ -989,7 +1026,7 @@ paths:
     post:
       summary: create new CATERING - for partner only
       tags:
-      - Partner
+      - Partner Caterings
       description: Creates a new catering
       security:
       - jwt_auth: []
@@ -1066,7 +1103,7 @@ paths:
       summary: 'update CATERING: status by admin: published/unpublished , other attr.
         by partner his own only'
       tags:
-      - Partner
+      - Partner Caterings
       security:
       - jwt_auth: []
       parameters: []
@@ -1108,7 +1145,7 @@ paths:
     delete:
       summary: delete CATERING - for admin all, for partner his own only
       tags:
-      - Partner
+      - Partner Caterings
       security:
       - jwt_auth: []
       responses:
@@ -1124,7 +1161,7 @@ paths:
     get:
       summary: list unpublished (for admin - all, for partner - his own only)
       tags:
-      - Admin
+      - Admin Caterings
       security:
       - jwt_auth: []
       responses:
@@ -1147,7 +1184,7 @@ paths:
     get:
       summary: list unpublished (for admin - all, for partner - his own only)
       tags:
-      - Admin
+      - Admin Caterings
       security:
       - jwt_auth: []
       responses:
@@ -1183,7 +1220,7 @@ paths:
     post:
       summary: create facility for accommodation by partner
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       parameters: []
@@ -1242,7 +1279,7 @@ paths:
     put:
       summary: update facility of accommodation by partner
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       parameters: []
@@ -1286,7 +1323,7 @@ paths:
     delete:
       summary: delete facility of accommodation by partner
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       responses:
@@ -1315,7 +1352,7 @@ paths:
     post:
       summary: create geolocation by admin (attraction) or partner (catering/tour)
       tags:
-      - Partner
+      - Map
       security:
       - jwt_auth: []
       parameters: []
@@ -1367,7 +1404,7 @@ paths:
     put:
       summary: update geolocation by admin or partner
       tags:
-      - Partner
+      - Map
       security:
       - jwt_auth: []
       parameters: []
@@ -1403,7 +1440,7 @@ paths:
     delete:
       summary: delete geolocation by admin or partner
       tags:
-      - Partner
+      - Map
       security:
       - jwt_auth: []
       responses:
@@ -1432,7 +1469,7 @@ paths:
     post:
       summary: create geolocation for tour by partner
       tags:
-      - Partner
+      - Map
       security:
       - jwt_auth: []
       parameters: []
@@ -1484,7 +1521,7 @@ paths:
     put:
       summary: update geolocation for tour by partner
       tags:
-      - Partner
+      - Map
       security:
       - jwt_auth: []
       parameters: []
@@ -1520,7 +1557,7 @@ paths:
     delete:
       summary: delete geolocation for tour by partner
       tags:
-      - Partner
+      - Map
       security:
       - jwt_auth: []
       responses:
@@ -1536,7 +1573,7 @@ paths:
     post:
       summary: forgot password
       tags:
-      - Authentication
+      - Users
       description: forgot users password
       security:
       - jwt_auth: []
@@ -1565,7 +1602,7 @@ paths:
     post:
       summary: reset password
       tags:
-      - Authentication
+      - Users
       description: reset password
       security:
       - jwt_auth: []
@@ -1616,7 +1653,7 @@ paths:
     post:
       summary: create place for tour by partner
       tags:
-      - Partner
+      - Partner Tours
       security:
       - jwt_auth: []
       parameters: []
@@ -1673,7 +1710,7 @@ paths:
     put:
       summary: update place of tour by partner
       tags:
-      - Partner
+      - Partner Tours
       security:
       - jwt_auth: []
       parameters: []
@@ -1699,7 +1736,7 @@ paths:
     delete:
       summary: delete place of tour by partner
       tags:
-      - Partner
+      - Partner Tours
       security:
       - jwt_auth: []
       responses:
@@ -1722,7 +1759,7 @@ paths:
     get:
       summary: list CATERING RESERVATION for tourist
       tags:
-      - Tourist
+      - Tourist Caterings
       security:
       - jwt_auth: []
       parameters:
@@ -1743,7 +1780,7 @@ paths:
     post:
       summary: create CATERING RESERVATION by tourist
       tags:
-      - Tourist
+      - Tourist Caterings
       security:
       - jwt_auth: []
       parameters: []
@@ -1797,7 +1834,7 @@ paths:
     get:
       summary: show CATERING RESERVATION for tourist
       tags:
-      - Tourist
+      - Tourist Caterings
       security:
       - jwt_auth: []
       responses:
@@ -1813,7 +1850,7 @@ paths:
       summary: 'update CATERING RESERVATION: confirmation (approved/cancelled) - partner
         only, other attr. by tourist'
       tags:
-      - Tourist
+      - Tourist Caterings
       security:
       - jwt_auth: []
       parameters: []
@@ -1847,7 +1884,7 @@ paths:
     delete:
       summary: delete CATERING RESERVATION by tourist
       tags:
-      - Tourist
+      - Tourist Caterings
       security:
       - jwt_auth: []
       responses:
@@ -1870,7 +1907,7 @@ paths:
     get:
       summary: list CATERING RESERVATION for partner
       tags:
-      - Partner
+      - Partner Caterings
       security:
       - jwt_auth: []
       parameters:
@@ -1928,7 +1965,7 @@ paths:
     post:
       summary: create room of accommodation by partner
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       parameters: []
@@ -1997,7 +2034,7 @@ paths:
     put:
       summary: update room of accommodation by partner
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       parameters: []
@@ -2031,7 +2068,7 @@ paths:
     delete:
       summary: delete room of accommodation by partner
       tags:
-      - Partner
+      - Partner Accommodations
       security:
       - jwt_auth: []
       responses:
@@ -2076,7 +2113,7 @@ paths:
     post:
       summary: create new TOUR - for partner only
       tags:
-      - Partner
+      - Partner Tours
       description: Creates a new tour
       security:
       - jwt_auth: []
@@ -2159,7 +2196,7 @@ paths:
       summary: 'update TOUR: status by admin: published/unpublished , other attr.
         by partner his own only'
       tags:
-      - Partner
+      - Partner Tours
       security:
       - jwt_auth: []
       parameters: []
@@ -2205,7 +2242,7 @@ paths:
     delete:
       summary: delete TOUR - for admin all, for partner his own only
       tags:
-      - Partner
+      - Partner Tours
       security:
       - jwt_auth: []
       responses:
@@ -2221,7 +2258,7 @@ paths:
     get:
       summary: list unpublished (for admin - all, for partner - his own only)
       tags:
-      - Admin
+      - Admin Tours
       security:
       - jwt_auth: []
       responses:
@@ -2244,7 +2281,7 @@ paths:
     get:
       summary: list unpublished (for admin - all, for partner - his own only)
       tags:
-      - Admin
+      - Admin Tours
       security:
       - jwt_auth: []
       responses:
@@ -2260,7 +2297,7 @@ paths:
     get:
       summary: list users
       tags:
-      - Admin
+      - Users Admin
       security:
       - jwt_auth: []
       parameters:
@@ -2281,7 +2318,7 @@ paths:
     post:
       summary: create user
       tags:
-      - Tourist
+      - Users Tourist
       description: Creates a new user
       parameters: []
       responses:
@@ -2321,7 +2358,7 @@ paths:
     get:
       summary: show user
       tags:
-      - User
+      - Users
       security:
       - jwt_auth: []
       responses:
@@ -2336,7 +2373,7 @@ paths:
     put:
       summary: update user
       tags:
-      - User
+      - Users
       security:
       - jwt_auth: []
       parameters: []
@@ -2369,7 +2406,7 @@ paths:
     delete:
       summary: delete user
       tags:
-      - User
+      - Users
       security:
       - jwt_auth: []
       responses:
@@ -2392,7 +2429,7 @@ paths:
     put:
       summary: change_role
       tags:
-      - Tourist
+      - Users Tourist
       security:
       - jwt_auth: []
       responses:

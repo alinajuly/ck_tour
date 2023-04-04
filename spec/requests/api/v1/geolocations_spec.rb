@@ -9,7 +9,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attractions_id, accommodations_id'
 
     post('create geolocation by admin (attraction) or partner (catering/tour)') do
-      tags 'Partner'
+      tags 'Map'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :geolocation,
@@ -90,7 +90,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     end
 
     put('update geolocation by admin or partner') do
-      tags 'Partner'
+      tags 'Map'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :geolocation,
@@ -142,7 +142,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     end
 
     delete('delete geolocation by admin or partner') do
-      tags 'Partner'
+      tags 'Map'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -190,7 +190,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     parameter name: 'place_id', in: :path, type: :string, description: 'place id'
 
     post('create geolocation for tour by partner') do
-      tags 'Partner'
+      tags 'Map'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :geolocation,
@@ -271,7 +271,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     end
 
     put('update geolocation for tour by partner') do
-      tags 'Partner'
+      tags 'Map'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :geolocation,
@@ -323,7 +323,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     end
 
     delete('delete geolocation for tour by partner') do
-      tags 'Partner'
+      tags 'Map'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do

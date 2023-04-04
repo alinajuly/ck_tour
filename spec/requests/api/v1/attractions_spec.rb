@@ -29,7 +29,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
     end
 
     post('create attraction by admin') do
-      tags 'Admin'
+      tags 'Admin Attractions'
       description 'Creates a new attraction'
       consumes 'application/json'
       security [ jwt_auth: [] ]
@@ -110,7 +110,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
     end
 
     put('update attraction by admin') do
-      tags 'Admin'
+      tags 'Admin Attractions'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :attraction,
@@ -161,7 +161,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
     end
 
     delete('delete attraction by admin') do
-      tags 'Admin'
+      tags 'Admin Attractions'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -236,7 +236,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
   path '/api/v1/attractions/{attraction_id}/upload_image' do
     post('upload image of attraction by admin') do
       parameter name: :attraction_id, in: :path, type: :string, description: 'attraction id'
-      tags 'Admin'
+      tags 'Admin Attractions'
       consumes 'multipart/form-data'
       security [ jwt_auth: [] ]
       parameter name: 'image', in: :formData, type: :file, description: 'Image file to upload'
@@ -287,7 +287,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
   path '/api/v1/attractions/{attraction_id}/update_image' do
     put('update image by admin') do
       parameter name: :attraction_id, in: :path, type: :string, description: 'attraction id'
-      tags 'Admin'
+      tags 'Admin Attractions'
       consumes 'multipart/form-data'
       security [ jwt_auth: [] ]
       parameter name: 'image', in: :formData, type: :file, description: 'Image file to upload'

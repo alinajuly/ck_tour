@@ -4,7 +4,7 @@ require 'swagger_helper'
 RSpec.describe 'api/v1/users', type: :request do
   path '/api/v1/users' do
     get('list users') do
-      tags 'Admin'
+      tags 'Users Admin'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :role, in: :query, schema: { type: :string },
@@ -36,7 +36,7 @@ RSpec.describe 'api/v1/users', type: :request do
     end
 
     post('create user') do
-      tags 'Tourist'
+      tags 'Users Tourist'
       description 'Creates a new user'
       consumes 'application/json'
       parameter name: :user,
@@ -92,7 +92,7 @@ RSpec.describe 'api/v1/users', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'user id'
 
     get('show user') do
-      tags 'User'
+      tags 'Users'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -134,7 +134,7 @@ RSpec.describe 'api/v1/users', type: :request do
     end
 
     put('update user') do
-      tags 'User'
+      tags 'Users'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :user,
@@ -189,7 +189,7 @@ RSpec.describe 'api/v1/users', type: :request do
     end
 
     delete('delete user') do
-      tags 'User'
+      tags 'Users'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -235,7 +235,7 @@ RSpec.describe 'api/v1/users', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'user id'
 
     put('change_role') do
-      tags 'Tourist'
+      tags 'Users Tourist'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 

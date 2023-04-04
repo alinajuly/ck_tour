@@ -39,7 +39,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     end
 
     post('create new TOUR - for partner only') do
-      tags 'Partner'
+      tags 'Partner Tours'
       description 'Creates a new tour'
       consumes 'application/json'
       security [ jwt_auth: [] ]
@@ -136,7 +136,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     end
 
     put('update TOUR: status by admin: published/unpublished , other attr. by partner his own only') do
-      tags 'Partner'
+      tags 'Partner Tours'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :tour,
@@ -197,7 +197,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     end
 
     delete('delete TOUR - for admin all, for partner his own only') do
-      tags 'Partner'
+      tags 'Partner Tours'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
@@ -228,7 +228,7 @@ RSpec.describe 'api/v1/tours', type: :request do
 
   path '/api/v1/tours_unpublished' do
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Admin'
+      tags 'Admin Tours'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -272,7 +272,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'tour id'
 
     get('list unpublished (for admin - all, for partner - his own only)') do
-      tags 'Admin'
+      tags 'Admin Tours'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 

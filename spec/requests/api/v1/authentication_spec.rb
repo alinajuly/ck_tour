@@ -4,7 +4,7 @@ require 'swagger_helper'
 RSpec.describe 'api/v1/authentication', type: :request do
   path '/api/v1/auth/login' do
     post('authentication user') do
-      tags 'Authentication'
+      tags 'Users'
       description 'authentication user'
       consumes 'application/json'
       parameter name: :user,
