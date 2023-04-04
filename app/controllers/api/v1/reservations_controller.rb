@@ -37,7 +37,7 @@ class Api::V1::ReservationsController < ApplicationController
 
   def create
     @catering = Catering.find_by_id(params[:catering_id])
-    @reservation = @current_user.reservations.build(reservation_params)
+    @reservation = @current_user.reservations.build(permitted_attributes(Reservation))
 
     authorize @reservation
 

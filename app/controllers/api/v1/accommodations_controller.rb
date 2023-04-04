@@ -1,41 +1,33 @@
 class Api::V1::AccommodationsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
-  before_action :set_accommodation, only: %i[update destroy]
+  before_action :current_user, only: %i[index show]
+  before_action :set_accommodation, only: :show
+  before_action :edit_accommodation, only: %i[update destroy]
   before_action :authorize_policy
 
   # GET /api/v1/accommodations
   def index
-    check_in = params[:check_in]
-    check_out = params[:check_out]
+    # check_in = params[:check_in]
+    # check_out = params[:check_out]
     number_of_peoples = params[:number_of_peoples]
 
     @accommodations = if params[:geolocations].present? && params[:check_in].present? && params[:check_out].present? && params[:number_of_peoples].present?
-                        Accommodation.joins(:rooms)
-                                     .where('rooms.places >= ?', number_of_peoples)
-                                     .geolocation_filter(params[:geolocations]).distinct.published
+                        policy_scope(Accommodation).joins(:rooms)
+                                                   .where('rooms.places >= ?', number_of_peoples)
+                                                   .geolocation_filter(params[:geolocations]).distinct
                         # Accommodation.joins(rooms: :bookings)
                                      # .where.not(bookings: { check_in: ..check_out, check_out: check_in.. })
                                      # .where('rooms.places >= ?', number_of_peoples)
                                      # .tag_filter(params[:tags]).distinct
                       elsif params[:geolocations].present?
-                        Accommodation.geolocation_filter(params[:geolocations]).published
+                        policy_scope(Accommodation).geolocation_filter(params[:geolocations])
                       elsif params[:user_id].present?
-                        Accommodation.where(params[:user_id]).published
+                        policy_scope(Accommodation).where(user_id: params[:user_id])
+                      elsif params[:status].present?
+                        policy_scope(Accommodation).where(status: params[:status])
                       else
-                        Accommodation.all.published
+                        policy_scope(Accommodation).all
                       end
-
-    authorize @accommodations
-
-    if @accommodations
-      render json: { data: @accommodations }, status: :ok
-    else
-      render json: @accommodations.errors, status: :bad_request
-    end
-  end
-
-  def index_unpublished
-    @accommodations = policy_scope(Accommodation).all.unpublished
 
     authorize @accommodations
 
@@ -48,31 +40,15 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # GET /api/v1/accommodations/1
   def show
-    @accommodation = Accommodation.find(params[:id]) if Accommodation.find(params[:id]).published?
-    if @accommodation.present?
-      authorize @accommodation
-
-      @rooms = @accommodation.rooms
-      render json: { data: @accommodation, rooms: @rooms }, status: :ok
-    else
-      render json: { message: 'accommodation id not found' }, status: :not_found
-    end
-  end
-
-  def show_unpublished
-    @accommodation = policy_scope(Accommodation).find(params[:accommodation_id])
     authorize @accommodation
 
-    if @accommodation
-      render json: { data: @accommodation }, status: :ok
-    else
-      render json: @accommodation.errors, status: :bad_request
-    end
+    @rooms = @accommodation.rooms
+    render json: { data: @accommodation, rooms: @rooms }, status: :ok
   end
 
   # POST /api/v1/accommodations
   def create
-    @accommodation = Accommodation.new(accommodation_params)
+    @accommodation = Accommodation.new(permitted_attributes(Accommodation))
 
     authorize @accommodation
 
@@ -110,6 +86,13 @@ class Api::V1::AccommodationsController < ApplicationController
 
   def set_accommodation
     @accommodation = policy_scope(Accommodation).find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'accommodation id not found' }, status: :not_found
+  end
+
+  def edit_accommodation
+    @accommodation = AccommodationPolicy::EditScope.new(current_user, Accommodation).resolve.find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'accommodation id not found' }, status: :not_found
