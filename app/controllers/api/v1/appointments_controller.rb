@@ -37,7 +37,7 @@ class Api::V1::AppointmentsController < ApplicationController
 
   def create
     @tour = Tour.find_by_id(params[:tour_id])
-    @appointment = @current_user.appointments.build(appointment_params)
+    @appointment = @current_user.appointments.build(permitted_attributes(Appointment))
 
     authorize @appointment
 

@@ -1,12 +1,22 @@
 class TourPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
+      if user.present? && user.admin?
+        scope.all
+      elsif user.present? && user.partner?
+        scope.where(status: 1).or(scope.where(user_id: user.id))
+      else
+        scope.where(status: 1)
+      end
+    end
+  end
+
+  class EditScope < Scope
+    def resolve
       if user.admin?
         scope.all
       elsif user.partner?
         scope.where(user_id: user.id)
-      else
-        scope.where(status: published)
       end
     end
   end
@@ -36,14 +46,6 @@ class TourPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.partner? || user.admin?
-  end
-
-  def index_unpublished?
-    user.partner? || user.admin?
-  end
-
-  def show_unpublished?
     user.partner? || user.admin?
   end
 end

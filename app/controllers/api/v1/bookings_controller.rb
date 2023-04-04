@@ -39,7 +39,7 @@ class Api::V1::BookingsController < ApplicationController
   def create
     # @accommodation = Accommodation.find_by_id(params[:accommodation_id])
     @room = Room.find_by_id(params[:room_id])
-    @booking = @current_user.bookings.build(booking_params)
+    @booking = @current_user.bookings.build(permitted_attributes(Booking))
 
     authorize @booking
 

@@ -4,48 +4,45 @@ info:
   title: API V1
   version: v1
 tags:
-  - name: Users
-    description: User operating for all roles
-  - name: Users Tourist
-    description: User operating for tourist
-  - name: Users Admin
-    description: User operating for admin
-  - name: Attraction
-    description: Views of attractions for all
-  - name: Admin Attractions
-    description: operate with attractions by admin
-  - name: Accommodation
-    description: Views of accommodations for all
-  - name: Partner Accommodations
-    description: operate with accommodations by partner
-  - name: Tourist Accommodations
-    description: operate with accommodations by tourist
-  - name: Admin Accommodations
-    description: operate with accommodations by admin
-  - name: Catering
-    description: Views of caterings for all
-  - name: Partner Caterings
-    description: operate with caterings by partner
-  - name: Tourist Caterings
-    description: operate with caterings by tourist
-  - name: Admin Caterings
-    description: operate with caterings by admin
-  - name: Tour
-    description: Views of tours for all
-  - name: Partner Tours
-    description: operate with tours by partner
-  - name: Tourist Tours
-    description: operate with tours by tourist
-  - name: Admin Tours
-    description: operate with tours by admin
-  - name: Map
-    description: operate with maps
+- name: Users
+  description: User operating for all roles
+- name: Users Tourist
+  description: User operating for tourist
+- name: Users Admin
+  description: User operating for admin
+- name: Attraction
+  description: Views of attractions for all
+- name: Admin Attractions
+  description: operate with attractions by admin
+- name: Accommodation
+  description: Views of accommodations for all
+- name: Partner Accommodations
+  description: operate with accommodations by partner
+- name: Tourist Accommodations
+  description: operate with accommodations by tourist
+- name: Catering
+  description: Views of caterings for all
+- name: Partner Caterings
+  description: operate with caterings by partner
+- name: Tourist Caterings
+  description: operate with caterings by tourist
+- name: Tour
+  description: Views of tours for all
+- name: Partner Tours
+  description: operate with tours by partner
+- name: Tourist Tours
+  description: operate with tours by tourist
+- name: Map
+  description: operate with maps
 paths:
   "/api/v1/accommodations":
     get:
-      summary: list ACCOMMODATION - published for all
+      summary: list ACCOMMODATION - published for all, unpublished for admin, his
+        own for partner
       tags:
       - Accommodation
+      security:
+      - jwt_auth: []
       parameters:
       - name: geolocations
         in: query
@@ -72,6 +69,11 @@ paths:
         schema:
           type: integer
         description: Filter on partner
+      - name: status
+        in: query
+        schema:
+          type: string
+        description: 'Filter on status: unpublished/published'
       responses:
         '200':
           description: successful
@@ -142,9 +144,12 @@ paths:
       schema:
         type: string
     get:
-      summary: show ACCOMMODATION published - for all
+      summary: show ACCOMMODATION published - for all, unpublished for admin, his
+        own for partner
       tags:
       - Accommodation
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -200,45 +205,6 @@ paths:
       summary: delete ACCOMMODATION - for admin all, for partner his own only
       tags:
       - Partner Accommodations
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/accommodations_unpublished":
-    get:
-      summary: list unpublished (for admin - all, for partner - his own only)
-      tags:
-      - Admin Accommodations
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/accommodations/{id}/show_unpublished":
-    parameters:
-    - name: id
-      in: path
-      description: accommodation id
-      required: true
-      schema:
-        type: string
-    get:
-      summary: list unpublished (for admin - all, for partner - his own only)
-      tags:
-      - Admin Accommodations
       security:
       - jwt_auth: []
       responses:
@@ -594,6 +560,11 @@ paths:
         schema:
           type: string
         description: Locality
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Search
       responses:
         '200':
           description: successful
@@ -683,26 +654,6 @@ paths:
       - Admin Attractions
       security:
       - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/search":
-    get:
-      summary: search attraction for all
-      tags:
-      - Attraction
-      parameters:
-      - name: req
-        in: query
-        schema:
-          type: string
-        description: Search attractions by phrase in title, description or locality
       responses:
         '200':
           description: successful
@@ -988,6 +939,8 @@ paths:
       summary: list CATERING - published for all
       tags:
       - Catering
+      security:
+      - jwt_auth: []
       parameters:
       - name: geolocations
         in: query
@@ -999,6 +952,11 @@ paths:
         schema:
           type: integer
         description: Filter on partner
+      - name: status
+        in: query
+        schema:
+          type: string
+        description: 'Filter on status: unpublished/published'
       - name: check_in
         in: query
         schema:
@@ -1090,6 +1048,8 @@ paths:
       summary: show CATERING - published for all
       tags:
       - Catering
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -1140,51 +1100,12 @@ paths:
                   type: string
                 person:
                   type: string
-                user_id:
+                status:
                   type: string
     delete:
       summary: delete CATERING - for admin all, for partner his own only
       tags:
       - Partner Caterings
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/caterings_unpublished":
-    get:
-      summary: list unpublished (for admin - all, for partner - his own only)
-      tags:
-      - Admin Caterings
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/caterings/{id}/show_unpublished":
-    parameters:
-    - name: id
-      in: path
-      description: catering id
-      required: true
-      schema:
-        type: string
-    get:
-      summary: list unpublished (for admin - all, for partner - his own only)
-      tags:
-      - Admin Caterings
       security:
       - jwt_auth: []
       responses:
@@ -2085,6 +2006,8 @@ paths:
       summary: list TOUR - published for all
       tags:
       - Tour
+      security:
+      - jwt_auth: []
       parameters:
       - name: geolocations
         in: query
@@ -2096,6 +2019,11 @@ paths:
         schema:
           type: integer
         description: Filter on partner
+      - name: status
+        in: query
+        schema:
+          type: string
+        description: 'Filter on status: unpublished/published'
       - name: archived
         in: query
         schema:
@@ -2243,45 +2171,6 @@ paths:
       summary: delete TOUR - for admin all, for partner his own only
       tags:
       - Partner Tours
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/tours_unpublished":
-    get:
-      summary: list unpublished (for admin - all, for partner - his own only)
-      tags:
-      - Admin Tours
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/tours/{id}/show_unpublished":
-    parameters:
-    - name: id
-      in: path
-      description: tour id
-      required: true
-      schema:
-        type: string
-    get:
-      summary: list unpublished (for admin - all, for partner - his own only)
-      tags:
-      - Admin Tours
       security:
       - jwt_auth: []
       responses:

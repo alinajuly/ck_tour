@@ -1,6 +1,8 @@
 class Api::V1::CateringsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
-  before_action :set_catering, only: %i[update destroy]
+  before_action :current_user, only: %i[index show]
+  before_action :set_catering, only: :show
+  before_action :edit_catering, only: %i[update destroy]
   before_action :authorize_policy
 
   # GET /api/v1/accommodations/1/caterings
@@ -11,21 +13,13 @@ class Api::V1::CateringsController < ApplicationController
 
     @caterings = if @check_in.present? && @check_out.present? && @number_of_peoples.present?
                    available_caterings
+                 elsif params[:user_id].present?
+                   policy_scope(Catering).where(user_id: params[:user_id])
+                 elsif params[:status].present?
+                   policy_scope(Catering).where(status: params[:status])
                  else
-                   Catering.all
+                   policy_scope(Catering).all
                  end
-
-    authorize @caterings
-
-    if @caterings
-      render json: { data: @caterings }, status: :ok
-    else
-      render json: @caterings.errors, status: :bad_request
-    end
-  end
-
-  def index_unpublished
-    @caterings = policy_scope(Catering).all.unpublished
 
     authorize @caterings
 
@@ -38,26 +32,14 @@ class Api::V1::CateringsController < ApplicationController
 
   # GET /api/v1/accommodations/1/caterings/1
   def show
-    @catering = Catering.find(params[:id]) if Catering.find(params[:id]).published?
     authorize @catering
 
     render json: @catering, status: :ok
   end
 
-  def show_unpublished
-    @catering = policy_scope(Catering).find(params[:catering_id])
-    authorize @catering
-
-    if @catering
-      render json: { data: @catering }, status: :ok
-    else
-      render json: @catering.errors, status: :bad_request
-    end
-  end
-
   # POST /api/v1/caterings
   def create
-    @catering = Catering.new(catering_params)
+    @catering = Catering.new(permitted_attributes(Catering))
 
     authorize @catering
 
@@ -93,7 +75,14 @@ class Api::V1::CateringsController < ApplicationController
   private
 
   def set_catering
-    @catering = Catering.find(params[:id])
+    @catering = policy_scope(Catering).find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'catering id not found' }, status: :not_found
+  end
+
+  def edit_catering
+    @catering = CateringPolicy::EditScope.new(current_user, Catering).resolve.find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'catering id not found' }, status: :not_found
@@ -104,10 +93,10 @@ class Api::V1::CateringsController < ApplicationController
   end
 
   def available_caterings
-    @free_places = @caterings.where.not(id: reserved_catering_ids(@check_in, @check_out)).pluck(:places).sum
+    @free_places = @caterings.published.where.not(id: reserved_catering_ids(@check_in, @check_out)).pluck(:places).sum
     return unless @free_places >= @number_of_peoples.to_i
 
-    @available_caterings = @caterings.where.not(id: reserved_catering_ids(@check_in, @check_out))
+    @available_caterings = @caterings.where.not(id: reserved_catering_ids(@check_in, @check_out)).published
   end
 
   # Only allow a list of trusted parameters through.
