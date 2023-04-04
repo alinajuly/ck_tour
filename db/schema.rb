@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_02_183242) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_04_191644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -173,6 +173,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_02_183242) do
     t.index ["tour_id"], name: "index_places_on_tour_id"
   end
 
+  create_table "plans", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "interval"
+    t.integer "price_cents"
+    t.string "stripe_price_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "interval_count", default: 1, null: false
+  end
+
   create_table "rates", force: :cascade do |t|
     t.integer "rating"
     t.datetime "created_at", null: false
@@ -211,6 +222,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_02_183242) do
     t.index ["accommodation_id"], name: "index_rooms_on_accommodation_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "plan_id", null: false
+    t.bigint "user_id", null: false
+    t.boolean "active", default: true
+    t.string "stripe_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_id"], name: "index_subscriptions_on_plan_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "tours", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
@@ -239,6 +261,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_02_183242) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.integer "role", default: 0
+    t.string "stripe_id"
   end
 
   add_foreign_key "accommodations", "users"
@@ -257,5 +280,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_02_183242) do
   add_foreign_key "reservations", "caterings"
   add_foreign_key "reservations", "users"
   add_foreign_key "rooms", "accommodations"
+  add_foreign_key "subscriptions", "plans"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "tours", "users"
 end
