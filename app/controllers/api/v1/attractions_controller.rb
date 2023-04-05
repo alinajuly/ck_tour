@@ -28,17 +28,16 @@ class Api::V1::AttractionsController < ApplicationController
     authorize @attraction
 
     render json: @attraction.as_json(include: :geolocations), status: :ok
-    # render json: @attraction.as_json(include: :geolocations), status: :ok
   end
 
   # POST /api/v1/attractions
   def create
     @attraction = Attraction.new(attraction_params)
 
-    authorize @attraction
+    # authorize @attraction
 
     if @attraction.save
-      render json: { data: @attraction }, status: :created
+      render json: AttractionSerializer.new(@attraction).serializable_hash[:data][:attributes], status: :created
     else
       render json: @attraction.errors, status: :unprocessable_entity
     end
@@ -66,17 +65,6 @@ class Api::V1::AttractionsController < ApplicationController
     end
   end
 
-  def upload_image
-    @attraction.image.attach(params[:file])
-    render json: { url: url_for(@attraction.image.variant(:main)) }
-  end
-
-  def update_image
-    @attraction.image.attach(params[:blob_id])
-    @attraction.update(image_url: params[:image_url])
-    render json: { message: 'Image updated successfully' }
-  end
-
   private
 
   def set_attraction
@@ -88,7 +76,7 @@ class Api::V1::AttractionsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def attraction_params
-    params.permit(:title, :description)
+    params.permit(:title, :description, :image)
   end
 
   def authorize_policy
