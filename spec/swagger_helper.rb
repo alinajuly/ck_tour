@@ -64,7 +64,7 @@ RSpec.configure do |config|
           }
         },
         {
-          url: 'http://{ck_tour_Host}',
+          url: 'https://{ck_tour_Host}',
           variables: {
             ck_tour_Host: {
               default: 'cktour.club'
