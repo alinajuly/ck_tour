@@ -7,7 +7,6 @@ Rails.application.routes.draw do
       post '/auth/login', to: 'authentication#login'
       post 'password/forgot', to: 'password#forgot'
       post 'password/reset', to: 'password#reset'
-      get 'users/user_id', to: 'authentication#user_id'
 
       post 'admins/create_admin', to: 'admins#create_admin'
 
@@ -19,8 +18,6 @@ Rails.application.routes.draw do
       end
 
       resources :attractions do
-        post '/attractions/:id/image', to: 'attractions#upload_image'
-        patch '/attractions/:id/image', to: 'attractions#update_image'
         resources :geolocations, only: %i[create]
         get '/geolocations', to: 'geolocations#show'
         put '/geolocations', to: 'geolocations#update'
