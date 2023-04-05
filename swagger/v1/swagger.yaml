@@ -591,7 +591,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -599,9 +599,12 @@ paths:
                   type: string
                 description:
                   type: string
+                image:
+                  type: file
               required:
               - title
               - description
+              - image
         required: true
   "/api/v1/attractions/{id}":
     parameters:
@@ -663,64 +666,6 @@ paths:
           description: not found
         '422':
           description: invalid request
-  "/api/v1/attractions/{attraction_id}/upload_image":
-    post:
-      summary: upload image of attraction by admin
-      parameters:
-      - name: attraction_id
-        in: path
-        description: attraction id
-        required: true
-        schema:
-          type: string
-      tags:
-      - Admin Attractions
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: Image uploaded successfully
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: file
-        description: Image file to upload
-  "/api/v1/attractions/{attraction_id}/update_image":
-    put:
-      summary: update image by admin
-      parameters:
-      - name: attraction_id
-        in: path
-        description: attraction id
-        required: true
-        schema:
-          type: string
-      tags:
-      - Admin Attractions
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: Image updated successfully
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: file
-        description: Image file to upload
   "/api/v1/auth/login":
     post:
       summary: authentication user
@@ -751,22 +696,6 @@ paths:
               - email
               - password
         required: true
-  "/api/v1/users/user_id":
-    get:
-      summary: show current user id
-      tags:
-      - Users
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
   "/api/v1/users/{id}/bookings":
     parameters:
     - name: id
