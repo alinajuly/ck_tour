@@ -8,4 +8,8 @@ class Attraction < ApplicationRecord
   scope :geolocation_filter, ->(locality) { joins(:geolocations).where('locality ILIKE ?', "%#{locality}%") }
 
   validates :title, :description, presence: true
+
+  def image_url
+    Rails.application.routes.url_helpers.url_for(image) if image.attached?
+  end
 end
