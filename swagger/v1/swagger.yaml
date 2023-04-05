@@ -751,6 +751,22 @@ paths:
               - email
               - password
         required: true
+  "/api/v1/users/user_id":
+    get:
+      summary: show current user id
+      tags:
+      - Users
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/users/{id}/bookings":
     parameters:
     - name: id
