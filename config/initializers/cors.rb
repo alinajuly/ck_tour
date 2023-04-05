@@ -17,7 +17,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'localhost:3000', 'tour-project-frontend.vercel.app', '164.92.135.103'
+    origins 'localhost:3000', 'tour-project-frontend.vercel.app', '164.92.135.103', 'cktour.club'
     resource '*',
       headers: :any,
       methods: [:get, :post, :put, :patch, :delete, :options, :head],
