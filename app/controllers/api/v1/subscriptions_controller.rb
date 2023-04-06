@@ -35,6 +35,7 @@ class Api::V1::SubscriptionsController < ApplicationController
     end
   end
 
+  # cancel subscription
   def destroy
     if @subscription.destroy!
       render json: { status: 'Delete' }, status: :ok
@@ -53,6 +54,6 @@ class Api::V1::SubscriptionsController < ApplicationController
   end
 
   def subscription_params
-    params.require(:data).permit(:card_number, :exp_month, :exp_year, :cvc, :user_id, :plan_id, :active)
+    params.require(:data).permit(:card_number, :exp_month, :exp_year, :cvc, :user_id, :plan_id, :active, :trial_period_days)
   end
 end

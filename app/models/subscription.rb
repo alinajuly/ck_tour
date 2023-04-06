@@ -35,10 +35,12 @@ class Subscription < ApplicationRecord
     }).id
   end
 
+  # method that the callback call
   def cancel_stripe_subscription
     Stripe::Subscription.cancel(stripe_id)
   end
   
+  # the method that define the condition
   def subscription_inactive?
     !active
   end
