@@ -12,7 +12,7 @@ class BookingPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.partner?
-      [:confirmation]
+      %i[confirmation number_of_peoples check_in check_out note room_id]
     elsif user.tourist? || user.partner?
       %i[number_of_peoples check_in check_out note room_id]
     end

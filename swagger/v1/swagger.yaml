@@ -1509,6 +1509,8 @@ paths:
       summary: list places of tour for all
       tags:
       - Tour
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -1536,7 +1538,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -1544,9 +1546,12 @@ paths:
                   type: string
                 body:
                   type: string
+                image:
+                  type: file
               required:
               - name
               - body
+              - image
         required: true
   "/api/v1/tours/{tour_id}/places/{id}":
     parameters:
@@ -1566,6 +1571,8 @@ paths:
       summary: show place of tour for all
       tags:
       - Tour
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -1593,7 +1600,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -1601,6 +1608,8 @@ paths:
                   type: string
                 body:
                   type: string
+                image:
+                  type: file
     delete:
       summary: delete place of tour by partner
       tags:
@@ -2063,6 +2072,8 @@ paths:
       summary: show TOUR - published for all
       tags:
       - Tour
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful

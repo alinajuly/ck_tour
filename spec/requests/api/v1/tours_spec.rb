@@ -101,6 +101,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     get('show TOUR - published for all') do
       tags 'Tour'
       produces 'application/json'
+      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:id) { '123' }
