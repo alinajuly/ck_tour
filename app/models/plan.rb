@@ -4,7 +4,6 @@ class Plan < ApplicationRecord
   validates :name, :stripe_price_id, :price_cents, presence: true
   validates :name, :stripe_price_id, uniqueness: true
 
-  # enum interval: { trial: 0, month: 1, three_months: 2, six_months: 3, year: 4 }
   enum interval: { month: 0, year: 1 }
   
   before_validation :create_stripe_reference, on: :create

@@ -1,8 +1,15 @@
-class PlansController < ApplicationController
-  before_action :set_plan, only: [:show, :update, :destroy]
+class Api::V1::PlansController < ApplicationController
+  skip_before_action :authenticate_request
+  before_action :set_plan, except: %i[index create]
 
   def index
     @plans = Plan.all
+    
+    if @plans
+      render json: { data: @plans }, status: :ok
+    else
+      render json: @plans.errors, status: :bad_request
+    end
   end
 
   def show

@@ -52,7 +52,8 @@ Rails.application.routes.draw do
         delete '/geolocations', to: 'geolocations#destroy'
       end
 
-      resources :subscriptions, only: %i[show create update]
+      resources :subscriptions
+      resources :plans
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

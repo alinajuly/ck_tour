@@ -1,6 +1,17 @@
 class Api::V1::SubscriptionsController < ApplicationController
-  skip_before_action :authenticate_request, only: %i[show create update]
-  before_action :set_subscription, except: %i[create]
+  # skip_before_action :authenticate_request, only: %i[show create update]
+  skip_before_action :authenticate_request
+  before_action :set_subscription, except: %i[index create]
+
+  def index
+    @subscriptions = Subscription.all
+    
+    if @subscriptions
+      render json: { data: @subscriptions }, status: :ok
+    else
+      render json: @subscriptions.errors, status: :bad_request
+    end
+  end
 
   def show
     render json: @subscription
@@ -19,6 +30,14 @@ class Api::V1::SubscriptionsController < ApplicationController
   def update
     if @subscription.update(subscription_params)
       render json: { status: 'Update', data: @subscription }, status: :ok
+    else
+      render json: @subscription.errors, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @subscription.destroy!
+      render json: { status: 'Delete' }, status: :ok
     else
       render json: @subscription.errors, status: :unprocessable_entity
     end
