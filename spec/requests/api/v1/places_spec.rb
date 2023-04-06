@@ -7,6 +7,7 @@ RSpec.describe 'api/v1/places', type: :request do
     get('list places of tour for all') do
       tags 'Tour'
       produces 'application/json'
+      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:tour_id) { '1' }
@@ -48,18 +49,19 @@ RSpec.describe 'api/v1/places', type: :request do
 
     post('create place for tour by partner') do
       tags 'Partner Tours'
-      consumes 'application/json'
       security [jwt_auth: []]
+      consumes 'multipart/form-data'
       parameter name: :place,
-                in: :body,
+                in: :formData,
                 required: true,
                 schema: {
                   type: :object,
                   properties: {
                     name: { type: :string },
-                    body: { type: :string }
+                    body: { type: :string },
+                    image: { type: :file }
                   },
-                  required: %i[name body]
+                  required: %i[name body image]
                 }
 
       response(201, 'successful created') do
@@ -107,6 +109,7 @@ RSpec.describe 'api/v1/places', type: :request do
 
     get('show place of tour for all') do
       tags 'Tour'
+      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:tour_id) { '123' }
@@ -149,17 +152,18 @@ RSpec.describe 'api/v1/places', type: :request do
 
     put('update place of tour by partner') do
       tags 'Partner Tours'
-      consumes 'application/json'
+      consumes 'multipart/form-data'
       security [jwt_auth: []]
       parameter name: :place,
-                in: :body,
+                in: :formData,
                 schema: {
                   type: :object,
                   properties: {
-                      name: { type: :string },
-                      body: { type: :string }
-                    }
+                    name: { type: :string },
+                    body: { type: :string },
+                    image: { type: :file }
                   }
+                }
 
       response(200, 'successful') do
         let(:tour_id) { '123' }

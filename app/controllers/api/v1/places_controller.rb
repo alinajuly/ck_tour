@@ -3,32 +3,29 @@ class Api::V1::PlacesController < ApplicationController
   before_action :set_place, only: %i[show update destroy]
 
   def index
-    @places = @tour.places.all
+    @places = @tour.places.all.joins(:image_attachment)
 
     authorize @places
-    render json: @places.as_json(include: :geolocations), status: :ok
+    # render json: @places.as_json(include: :geolocations), status: :ok
+    render json: @places.map { |place|
+      place.as_json(only: %i[name body tour_id]).merge(
+        image_path: url_for(place.image)) }
   end
 
   def show
     authorize @place
 
     # render json: @place.as_json(include: :geolocations), status: :ok
-    render json: @place.as_json(include: :images).merge(
-      images: @place.images.map do |image|
-        url_for(image)
-      end
-    )
+    if @place.image.attached?
+      render json: @place.as_json(only: %i[name body tour_id]).merge(
+        image_path: url_for(@place.image))
+    else
+      render json: @place.as_json(only: %i[name body tour_id])
+    end
   end
 
   def create
-    @place = @tour.places.new(place_params.except(:images))
-    images = params[:place][:images]
-
-    if images
-      images.each do |image|
-        @place.images.attach(image)
-      end
-    end
+    @place = @tour.places.new(place_params)
 
     authorize @place
 
@@ -40,14 +37,6 @@ class Api::V1::PlacesController < ApplicationController
   end
 
   def update
-    images = params[:place][:images]
-
-    if images
-      images.each do |image|
-        @place.images.attach(image)
-      end
-    end
-
     authorize @place
 
     if @place.update(place_params)
@@ -84,6 +73,6 @@ class Api::V1::PlacesController < ApplicationController
   end
 
   def place_params
-    params.permit(:name, :body, :tour_id, images: [])
+    params.permit(:name, :body, :tour_id, :image)
   end
 end
