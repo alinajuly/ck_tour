@@ -49,6 +49,10 @@ RSpec.describe 'api/v1/attractions', type: :request do
                   },
                   required: [ :title, :description, :image ]
                 }
+      # parameter name: :image,
+      #           in: :formData,
+      #           type: :file,
+      #           description: 'Image file to upload'
 
       response(201, 'successful created') do
         it 'should returns status response' do
@@ -77,6 +81,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
   end
 
   path '/api/v1/attractions/{id}' do
+    # You'll want to customize the parameter types...
     parameter name: :id, in: :path, type: :string, description: 'attraction id'
 
     get('show attraction for all') do
@@ -115,15 +120,17 @@ RSpec.describe 'api/v1/attractions', type: :request do
 
     put('update attraction by admin') do
       tags 'Admin Attractions'
-      consumes 'application/json'
       security [ jwt_auth: [] ]
+      consumes 'multipart/form-data'
       parameter name: :attraction,
-                in: :body,
+                # in: :body,
+                in: :formData,
                 schema: {
                   type: :object,
                   properties: {
                     title: { type: :string },
-                    description: { type: :string }
+                    description: { type: :string },
+                    image: { type: :file }
                   }
                 }
 
@@ -193,4 +200,107 @@ RSpec.describe 'api/v1/attractions', type: :request do
       end
     end
   end
+
+  # path '/api/v1/attractions/{attraction_id}/upload_image' do
+  #   post('upload image of attraction by admin') do
+  #     parameter name: :attraction_id, in: :path, type: :string, description: 'attraction id'
+  #     tags 'Admin Attractions'
+  #     consumes 'multipart/form-data'
+  #     security [ jwt_auth: [] ]
+  #     parameter name: 'image', in: :formData, type: :file, description: 'Image file to upload'
+  #     produces 'application/json'
+  #
+  #     response '200', 'Image uploaded successfully' do
+  #       schema type: :object,
+  #              properties: {
+  #                url: { type: :string, description: 'URL of the uploaded image' }
+  #              }
+  #       let(:id) { create(:attraction).id }
+  #       let(:Authorization) { "Bearer #{JwtToken.encode(user_id: create(:user).id)}" }
+  #       let(:image) { fixture_file_upload('spec/fixtures/test_image.jpg', 'image/jpg') }
+  #       run_test!
+  #     end
+  #     response '401', 'Unauthorized' do
+  #       let(:id) { create(:attraction).id }
+  #       let(:image) { fixture_file_upload('spec/fixtures/test_image.jpg', 'image/jpg') }
+  #       run_test!
+  #     end
+  #
+  #     response(200, 'Image uploaded successfully') do
+  #       it 'should returns status response' do
+  #         expect(response.status).to eq(201)
+  #       end
+  #     end
+  #
+  #     response(401, 'unauthorized') do
+  #       it 'should returns status response' do
+  #         expect(response.status).to eq(401)
+  #       end
+  #     end
+  #
+  #     response(404, 'not found') do
+  #       it 'should returns status response' do
+  #         expect(response.status).to eq(404)
+  #       end
+  #     end
+  #
+  #     response(422, 'invalid request') do
+  #       it 'should returns status response' do
+  #         expect(response.status).to eq(422)
+  #       end
+  #     end
+  #   end
+  # end
+  #
+  # path '/api/v1/attractions/{attraction_id}/update_image' do
+  #   put('update image by admin') do
+  #     parameter name: :attraction_id, in: :path, type: :string, description: 'attraction id'
+  #     tags 'Admin Attractions'
+  #     consumes 'multipart/form-data'
+  #     security [ jwt_auth: [] ]
+  #     parameter name: 'image', in: :formData, type: :file, description: 'Image file to upload'
+  #     produces 'application/json'
+  #
+  #     response '200', 'Image updated successfully' do
+  #       schema type: :object,
+  #              properties: {
+  #                url: { type: :string, description: 'URL of the updated image' }
+  #              }
+  #       let(:attraction) { create(:attraction, :with_image) }
+  #       let(:id) { attraction.id }
+  #       let(:Authorization) { "Bearer #{JwtToken.encode(user_id: attraction.user_id)}" }
+  #       let(:image) { fixture_file_upload('spec/fixtures/test_image.jpg', 'image/jpg') }
+  #       run_test!
+  #     end
+  #     response '401', 'Unauthorized' do
+  #       let(:id) { create(:attraction).id }
+  #       let(:image) { fixture_file_upload('spec/fixtures/test_image.jpg', 'image/jpg') }
+  #       run_test!
+  #     end
+  #
+  #     response(200, 'Image updated successfully') do
+  #       it 'should returns status response' do
+  #         expect(response.status).to eq(201)
+  #       end
+  #     end
+  #
+  #     response(401, 'unauthorized') do
+  #       it 'should returns status response' do
+  #         expect(response.status).to eq(401)
+  #       end
+  #     end
+  #
+  #     response(404, 'not found') do
+  #       it 'should returns status response' do
+  #         expect(response.status).to eq(404)
+  #       end
+  #     end
+  #
+  #     response(422, 'invalid request') do
+  #       it 'should returns status response' do
+  #         expect(response.status).to eq(422)
+  #       end
+  #     end
+  #   end
+  # end
 end
