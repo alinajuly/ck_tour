@@ -8,8 +8,8 @@ class Api::V1::PlacesController < ApplicationController
     authorize @places
     # render json: @places.as_json(include: :geolocations), status: :ok
     render json: @places.map { |place|
-      place.as_json(only: %i[name body tour_id]).merge(
-        image_path: url_for(place.image)) }
+      place.as_json(only: %i[id name body tour_id], include: :geolocations)
+           .merge(image_path: url_for(place.image)) }
   end
 
   def show
@@ -17,8 +17,10 @@ class Api::V1::PlacesController < ApplicationController
 
     # render json: @place.as_json(include: :geolocations), status: :ok
     if @place.image.attached?
-      render json: @place.as_json(only: %i[name body tour_id]).merge(
-        image_path: url_for(@place.image))
+      # render json: @place.as_json(only: %i[id name body tour_id]).merge(
+      #   image_path: url_for(@place.image))
+      render json: @place.as_json(only: %i[id name body tour_id], include: :geolocations)
+                         .merge(image_path: url_for(@place.image))
     else
       render json: @place.as_json(only: %i[name body tour_id])
     end
