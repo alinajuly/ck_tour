@@ -54,10 +54,10 @@ RSpec.describe 'api/v1/rooms', type: :request do
 
     post('create room of accommodation by partner') do
       tags 'Partner Accommodations'
-      consumes 'application/json'
       security [jwt_auth: []]
+      consumes 'multipart/form-data'
       parameter name: :room,
-                in: :body,
+                in: :formData,
                 required: true,
                 schema: {
                   type: :object,
@@ -67,10 +67,33 @@ RSpec.describe 'api/v1/rooms', type: :request do
                     quantity: { type: :integer },
                     description: { type: :string },
                     bed: { type: :string },
-                    price_per_night: { type: :integer }
+                    price_per_night: { type: :integer },
+                    filename: {
+                      type: :array,
+                      items:
+                        { type: :string,
+                          format: :binary }
+                    }
                   },
                   required: %i[name places bed description quantity price_per_night]
                 }
+
+      # consumes 'application/json'
+      # parameter name: :room,
+      #           in: :body,
+      #           required: true,
+      #           schema: {
+      #             type: :object,
+      #             properties: {
+      #               name: { type: :string },
+      #               places: { type: :integer },
+      #               quantity: { type: :integer },
+      #               description: { type: :string },
+      #               bed: { type: :string },
+      #               price_per_night: { type: :integer }
+      #             },
+      #             required: %i[name places bed description quantity price_per_night]
+      #           }
 
       response(201, 'successful created') do
         let(:accommodation_id) { '123' }

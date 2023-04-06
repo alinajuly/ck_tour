@@ -19,7 +19,12 @@ class Api::V1::RoomsController < ApplicationController
     authorize @rooms
 
     if @rooms
-      render json: { data: @rooms }, status: :ok
+      # render json: { data: @rooms }, status: :ok
+      render json: @rooms.as_json(include: :images).merge(
+        images: @rooms.images.map do |image|
+          url_for(image)
+        end
+      )
     else
       render json: @rooms.errors, status: :bad_request
     end
@@ -29,12 +34,23 @@ class Api::V1::RoomsController < ApplicationController
   def show
     authorize @room
 
-    render json: @room, status: :ok
+    render json: @room.as_json(include: :images).merge(
+      images: @room.images.map do |image|
+        url_for(image)
+      end
+    )
   end
 
   # POST /api/v1/rooms
   def create
-    @room = @accommodation.rooms.new(room_params)
+    @room = @accommodation.rooms.new(room_params.except(:images))
+    images = params[:room][:images]
+
+    if images
+      images.each do |image|
+        @room.images.attach(image)
+      end
+    end
 
     authorize @room
 
@@ -47,6 +63,14 @@ class Api::V1::RoomsController < ApplicationController
 
   # PATCH/PUT /api/v1/rooms/1
   def update
+    images = params[:room][:images]
+
+    if images
+      images.each do |image|
+        @room.images.attach(image)
+      end
+    end
+
     authorize @room
 
     if @room.update(room_params)
@@ -99,7 +123,7 @@ class Api::V1::RoomsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def room_params
-    params.permit(:places, :bed, :name, :quantity, :description, :price_per_night, bookings_attributes: %i[id check_in check_out number_of_peoples])
+    params.permit(:places, :bed, :name, :quantity, :description, :price_per_night, images: [])
   end
 
   def authorize_policy

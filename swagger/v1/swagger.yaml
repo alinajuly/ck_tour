@@ -643,7 +643,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -651,6 +651,8 @@ paths:
                   type: string
                 description:
                   type: string
+                image:
+                  type: file
     delete:
       summary: delete attraction by admin
       tags:
@@ -1846,7 +1848,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -1862,6 +1864,11 @@ paths:
                   type: string
                 price_per_night:
                   type: integer
+                filename:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
               required:
               - name
               - places
