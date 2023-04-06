@@ -17,7 +17,7 @@ class Api::V1::AttractionsController < ApplicationController
 
     if @attractions
       # render json: { data: @attractions }, status: :ok
-      render json: @attractions.as_json(include: :geolocations), status: :ok
+      render json: @attractions.as_json(include: :geolocations, methods: [:image_url]), status: :ok
     else
       render json: @attractions.errors, status: :bad_request
     end
@@ -27,7 +27,7 @@ class Api::V1::AttractionsController < ApplicationController
   def show
     authorize @attraction
 
-    render json: @attraction.as_json(include: :geolocations), status: :ok
+    render json: @attraction.as_json(include: :geolocations, methods: [:image_url]), status: :ok
   end
 
   # POST /api/v1/attractions
@@ -48,7 +48,8 @@ class Api::V1::AttractionsController < ApplicationController
     authorize @attraction
 
     if @attraction.update(attraction_params)
-      render json: { status: 'Update', data: @attraction }, status: :ok
+      render json: AttractionSerializer.new(@attraction).serializable_hash[:data][:attributes], status: :ok
+      # render json: { status: 'Update', data: @attraction }, status: :ok
     else
       render json: @attraction.errors, status: :unprocessable_entity
     end

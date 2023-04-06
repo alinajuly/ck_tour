@@ -12,11 +12,23 @@ class Api::V1::PlacesController < ApplicationController
   def show
     authorize @place
 
-    render json: @place.as_json(include: :geolocations), status: :ok
+    # render json: @place.as_json(include: :geolocations), status: :ok
+    render json: @place.as_json(include: :images).merge(
+      images: @place.images.map do |image|
+        url_for(image)
+      end
+    )
   end
 
   def create
-    @place = @tour.places.new(place_params)
+    @place = @tour.places.new(place_params.except(:images))
+    images = params[:place][:images]
+
+    if images
+      images.each do |image|
+        @place.images.attach(image)
+      end
+    end
 
     authorize @place
 
@@ -28,9 +40,17 @@ class Api::V1::PlacesController < ApplicationController
   end
 
   def update
+    images = params[:place][:images]
+
+    if images
+      images.each do |image|
+        @place.images.attach(image)
+      end
+    end
+
     authorize @place
 
-    if @place.update(attraction_params)
+    if @place.update(place_params)
       render json: { status: 'Update', data: @place }, status: :ok
     else
       render json: @place.errors, status: :unprocessable_entity
@@ -64,6 +84,6 @@ class Api::V1::PlacesController < ApplicationController
   end
 
   def place_params
-    params.permit(:name, :body, :tour_id)
+    params.permit(:name, :body, :tour_id, images: [])
   end
 end
