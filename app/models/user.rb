@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :bookings, dependent: :destroy
   has_many :appointments, dependent: :destroy
   has_many :reservations, dependent: :destroy
+  has_one :subscription
 
   has_secure_password
 
@@ -22,6 +23,9 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 8, maximum: 255 }, format: { with: VALID_PASSWORD_REGEX }
   validates :name, presence: true, uniqueness: true, length: { minimum: 3, maximum: 50 }
+  validates :stripe_id, presence: true, uniqueness: true
+
+  before_validation :create_stripe_reference, on: :create
 
   enum role: { tourist: 0, partner: 1, admin: 2 }
 
@@ -41,6 +45,16 @@ class User < ApplicationRecord
     self.reset_password_token = nil
     self.password = password
     save!(validate: false)
+  end
+
+  def create_stripe_reference
+    response = Stripe::Customer.create(email: email)
+    self.stripe_id = response.id
+  end
+
+  # to retrieve all the Stripe info for user
+  def retrieve_stripe_reference
+    Stripe::Customer.retrieve(stripe_id)
   end
 
   private

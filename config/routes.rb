@@ -44,6 +44,11 @@ Rails.application.routes.draw do
         get '/reservations', to: 'reservations#list_for_partner'
       end
 
+
+      resources :subscriptions
+      resources :plans, except: :show
+      get 'plans/plan', to: 'plans#show'
+
       resources :tours do
         resources :places do
           resources :geolocations, only: %i[create]
@@ -56,8 +61,7 @@ Rails.application.routes.draw do
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
   # Defines the root path route ("/")
-  root 'api/v1/attractions#index'
   # root 'authentication#login'
+  root 'api/v1/attractions#index'
 end
