@@ -1,19 +1,23 @@
 class User < ApplicationRecord
   require 'securerandom'
   has_many :accommodations, dependent: :destroy
+  has_many :tours, dependent: :destroy
+  has_many :caterings, dependent: :destroy
   has_many :bookings, dependent: :destroy
+  has_many :appointments, dependent: :destroy
+  has_many :reservations, dependent: :destroy
   has_one :subscription
 
   has_secure_password
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /\A
-  (?=.*\d)           # At least one digit
-  (?=.*[a-z])        # At least one lowercase letter
-  (?=.*[A-Z])        # At least one uppercase letter
-  (?=.*[[:^alnum:]]) # At least one symbol
-  [[:print:]]{8,}    # At least 8 printable characters
-\z/x
+    (?=.*\d)           # At least one digit
+    (?=.*[a-z])        # At least one lowercase letter
+    (?=.*[A-Z])        # At least one uppercase letter
+    (?=.*[[:^alnum:]]) # At least one symbol
+    [[:print:]]{8,}    # At least 8 printable characters
+  \z/x
 
   validates :email, presence: true, length: { minimum: 5, maximum: 255 }, format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
@@ -24,6 +28,8 @@ class User < ApplicationRecord
   before_validation :create_stripe_reference, on: :create
 
   enum role: { tourist: 0, partner: 1, admin: 2 }
+
+  scope :role_filter, ->(role) { where(role: role) }
 
   def generate_password_token!
     self.reset_password_token = generate_token

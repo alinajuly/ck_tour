@@ -3,12 +3,11 @@ require 'swagger_helper'
 
 RSpec.describe "Api::V1::Amenities", type: :request do
   path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities' do
-    # You'll want to customize the parameter types...
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
 
-    get('list amenities') do
-      tags 'Amenity'
+    get('list amenities of room') do
+      tags 'Accommodation'
       response(200, 'successful') do
         let(:accommodation_id) { '123' }
 
@@ -47,8 +46,8 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       end
     end
 
-    post('create amenity') do
-      tags 'Amenity'
+    post('create amenity of room - for partner only') do
+      tags 'Partner Accommodations'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :amenity,
@@ -86,7 +85,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
           expect(response.status).to eq(201)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -108,13 +107,12 @@ RSpec.describe "Api::V1::Amenities", type: :request do
   end
 
   path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities/{id}' do
-    # You'll want to customize the parameter types...
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
     parameter name: 'id', in: :path, type: :string, description: 'amenity_id'
 
-    put('update amenity') do
-      tags 'Amenity'
+    put('update amenity of room - for partner only') do
+      tags 'Partner Accommodations'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :amenity,
@@ -131,7 +129,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
                     nice_view: { type: :boolean },
                     inclusive: { type: :boolean }
                   }
-                  # required: false
                 }
 
       response(200, 'successful') do
@@ -173,8 +170,8 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       end
     end
 
-    delete('delete amenity') do
-      tags 'Amenity'
+    delete('delete amenity of room - for partner only') do
+      tags 'Partner Accommodations'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do

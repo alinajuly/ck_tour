@@ -9,6 +9,7 @@ upstream puma_<%= fetch(:nginx_config_name) %> { <%
 %><% @backends.each do |server| %>
   <%= server %><% end %>
 }
+
 <% if fetch(:nginx_use_ssl) -%>
 server {
   listen 80;

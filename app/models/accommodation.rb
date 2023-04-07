@@ -1,7 +1,7 @@
 class Accommodation < ApplicationRecord
   belongs_to :user
-  has_many :rooms
-  has_many :facilities
+  has_many :rooms, dependent: :destroy
+  has_many :facilities, dependent: :destroy
   has_many :geolocations, as: :geolocationable
   has_many_attached :image do |attachable|
     attachable.variant :thumb, resize_to_limit: [100, 100]

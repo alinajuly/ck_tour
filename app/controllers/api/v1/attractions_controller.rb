@@ -1,12 +1,14 @@
 class Api::V1::AttractionsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[show index search]
-  before_action :set_attraction, only: %i[show update destroy]
+  before_action :set_attraction, only: %i[show update destroy upload_image update_image]
   before_action :authorize_policy
 
   # GET /api/v1/attractions
   def index
     @attractions = if params[:geolocations].present?
                      Attraction.geolocation_filter(params[:geolocations])
+                   elsif params[:search].present?
+                     Attraction.all.joins(:geolocations).where('title||description||locality ILIKE ?', "%#{params[:search]}%")
                    else
                      Attraction.all
                    end
@@ -15,7 +17,7 @@ class Api::V1::AttractionsController < ApplicationController
 
     if @attractions
       # render json: { data: @attractions }, status: :ok
-      render json: @attractions.as_json(include: :geolocations), status: :ok
+      render json: @attractions.as_json(include: :geolocations, methods: [:image_url]), status: :ok
     else
       render json: @attractions.errors, status: :bad_request
     end
@@ -25,18 +27,17 @@ class Api::V1::AttractionsController < ApplicationController
   def show
     authorize @attraction
 
-    render json: @attraction.as_json(include: :geolocations), status: :ok
-    # render json: @attraction.as_json(include: :geolocations), status: :ok
+    render json: @attraction.as_json(include: :geolocations, methods: [:image_url]), status: :ok
   end
 
   # POST /api/v1/attractions
   def create
     @attraction = Attraction.new(attraction_params)
 
-    authorize @attraction
+    # authorize @attraction
 
     if @attraction.save
-      render json: { data: @attraction }, status: :created
+      render json: AttractionSerializer.new(@attraction).serializable_hash[:data][:attributes], status: :created
     else
       render json: @attraction.errors, status: :unprocessable_entity
     end
@@ -47,7 +48,8 @@ class Api::V1::AttractionsController < ApplicationController
     authorize @attraction
 
     if @attraction.update(attraction_params)
-      render json: { status: 'Update', data: @attraction }, status: :ok
+      render json: AttractionSerializer.new(@attraction).serializable_hash[:data][:attributes], status: :ok
+      # render json: { status: 'Update', data: @attraction }, status: :ok
     else
       render json: @attraction.errors, status: :unprocessable_entity
     end
@@ -64,17 +66,6 @@ class Api::V1::AttractionsController < ApplicationController
     end
   end
 
-  def search
-    authorize @attraction
-
-    @result = Attraction.all.joins(:geolocations).where('title||description||locality ILIKE ?', "%#{params[:req]}%")
-    if @result.blank?
-      render json: { message: 'Attraction not found' }, status: :ok
-    else
-      render json: { data: @result }, status: :ok
-    end
-  end
-
   private
 
   def set_attraction
@@ -86,7 +77,7 @@ class Api::V1::AttractionsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def attraction_params
-    params.permit(:title, :description)
+    params.permit(:title, :description, :image)
   end
 
   def authorize_policy

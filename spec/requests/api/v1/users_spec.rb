@@ -4,16 +4,18 @@ require 'swagger_helper'
 RSpec.describe 'api/v1/users', type: :request do
   path '/api/v1/users' do
     get('list users') do
-      tags 'User'
+      tags 'Users Admin'
       produces 'application/json'
       security [ jwt_auth: [] ]
+      parameter name: :role, in: :query, schema: { type: :string },
+                description: 'admin/partner/tourist'
 
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -34,7 +36,7 @@ RSpec.describe 'api/v1/users', type: :request do
     end
 
     post('create user') do
-      tags 'User'
+      tags 'Users Tourist'
       description 'Creates a new user'
       consumes 'application/json'
       parameter name: :user,
@@ -90,9 +92,9 @@ RSpec.describe 'api/v1/users', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'user id'
 
     get('show user') do
-      tags 'User'
+      tags 'Users'
       security [ jwt_auth: [] ]
-    
+
       response(200, 'successful') do
         let(:id) { '123' }
 
@@ -111,7 +113,7 @@ RSpec.describe 'api/v1/users', type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -132,7 +134,7 @@ RSpec.describe 'api/v1/users', type: :request do
     end
 
     put('update user') do
-      tags 'User'
+      tags 'Users'
       consumes 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :user,
@@ -145,7 +147,7 @@ RSpec.describe 'api/v1/users', type: :request do
                     email: { type: :string },
                     password: { type: :string }
                   },
-                  required: [ :name, :email, :password ]
+                  required: [:name, :email, :password]
                 }
 
       response(200, 'successful') do
@@ -166,7 +168,7 @@ RSpec.describe 'api/v1/users', type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -187,9 +189,9 @@ RSpec.describe 'api/v1/users', type: :request do
     end
 
     delete('delete user') do
-      tags 'User'
+      tags 'Users'
       security [ jwt_auth: [] ]
-      
+
       response(200, 'successful') do
         let(:id) { '123' }
 
@@ -208,7 +210,7 @@ RSpec.describe 'api/v1/users', type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)
@@ -230,11 +232,10 @@ RSpec.describe 'api/v1/users', type: :request do
   end
 
   path '/api/v1/users/{id}/change_role' do
-    # You'll want to customize the parameter types...
     parameter name: :id, in: :path, type: :string, description: 'user id'
 
     put('change_role') do
-      tags 'User'
+      tags 'Users Tourist'
       consumes 'application/json'
       security [ jwt_auth: [] ]
 
@@ -256,7 +257,7 @@ RSpec.describe 'api/v1/users', type: :request do
           expect(response.status).to eq(200)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)

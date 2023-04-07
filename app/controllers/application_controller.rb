@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include JsonWebToken
+  include Authenticate
   include Pundit::Authorization
 
   before_action :authenticate_request

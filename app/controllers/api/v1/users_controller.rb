@@ -6,6 +6,7 @@ class Api::V1::UsersController < ApplicationController
   # GET api/v1/users
   def index
     @users = User.all
+    @users = @users.role_filter(params[:role]) if params[:role].present?
 
     authorize @users
 
@@ -79,7 +80,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def set_user
-    @user = User.find(params[:id])
+    @user = policy_scope(User).find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'user id not found' }, status: :not_found

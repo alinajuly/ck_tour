@@ -1,11 +1,26 @@
 class Api::V1::BookingsController < ApplicationController
-  before_action :authenticate_request
-  before_action :set_user
+  before_action :set_user, except: :list_for_partner
+  before_action :set_accommodation, only: :list_for_partner
+  before_action :set_room, only: :list_for_partner
   before_action :set_booking, only: %i[show update destroy]
   before_action :authorize_policy
 
   def index
-    @bookings = @user.bookings.all
+    @bookings = @user.bookings.where('check_out >= ?', Time.now)
+    @bookings = @user.bookings.where('check_out < ?', Time.now) if params[:archived].present?
+
+    authorize @bookings
+    if @bookings
+      render json: { data: @bookings }, status: :ok
+    else
+      render json: @bookings.errors, status: :bad_request
+    end
+  end
+
+  def list_for_partner
+    # @booking = Booking.joins(room: :accommodation).where()
+    @bookings = @accommodation.room.bookings.where('check_out >= ?', Time.now)
+    @bookings = @accommodation.room.bookings.where('check_out < ?', Time.now) if params[:archived].present?
 
     authorize @bookings
     if @bookings
@@ -24,7 +39,7 @@ class Api::V1::BookingsController < ApplicationController
   def create
     # @accommodation = Accommodation.find_by_id(params[:accommodation_id])
     @room = Room.find_by_id(params[:room_id])
-    @booking = @current_user.bookings.build(booking_params)
+    @booking = @current_user.bookings.build(permitted_attributes(Booking))
 
     authorize @booking
 
@@ -56,28 +71,6 @@ class Api::V1::BookingsController < ApplicationController
     end
   end
 
-  def confirm
-    @booking = Booking.find(params[:booking_id])
-    authorize @booking
-
-    if @booking.approved!
-      render json: { status: 'Confirmed', data: @booking }, status: :ok
-    else
-      render json: @booking.errors, status: :unprocessable_entity
-    end
-  end
-
-  def cancel
-    @booking = Booking.find(params[:booking_id])
-    authorize @booking
-
-    if @booking.cancelled!
-      render json: { status: 'Cancelled', data: @booking }, status: :ok
-    else
-      render json: @booking.errors, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def set_booking
@@ -91,12 +84,29 @@ class Api::V1::BookingsController < ApplicationController
     @user = User.find(params[:user_id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
-    render json: { message: 'booking id not found' }, status: :not_found
+    render json: { message: 'user id not found' }, status: :not_found
+  end
+
+  def set_accommodation
+    @accommodation = Accommodation.find(params[:accommodation_id])
+    # params[:accommodation_id] = @room.accommodation_id
+    # @accommodation = Accommodation.joins(:rooms).find(params[:accommodation_id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'accommodation id not found' }, status: :not_found
+  end
+
+  def set_room
+    @room = @accommodation.rooms.find(params[:room_id])
+  rescue ActiveRecord::RecordNotFound => e
+    logger.info e
+    render json: { message: 'room id not found' }, status: :not_found
   end
 
   # Only allow a list of trusted parameters through.
   def booking_params
-    params.permit(:number_of_peoples, :check_in, :check_out, :note, :confirmation, :room_id)
+    params.require(:booking).permit(policy(@booking).permitted_attributes)
+    # params.permit(:number_of_peoples, :check_in, :check_out, :note, :room_id)
   end
 
   def authorize_policy
