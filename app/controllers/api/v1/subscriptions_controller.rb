@@ -1,6 +1,6 @@
 class Api::V1::SubscriptionsController < ApplicationController
-  # skip_before_action :authenticate_request, only: %i[show create update]
-  skip_before_action :authenticate_request
+  skip_before_action :authenticate_request, only: %i[show create update]
+  # skip_before_action :authenticate_request
   before_action :set_subscription, except: %i[index create]
 
   def index
@@ -14,7 +14,7 @@ class Api::V1::SubscriptionsController < ApplicationController
   end
 
   def show
-    render json: @subscription
+    render json: @subscription, status: :ok
   end
 
   def create
@@ -27,6 +27,7 @@ class Api::V1::SubscriptionsController < ApplicationController
     end
   end
 
+  # cancel subscription by partner
   def update
     if @subscription.update(subscription_params)
       render json: { status: 'Update', data: @subscription }, status: :ok
@@ -35,7 +36,6 @@ class Api::V1::SubscriptionsController < ApplicationController
     end
   end
 
-  # cancel subscription
   def destroy
     if @subscription.destroy!
       render json: { status: 'Delete' }, status: :ok

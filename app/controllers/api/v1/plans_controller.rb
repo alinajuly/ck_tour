@@ -1,6 +1,6 @@
 class Api::V1::PlansController < ApplicationController
-  skip_before_action :authenticate_request
-  before_action :set_plan, except: %i[index create]
+  skip_before_action :authenticate_request, only: %i[index show]
+  before_action :set_plan, except: %i[index show create]
 
   def index
     @plans = Plan.all
@@ -13,7 +13,10 @@ class Api::V1::PlansController < ApplicationController
   end
 
   def show
-    render json: @plan
+    @prices = Stripe::Price.list(expand: ['data.product'], limit: 4)
+
+    # render json: @plans
+    render 'plans/plan'
   end
 
   def create
