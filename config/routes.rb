@@ -47,7 +47,7 @@ Rails.application.routes.draw do
 
       resources :subscriptions
       resources :plans, except: :show
-      get 'plans/plan', to: 'plans#show'
+      get 'plans/show', to: 'plans#show'
 
       resources :tours do
         resources :places do

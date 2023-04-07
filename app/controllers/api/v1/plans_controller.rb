@@ -17,7 +17,7 @@ class Api::V1::PlansController < ApplicationController
   def show
     @prices = Stripe::Price.list(expand: ['data.product'], limit: 4)
 
-    render 'api/v1/plans/plan', layout: false
+    render 'api/v1/plans/show', layout: false
   end
 
   def create
