@@ -43,14 +43,17 @@ class Api::V1::RoomsController < ApplicationController
 
   # POST /api/v1/rooms
   def create
-    @room = @accommodation.rooms.new(room_params.except(:images))
-    images = params[:room][:images]
+    @room = @accommodation.rooms.create!(room_params)
+    # @room = @accommodation.rooms.new(room_params.except(:images))
+    @room.images.attach(params[:images])
 
-    if images
-      images.each do |image|
-        @room.images.attach(image)
-      end
-    end
+    # images = params[:room][:images]
+    #
+    # if images
+    #   images.each do |image|
+    #     @room.images.attach(image)
+    #   end
+    # end
 
     authorize @room
 
@@ -63,13 +66,7 @@ class Api::V1::RoomsController < ApplicationController
 
   # PATCH/PUT /api/v1/rooms/1
   def update
-    images = params[:room][:images]
-
-    if images
-      images.each do |image|
-        @room.images.attach(image)
-      end
-    end
+    @room.images.attach(params[:images]) if params[:images]
 
     authorize @room
 

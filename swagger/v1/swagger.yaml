@@ -1873,11 +1873,10 @@ paths:
                   type: string
                 price_per_night:
                   type: integer
-                filename:
+                images:
                   type: array
                   items:
-                    type: string
-                    format: binary
+                    type: file
               required:
               - name
               - places
@@ -1931,7 +1930,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -1947,6 +1946,10 @@ paths:
                   type: string
                 price_per_night:
                   type: integer
+                images:
+                  type: array
+                  items:
+                    type: file
     delete:
       summary: delete room of accommodation by partner
       tags:
