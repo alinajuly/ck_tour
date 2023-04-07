@@ -1,7 +1,8 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.routes.default_url_options = {
-  host: 'http://cktour-images-pro.s3-website-us-east-1.amazonaws.com'
+  host: 'https://cktour.club'
+  # host: 'http://cktour-images-pro.s3-website-us-east-1.amazonaws.com'
 }
 
 Rails.application.configure do
