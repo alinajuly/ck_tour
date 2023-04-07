@@ -51,7 +51,9 @@ RSpec.configure do |config|
         { name: 'Tourist Tours',
           description: 'operate with tours by tourist' },
         { name: 'Map',
-          description: 'operate with maps' }
+          description: 'operate with maps' },
+        { name: 'Comment',
+          description: 'operate with user\'s comments' }
       ],
       paths: {},
       servers: [
