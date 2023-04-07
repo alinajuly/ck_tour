@@ -18,15 +18,16 @@ Rails.application.routes.draw do
       end
 
       resources :attractions do
-        resources :geolocations, only: %i[create]
+        post '/geolocations', to: 'geolocations#create'
         get '/geolocations', to: 'geolocations#show'
         put '/geolocations', to: 'geolocations#update'
         delete '/geolocations', to: 'geolocations#destroy'
+        resources :comments
       end
 
       resources :accommodations do
         resources :facilities
-        resources :geolocations, only: %i[create]
+        post '/geolocations', to: 'geolocations#create'
         get '/geolocations', to: 'geolocations#show'
         put '/geolocations', to: 'geolocations#update'
         delete '/geolocations', to: 'geolocations#destroy'
@@ -34,6 +35,7 @@ Rails.application.routes.draw do
           resources :amenities
           get '/bookings', to: 'bookings#list_for_partner'
         end
+        resources :comments
       end
 
       resources :caterings do
@@ -42,8 +44,9 @@ Rails.application.routes.draw do
         put '/geolocations', to: 'geolocations#update'
         delete '/geolocations', to: 'geolocations#destroy'
         get '/reservations', to: 'reservations#list_for_partner'
+        resources :comments
       end
-
+      
       # resources :plans, except: :show
       # get 'plans/show', to: 'plans#show'
       get 'plans/show'
@@ -52,12 +55,13 @@ Rails.application.routes.draw do
 
       resources :tours do
         resources :places do
-          resources :geolocations, only: %i[create]
+          post '/geolocations', to: 'geolocations#create'
           get '/geolocations', to: 'geolocations#show'
           put '/geolocations', to: 'geolocations#update'
           delete '/geolocations', to: 'geolocations#destroy'
         end
         get '/appointments', to: 'appointments#list_for_partner'
+        resources :comments
       end
     end
   end

@@ -2,6 +2,7 @@ class Tour < ApplicationRecord
   belongs_to :user
   has_many :places
   has_many :appointments
+  has_many :comments, as: :commentable
 
   enum status: { unpublished: 0, published: 1 }
 
