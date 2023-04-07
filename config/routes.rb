@@ -44,6 +44,11 @@ Rails.application.routes.draw do
         get '/reservations', to: 'reservations#list_for_partner'
       end
 
+
+      resources :subscriptions
+      resources :plans
+      get '/plan', to: 'plans#show'
+
       resources :tours do
         resources :places do
           resources :geolocations, only: %i[create]
