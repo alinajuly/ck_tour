@@ -46,10 +46,12 @@ Rails.application.routes.draw do
         get '/reservations', to: 'reservations#list_for_partner'
         resources :comments
       end
-
-      resources :subscriptions
-      resources :plans, except: :show
-      get 'plans/plan', to: 'plans#show'
+      
+      # resources :plans, except: :show
+      # get 'plans/show', to: 'plans#show'
+      get 'plans/show'
+      resource :plan
+      resource :billing
 
       resources :tours do
         resources :places do
