@@ -1,10 +1,12 @@
 class Api::V1::PlansController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :set_plan, except: %i[index show create]
+  include ActionView::Layouts
+  include ActionController::Rendering
 
   def index
     @plans = Plan.all
-    
+
     if @plans
       render json: { data: @plans }, status: :ok
     else
@@ -15,8 +17,8 @@ class Api::V1::PlansController < ApplicationController
   def show
     @prices = Stripe::Price.list(expand: ['data.product'], limit: 4)
 
+    render 'api/v1/plans/plan', layout: false
     # render json: @plans
-    render 'plans/plan'
   end
 
   def create
