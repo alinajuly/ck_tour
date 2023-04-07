@@ -68,11 +68,12 @@ RSpec.describe 'api/v1/rooms', type: :request do
                     description: { type: :string },
                     bed: { type: :string },
                     price_per_night: { type: :integer },
-                    filename: {
+                    # filename: {
+                    images: {
                       type: :array,
-                      items:
-                        { type: :string,
-                          format: :binary }
+                      items: { type: :file }
+                        # { type: :string,
+                        #   format: :binary }
                     }
                   },
                   required: %i[name places bed description quantity price_per_night]
@@ -182,10 +183,10 @@ RSpec.describe 'api/v1/rooms', type: :request do
 
     put('update room of accommodation by partner') do
       tags 'Partner Accommodations'
-      consumes 'application/json'
+      consumes 'multipart/form-data'
       security [jwt_auth: []]
       parameter name: :room,
-                in: :body,
+                in: :formData,
                 schema: {
                   type: :object,
                   properties: {
@@ -194,7 +195,8 @@ RSpec.describe 'api/v1/rooms', type: :request do
                     quantity: { type: :integer },
                     description: { type: :string },
                     bed: { type: :string },
-                    price_per_night: { type: :integer }
+                    price_per_night: { type: :integer },
+                    images: { type: :array, items: { type: :file } }
                   }
                 }
 
