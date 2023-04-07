@@ -22,7 +22,7 @@ class Api::V1::PlacesController < ApplicationController
       render json: @place.as_json(only: %i[id name body tour_id], include: :geolocations)
                          .merge(image_path: url_for(@place.image))
     else
-      render json: @place.as_json(only: %i[name body tour_id])
+      render json: @place.as_json(only: %i[id name body tour_id], include: :geolocations)
     end
   end
 
