@@ -6,7 +6,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
   path '/api/v1/{parentable_type}/{parentable_id}/geolocations' do
     # You'll want to customize the parameter types...
     parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations'
-    parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attractions_id, accommodations_id'
+    parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attraction_id, accommodation_id'
 
     post('create geolocation by admin (attraction) or partner (catering/tour)') do
       tags 'Map'
@@ -57,7 +57,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       tags 'Map'
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
+        let(:geolocation_id) { '123' }
         let(:id) { '123' }
 
         after do |example|
@@ -109,7 +109,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
                 }
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
+        let(:geolocation_id) { '123' }
         let(:id) { '123' }
 
         after do |example|
@@ -146,7 +146,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
+        let(:geolocation_id) { '123' }
         let(:id) { '123' }
 
         after do |example|
@@ -238,7 +238,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       tags 'Map'
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
+        let(:geolocation_id) { '123' }
         let(:id) { '123' }
 
         after do |example|
@@ -290,7 +290,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
                 }
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
+        let(:geolocation_id) { '123' }
         let(:id) { '123' }
 
         after do |example|
@@ -327,7 +327,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
+        let(:geolocation_id) { '123' }
         let(:id) { '123' }
 
         after do |example|

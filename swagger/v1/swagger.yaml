@@ -34,6 +34,8 @@ tags:
   description: operate with tours by tourist
 - name: Map
   description: operate with maps
+- name: Comment
+  description: operate with user's comments
 paths:
   "/api/v1/accommodations":
     get:
@@ -1064,6 +1066,148 @@ paths:
           description: not found
         '422':
           description: invalid request
+  "/api/v1/{parentable_type}/{parentable_id}/comments":
+    parameters:
+    - name: parentable_type
+      in: path
+      description: f.e. attractions, accommodations, catering, tour
+      required: true
+      schema:
+        type: string
+    - name: parentable_id
+      in: path
+      description: f.e. attraction_id, accommodation_id, catering_id, tour_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list comments - published for all, unpublished for admin, his own for
+        partner/tourist
+      tags:
+      - Comment
+      security:
+      - jwt_auth: []
+      parameters:
+      - name: status
+        in: query
+        schema:
+          type: string
+        description: 'Filter on status: unpublished/published'
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    post:
+      summary: create comment by authenticated user
+      tags:
+      - Comment
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                user_id:
+                  type: integer
+              required:
+              - body
+              - user_id
+        required: true
+  "/api/v1/{parentable_type}/{parentable_id}/comments/{id}":
+    parameters:
+    - name: parentable_type
+      in: path
+      description: f.e. attractions, accommodations, catering, tour
+      required: true
+      schema:
+        type: string
+    - name: parentable_id
+      in: path
+      description: f.e. attraction_id, accommodation_id, catering_id, tour_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: comment id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show comment for all
+      tags:
+      - Comment
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    put:
+      summary: update comment by admin or partner
+      tags:
+      - Comment
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                user_id:
+                  type: integer
+                status:
+                  type: string
+    delete:
+      summary: delete comment by admin or partner
+      tags:
+      - Comment
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/accommodations/{accommodation_id}/facilities":
     parameters:
     - name: accommodation_id
@@ -1213,7 +1357,7 @@ paths:
         type: string
     - name: parentable_id
       in: path
-      description: f.e. attractions_id, accommodations_id
+      description: f.e. attraction_id, accommodation_id
       required: true
       schema:
         type: string
