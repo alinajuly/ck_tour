@@ -1,4 +1,4 @@
-class BillingsController < ApplicationController
+class Api::V1::BillingsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[show]
   include ActionView::Layouts
   include ActionController::Rendering
