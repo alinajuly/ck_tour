@@ -18,7 +18,6 @@ class Api::V1::PlansController < ApplicationController
     @prices = Stripe::Price.list(expand: ['data.product'], limit: 4)
 
     render 'api/v1/plans/plan', layout: false
-    # render json: @plans
   end
 
   def create
