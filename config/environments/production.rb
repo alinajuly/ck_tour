@@ -1,10 +1,10 @@
 require "active_support/core_ext/integer/time"
 
-# Rails.application.routes.default_url_options = {
+Rails.application.routes.default_url_options = {
 #   host: 'https://cktour.club'
-#   # host: 'http://cktour-images-pro.s3-website-us-east-1.amazonaws.com'
+  host: 'https://cktour-images-pro.s3-website-us-east-1.amazonaws.com'
 #   # host: 'https://cktour-images-pro.s3.amazonaws.com'
-# }
+}
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
