@@ -5,8 +5,8 @@ class User < ApplicationRecord
   has_many :caterings, dependent: :destroy
   has_many :bookings, dependent: :destroy
   has_many :appointments, dependent: :destroy
-  has_many :reservations, dependent: :destroy
-  has_one :subscription
+
+  before_validation :ensure_stripe_customer
 
   has_secure_password
 
@@ -23,9 +23,8 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 8, maximum: 255 }, format: { with: VALID_PASSWORD_REGEX }
   validates :name, presence: true, uniqueness: true, length: { minimum: 3, maximum: 50 }
-  validates :stripe_id, presence: true, uniqueness: true
 
-  before_validation :create_stripe_reference, on: :create
+
 
   enum role: { tourist: 0, partner: 1, admin: 2 }
 
@@ -47,7 +46,19 @@ class User < ApplicationRecord
     save!(validate: false)
   end
 
-  def create_stripe_reference
+  def stripe_attributes(pay_customer)
+    attrs = {
+      description: 'Created with pay',
+      metadata: {
+        pay_customer_id: pay_customer.id,
+        user_id: id
+      }
+    }
+
+    attrs
+  end
+
+  def ensure_stripe_customer
     response = Stripe::Customer.create(email: email)
     self.stripe_id = response.id
   end
