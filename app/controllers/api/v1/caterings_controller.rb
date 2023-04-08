@@ -7,11 +7,12 @@ class Api::V1::CateringsController < ApplicationController
 
   # GET /api/v1/accommodations/1/caterings
   def index
+    # methods
     @check_in = params[:check_in]
     @check_out = params[:check_out]
     @number_of_peoples = params[:number_of_peoples]
 
-    @caterings = if @check_in.present? && @check_out.present? && @number_of_peoples.present?
+    @caterings = if check_in.present? && check_out.present? && number_of_peoples.present?
                    available_caterings
                  elsif params[:user_id].present?
                    policy_scope(Catering).where(user_id: params[:user_id])
@@ -94,6 +95,7 @@ class Api::V1::CateringsController < ApplicationController
 
   def available_caterings
     @free_places = @caterings.published.where.not(id: reserved_catering_ids(@check_in, @check_out)).pluck(:places).sum
+    return if @number_of_peoples.nil?
     return unless @free_places >= @number_of_peoples.to_i
 
     @available_caterings = @caterings.where.not(id: reserved_catering_ids(@check_in, @check_out)).published

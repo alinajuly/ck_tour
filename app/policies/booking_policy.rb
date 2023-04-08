@@ -5,7 +5,7 @@ class BookingPolicy < ApplicationPolicy
         scope.all
       elsif user.partner?
         # scope.joins(accommodation: :room).where(user_id: user.id)
-        scope.joins(room: :accommodation).where(accommodations: { user_id: user.id })
+        scope.joins(room: :accommodation).where(accommodations: { id: user.accommodations.ids })
       end
     end
   end

@@ -11,9 +11,9 @@ class Api::V1::RoomsController < ApplicationController
     @number_of_peoples = params[:number_of_peoples]
 
     @rooms = if @check_in.present? && @check_out.present? && @number_of_peoples.present?
-                available_rooms
+               available_rooms
              else
-                @accommodation.rooms.all
+               @accommodation.rooms.all
              end
 
     authorize @rooms
@@ -47,7 +47,7 @@ class Api::V1::RoomsController < ApplicationController
     # @room = @accommodation.rooms.new(room_params.except(:images))
     @room.images.attach(params[:images])
 
-    # images = params[:room][:images]
+    # images = params[room: :images]
     #
     # if images
     #   images.each do |image|

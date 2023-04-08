@@ -3,7 +3,7 @@ class Api::V1::PlacesController < ApplicationController
   before_action :set_place, only: %i[show update destroy]
 
   def index
-    @places = @tour.places.all.joins(:image_attachment)
+    @places = @tour.places.joins(:image_attachment)
 
     authorize @places
     # render json: @places.as_json(include: :geolocations), status: :ok

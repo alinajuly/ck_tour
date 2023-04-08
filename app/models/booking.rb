@@ -11,11 +11,11 @@ class Booking < ApplicationRecord
   validate :enough_places, on: :create
 
   def not_in_past
-    errors.add(:check_in, 'can\'t be in the past') if check_in.present? && check_in < Date.today
+    errors.add(:check_in, "can't be in the past") if check_in.present? && check_in < Date.today
 
     return unless check_out.present? && check_out < Date.today
 
-    errors.add(:check_out, 'can\'t be in the past')
+    errors.add(:check_out, "can't be in the past")
   end
 
   def check_availability
