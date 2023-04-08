@@ -18,6 +18,7 @@ set :linked_dirs,  fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 
 set :config_example_suffix, '.example'
 set :config_files, %w[config/database.yml config/credentials.yml]
 set :nginx_use_ssl, true
+set :env_file, '.env.production.local'
 
 namespace :deploy do
   before 'check:linked_files', 'set:master_key'
