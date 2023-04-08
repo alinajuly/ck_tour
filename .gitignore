@@ -29,13 +29,10 @@
 /config/master.key
 /config/credentials.yml
 /config/credentials.production.yml
-.env.production.local
 
 #ignore database configuration file
 /config/database.yml
 /config/database.production.yml
-
-/config/credentials.yml.enc
 
 # Ignore idea
 .idea

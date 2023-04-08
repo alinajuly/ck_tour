@@ -64,7 +64,6 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem 'rspec-rails'
   gem 'rswag-specs'
-  gem 'dotenv-rails', '~> 2.8' # Shim to load environment variables from .env into ENV in development.
 end
 
 group :development do
@@ -77,7 +76,6 @@ group :development do
   gem 'capistrano-nginx'
   gem 'capistrano-upload-config'
   gem 'sshkit-sudo'
-  gem 'capistrano-dotenv', require: false
   
   # generate preview of e-mail instead of sending
   gem 'letter_opener', '~> 1.8', '>= 1.8.1'
