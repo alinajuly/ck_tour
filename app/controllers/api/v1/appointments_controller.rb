@@ -5,8 +5,12 @@ class Api::V1::AppointmentsController < ApplicationController
   before_action :authorize_policy
 
   def index
-    @appointments = @user.appointments.all.joins(:tour).where('time_end >= ?', Time.now)
-    @appointments = @user.appointments.all.joins(:tour).where('time_end < ?', Time.now) if params[:archived].present?
+    user_appointments = @user.appointments
+    @appointments = if params[:archived].present?
+                      user_appointments.joins(:tour).where('time_end < ?', Time.now)
+                    else
+                      user_appointments.joins(:tour).where('time_end >= ?', Time.now)
+                    end
 
     authorize @appointments
     if @appointments

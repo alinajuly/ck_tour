@@ -1,18 +1,12 @@
 class Api::V1::AttractionsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[show index search]
-  before_action :set_attraction, only: %i[show update destroy upload_image update_image]
   before_action :authorize_policy
+  before_action :set_attractions, only: :index
+  before_action :set_attraction, only: %i[show update destroy]
+
 
   # GET /api/v1/attractions
   def index
-    @attractions = if params[:geolocations].present?
-                     Attraction.geolocation_filter(params[:geolocations])
-                   elsif params[:search].present?
-                     Attraction.all.joins(:geolocations).where('title||description||locality ILIKE ?', "%#{params[:search]}%")
-                   else
-                     Attraction.all
-                   end
-
     authorize @attractions
 
     if @attractions
@@ -67,6 +61,16 @@ class Api::V1::AttractionsController < ApplicationController
   end
 
   private
+
+  def set_attractions
+    @attractions = if params[:geolocations].present?
+                     Attraction.geolocation_filter(params[:geolocations])
+                   elsif params[:search].present?
+                     Attraction.all.joins(:geolocations).where('title||description||locality ILIKE ?', "%#{params[:search]}%")
+                   else
+                     Attraction.all
+                   end
+  end
 
   def set_attraction
     @attraction = Attraction.find(params[:id])

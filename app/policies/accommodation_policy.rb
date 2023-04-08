@@ -33,9 +33,7 @@ class AccommodationPolicy < ApplicationPolicy
     true
   end
 
-  def show?
-    true
-  end
+  alias show? index?
 
   def create?
     user.partner?

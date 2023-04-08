@@ -1,16 +1,16 @@
 class Api::V1::AccommodationsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :current_user, only: %i[index show]
+  before_action :authorize_policy
   before_action :set_accommodation, only: :show
   before_action :edit_accommodation, only: %i[update destroy]
-  before_action :authorize_policy
 
   # GET /api/v1/accommodations
   def index
     # check_in = params[:check_in]
     # check_out = params[:check_out]
     number_of_peoples = params[:number_of_peoples]
-
+    # (a && b && c).present?
     @accommodations = if params[:geolocations].present? && params[:check_in].present? && params[:check_out].present? && params[:number_of_peoples].present?
                         policy_scope(Accommodation).joins(:rooms)
                                                    .where('rooms.places >= ?', number_of_peoples)
@@ -64,9 +64,8 @@ class Api::V1::AccommodationsController < ApplicationController
     authorize @accommodation
 
     if @accommodation.update(accommodation_params)
-      render json: { status: 'Update', data: @accommodation }, status: :ok
+      render_success(data: @accommodation)
     else
-      # render :edit
       render json: @accommodation.errors, status: :unprocessable_entity
     end
   end
