@@ -38,7 +38,7 @@ class Api::V1::UsersController < ApplicationController
   def update
     authorize @user
 
-    if @user&.authenticate(params[:current_password])
+    if @user.authenticate(params[:current_password])
       @user.update(password: params[:new_password])
       render json: { message: 'Password updated successfully' }, status: :ok
     else
@@ -66,7 +66,7 @@ class Api::V1::UsersController < ApplicationController
 
       render json: { status: 'Role is changed', data: @user }, status: :ok
     elsif
-    @user.tourist!
+      @user.tourist!
       @user.accommodations.destroy_all
     else
       render json: { error: 'Invalid current password' }, status: :unprocessable_entity

@@ -17,7 +17,7 @@ module Api::V1
     end
 
     def reset
-      token = params[:token].to_s
+      token = params[:token]
 
       return render json: { error: 'Token not present' } if params[:email].blank?
 

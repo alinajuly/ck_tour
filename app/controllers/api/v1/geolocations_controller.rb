@@ -1,8 +1,8 @@
 class Api::V1::GeolocationsController < ApplicationController
   include ResourceFinder
-  before_action :set_geolocation, only: %i[show update destroy]
   skip_before_action :authenticate_request, only: %i[show]
   before_action :authorize_policy
+  before_action :set_geolocation, only: %i[show update destroy]
 
   def show
     authorize @geolocation
@@ -45,11 +45,11 @@ class Api::V1::GeolocationsController < ApplicationController
   private
 
   def set_geolocation
-    @geolocation = parentable.geolocations
+    @geolocation = parentable.geolocations.find(params[:id])
   end
 
   def geolocation_params
-    params.permit(:locality, :latitude, :longitude)
+    params.permit(:locality, :latitude, :longitude, :street, :suite, :zip_code)
   end
 
   def authorize_policy

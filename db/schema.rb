@@ -124,7 +124,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_08_005534) do
 
   create_table "comments", force: :cascade do |t|
     t.string "body"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "commentable_type", null: false

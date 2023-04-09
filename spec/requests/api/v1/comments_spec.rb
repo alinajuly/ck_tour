@@ -49,10 +49,9 @@ RSpec.describe 'api/v1/comments', type: :request do
                 schema: {
                   type: :object,
                   properties: {
-                    body: { type: :string },
-                    user_id: { type: :integer }
+                    body: { type: :string }
                   },
-                  required: %i[body user_id]
+                  required: %i[body]
                 }
 
       response(201, 'successful created') do
@@ -133,8 +132,6 @@ RSpec.describe 'api/v1/comments', type: :request do
                 schema: {
                   type: :object,
                   properties: {
-                    body: { type: :string },
-                    user_id: { type: :integer },
                     status: { type: :string }
                   }
                 }

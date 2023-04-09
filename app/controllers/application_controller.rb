@@ -28,4 +28,8 @@ class ApplicationController < ActionController::API
   def user_not_authorized
     render json: { error: 'You are not authorized to perform this action.' }, status: :unauthorized
   end
+
+  def render_success(data:, status: :ok)
+    render json: { data: }, status:
+  end
 end

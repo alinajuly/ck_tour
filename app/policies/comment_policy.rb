@@ -3,15 +3,13 @@ class CommentPolicy < ApplicationPolicy
     def resolve
       if user.present? && user.admin?
         scope.all
-      elsif user.present? && (user.partner? || user.tourist?)
-        scope.where(status: 1).or(scope.where(user_id: user.id))
       else
         scope.where(status: 1)
       end
     end
   end
 
-  class EditScope < Scope
+  class DeleteScope < Scope
     def resolve
       if user.admin?
         scope.all
@@ -20,12 +18,14 @@ class CommentPolicy < ApplicationPolicy
       end
     end
   end
+
   def index?
+    # user.admin? || (record.status.eql? 1)
     true
   end
 
   def show?
-    true
+    user.admin? || (record.status.eql? 1)
   end
 
   def create?

@@ -1,9 +1,9 @@
 class Api::V1::AmenitiesController < ApplicationController
+  skip_before_action :authenticate_request, only: %i[index]
+  before_action :authorize_policy
   before_action :set_accommodation
   before_action :set_room
   before_action :set_amenity, only: %i[update destroy]
-  skip_before_action :authenticate_request, only: %i[index]
-  before_action :authorize_policy
 
   def index
     @amenities = @room.amenities.all

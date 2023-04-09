@@ -1126,11 +1126,8 @@ paths:
               properties:
                 body:
                   type: string
-                user_id:
-                  type: integer
               required:
               - body
-              - user_id
         required: true
   "/api/v1/{parentable_type}/{parentable_id}/comments/{id}":
     parameters:
@@ -1187,10 +1184,6 @@ paths:
             schema:
               type: object
               properties:
-                body:
-                  type: string
-                user_id:
-                  type: integer
                 status:
                   type: string
     delete:
@@ -1402,6 +1395,26 @@ paths:
               - latitude
               - longitude
         required: true
+  "/api/v1/{parentable_type}/{parentable_id}/geolocations/{id}":
+    parameters:
+    - name: parentable_type
+      in: path
+      description: f.e. attractions, accommodations
+      required: true
+      schema:
+        type: string
+    - name: parentable_id
+      in: path
+      description: f.e. attraction_id, accommodation_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: geolocation id
+      required: true
+      schema:
+        type: string
     get:
       summary: show geolocation for all
       tags:
@@ -1475,6 +1488,12 @@ paths:
     - name: place_id
       in: path
       description: place id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: geolocation id
       required: true
       schema:
         type: string

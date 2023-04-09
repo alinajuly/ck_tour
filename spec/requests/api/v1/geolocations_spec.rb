@@ -52,6 +52,13 @@ RSpec.describe 'api/v1/geolocations', type: :request do
         end
       end
     end
+  end
+
+  path '/api/v1/{parentable_type}/{parentable_id}/geolocations/{id}' do
+    # You'll want to customize the parameter types...
+    parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations'
+    parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attraction_id, accommodation_id'
+    parameter name: :id, in: :path, type: :string, description: 'geolocation id'
 
     get('show geolocation for all') do
       tags 'Map'
@@ -233,6 +240,12 @@ RSpec.describe 'api/v1/geolocations', type: :request do
         end
       end
     end
+  end
+
+  path '/api/v1/tours/{tour_id}/places/{place_id}/geolocations' do
+    parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
+    parameter name: 'place_id', in: :path, type: :string, description: 'place id'
+    parameter name: :id, in: :path, type: :string, description: 'geolocation id'
 
     get('show geolocation for tour for all') do
       tags 'Map'

@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :caterings, dependent: :destroy
   has_many :bookings, dependent: :destroy
   has_many :appointments, dependent: :destroy
+  has_many :comments, dependent: :destroy
 
   before_validation :ensure_stripe_customer
 
@@ -37,7 +38,7 @@ class User < ApplicationRecord
   end
 
   def password_token_valid?
-    (self.reset_password_sent_at + 4.hours) > Time.now.utc
+    (reset_password_sent_at + 4.hours) > Time.now.utc
   end
 
   def reset_password!(password)
@@ -47,15 +48,13 @@ class User < ApplicationRecord
   end
 
   def stripe_attributes(pay_customer)
-    attrs = {
+    {
       description: 'Created with pay',
       metadata: {
         pay_customer_id: pay_customer.id,
         user_id: id
       }
     }
-
-    attrs
   end
 
   def ensure_stripe_customer
