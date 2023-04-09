@@ -9,7 +9,6 @@ module Api
 
       # GET /api/v1/comments
       def index
-        # @comments = parentable.comments
         @comments = policy_scope(parentable.comments)
 
         render json: @comments
@@ -17,9 +16,7 @@ module Api
 
       # GET /api/v1/comments/1
       def show
-        @comment = parentable.comments
-        # @comment = policy_scope(parentable.comments)
-        authorize @comment
+        @comment = policy_scope(parentable.comments).find(params[:id])
 
         render json: @comment
       end
@@ -41,7 +38,7 @@ module Api
       def update
         authorize @comment
 
-        if @comment.update(params[:status])
+        if @comment.update(comment_status_params)
           render json: @comment
         else
           render json: @comment.errors, status: :unprocessable_entity
@@ -50,7 +47,6 @@ module Api
 
       # DELETE /api/v1/comments/1
       def destroy
-        authorize @comment
 
         if @comment.destroy!
           render json: { status: 'Delete' }, status: :no_content
@@ -63,13 +59,16 @@ module Api
 
       # Use callbacks to share common setup or constraints between actions.
       def set_comment
-        @comment = parentable.comments
-        # @comment = CommentPolicy::EditScope.new(current_user, parentable.comments).resolve
+        @comment = policy_scope(parentable.comments, policy_scope_class: CommentPolicy::DeleteScope).find(params[:id])
       end
 
       # Only allow a list of trusted parameters through.
       def comment_params
-        params.require(:comment).permit(:body, :user_id).merge(user_id: current_user.id)
+        params.require(:comment).permit(:body, :user_id, :commentable_id, :commentable_type).merge(user_id: current_user.id)
+      end
+
+      def comment_status_params
+        params.require(:comment).permit(:status)
       end
 
       def authorize_policy
