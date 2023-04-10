@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_10_081624) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_10_143431) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,17 +59,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_10_081624) do
   end
 
   create_table "amenities", force: :cascade do |t|
-    t.boolean "conditioner", default: false
-    t.boolean "tv", default: false
-    t.boolean "refrigerator", default: false
-    t.boolean "kettle", default: false
-    t.boolean "mv_owen", default: false
-    t.boolean "hair_dryer", default: false
-    t.boolean "nice_view", default: false
-    t.boolean "inclusive", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "room_id", null: false
+    t.jsonb "data"
     t.index ["room_id"], name: "index_amenities_on_room_id"
   end
 
@@ -140,18 +133,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_10_081624) do
   end
 
   create_table "facilities", force: :cascade do |t|
-    t.datetime "checkin_start", precision: nil
-    t.datetime "checkin_end", precision: nil
-    t.datetime "checkout_start", precision: nil
-    t.datetime "checkout_end", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "accommodation_id", null: false
-    t.boolean "credit_card", default: false
-    t.boolean "free_parking", default: false
-    t.boolean "wi_fi", default: false
-    t.boolean "breakfast", default: false
-    t.boolean "pets", default: false
+    t.jsonb "data"
     t.index ["accommodation_id"], name: "index_facilities_on_accommodation_id"
   end
 
