@@ -49,6 +49,9 @@ RSpec.describe 'api/v1/appointments', type: :request do
                   type: :object,
                   properties: {
                     number_of_peoples: { type: :integer },
+                    note: { type: :string },
+                    phone: { type: :string },
+                    full_name: { type: :string },
                     tour_id: { type: :integer }
                   },
                   required: [ :number_of_peoples, :tour_id ]
@@ -137,6 +140,9 @@ RSpec.describe 'api/v1/appointments', type: :request do
                   type: :object,
                   properties: {
                     number_of_peoples: { type: :integer },
+                    note: { type: :string },
+                    phone: { type: :string },
+                    full_name: { type: :string },
                     confirmation: { type: :string }
                   }
                 }

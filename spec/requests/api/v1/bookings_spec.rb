@@ -52,6 +52,8 @@ RSpec.describe 'api/v1/bookings', type: :request do
                     check_in: { type: :string, format: :date },
                     check_out: { type: :string, format: :date },
                     note: { type: :string },
+                    phone: { type: :string },
+                    full_name: { type: :string },
                     room_id: { type: :integer }
                   },
                   required: [ :number_of_peoples, :check_in, :check_out, :room_id ]
@@ -143,6 +145,8 @@ RSpec.describe 'api/v1/bookings', type: :request do
                     check_in: { type: :string, format: :date },
                     check_out: { type: :string, format: :date },
                     note: { type: :string },
+                    phone: { type: :string },
+                    full_name: { type: :string },
                     confirmation: { type: :string }
                   }
                 }
