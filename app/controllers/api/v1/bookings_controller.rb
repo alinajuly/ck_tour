@@ -8,8 +8,8 @@ class Api::V1::BookingsController < ApplicationController
   def index
     @bookings = @user.bookings.where('check_out >= ?', Time.now)
     @bookings = @user.bookings.where('check_out < ?', Time.now) if params[:archived].present?
+    @bookings = policy_scope(@bookings)
 
-    authorize @bookings
     if @bookings
       render json: { data: @bookings }, status: :ok
     else
@@ -19,10 +19,10 @@ class Api::V1::BookingsController < ApplicationController
 
   def list_for_partner
     # @booking = Booking.joins(room: :accommodation).where()
-    @bookings = @accommodation.room.bookings.where('check_out >= ?', Time.now)
-    @bookings = @accommodation.room.bookings.where('check_out < ?', Time.now) if params[:archived].present?
+    @bookings = @room.bookings.where('check_out >= ?', Time.now)
+    @bookings = @room.bookings.where('check_out < ?', Time.now) if params[:archived].present?
+    @bookings = policy_scope(@bookings)
 
-    authorize @bookings
     if @bookings
       render json: { data: @bookings }, status: :ok
     else
@@ -31,13 +31,13 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def show
-    authorize @booking
+    # @booking = policy_scope(@booking)
+    # authorize @booking
 
     render json: @booking, status: :ok
   end
 
   def create
-    # @accommodation = Accommodation.find_by_id(params[:accommodation_id])
     @room = Room.find_by_id(params[:room_id])
     @booking = @current_user.bookings.build(permitted_attributes(Booking))
 
@@ -52,7 +52,8 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def update
-    authorize @booking
+    # authorize @booking.room.accommodation
+    # authorize @booking
 
     if @booking.update(booking_params)
       render json: { status: 'Update', data: @booking }, status: :ok
@@ -62,7 +63,7 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def destroy
-    authorize @booking
+    # authorize @booking
 
     if @booking.destroy!
       render json: { status: 'Delete' }, status: :ok
@@ -74,7 +75,8 @@ class Api::V1::BookingsController < ApplicationController
   private
 
   def set_booking
-    @booking = @user.bookings.find(params[:id])
+    # @booking = @user.bookings.find(params[:id])
+    @booking = authorize Booking.find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     logger.info e
     render json: { message: 'booking id not found' }, status: :not_found

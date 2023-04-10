@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_08_005534) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_10_081624) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -80,6 +80,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_08_005534) do
     t.integer "confirmation", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "full_name"
+    t.string "phone"
+    t.string "note"
     t.index ["tour_id"], name: "index_appointments_on_tour_id"
     t.index ["user_id"], name: "index_appointments_on_user_id"
   end
@@ -101,6 +104,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_08_005534) do
     t.datetime "updated_at", null: false
     t.text "note"
     t.integer "confirmation", default: 0
+    t.string "full_name"
+    t.string "phone"
     t.index ["room_id"], name: "index_bookings_on_room_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
@@ -194,6 +199,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_08_005534) do
     t.integer "confirmation", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "full_name"
+    t.string "phone"
     t.index ["catering_id"], name: "index_reservations_on_catering_id"
     t.index ["user_id"], name: "index_reservations_on_user_id"
   end
