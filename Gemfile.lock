@@ -142,6 +142,10 @@ GEM
       addressable (>= 2.8)
     jsonapi-serializer (2.2.0)
       activesupport (>= 4.2)
+    jsonb_accessor (1.3.7)
+      activerecord (>= 5.0)
+      activesupport (>= 5.0)
+      pg (>= 0.18.1)
     jwt (2.7.0)
     launchy (2.5.2)
       addressable (~> 2.8)
@@ -314,6 +318,7 @@ DEPENDENCIES
   faker (~> 3.1, >= 3.1.1)
   image_processing (~> 1.12, >= 1.12.2)
   jsonapi-serializer (~> 2.2)
+  jsonb_accessor (~> 1.3, >= 1.3.7)
   jwt (~> 2.7)
   letter_opener (~> 1.8, >= 1.8.1)
   net-imap

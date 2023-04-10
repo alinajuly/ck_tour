@@ -40,6 +40,9 @@ gem 'stripe-rails', '~> 2.4'
 # Use Active Storage variants
 gem 'image_processing', '~> 1.12', '>= 1.12.2'
 
+# Adds typed jsonb backed fields to ActiveRecord models
+gem 'jsonb_accessor', '~> 1.3', '>= 1.3.7'
+
 # Official AWS Ruby gem for Amazon Simple Storage Service (Amazon S3). This gem is part of the AWS SDK for Ruby
 gem "aws-sdk-s3", require: false
 
