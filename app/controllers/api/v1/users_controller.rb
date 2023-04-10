@@ -72,18 +72,15 @@ class Api::V1::UsersController < ApplicationController
       render json: { error: 'Invalid current password' }, status: :unprocessable_entity
     end
   end
-  
-  private
 
-  def user_params
-    params.permit(:name, :email, :password)
-  end
+  private
 
   def set_user
     @user = policy_scope(User).find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'user id not found' }, status: :not_found
+  end
+
+  def user_params
+    params.permit(:name, :email, :password)
   end
 
   def authorize_policy

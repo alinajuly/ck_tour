@@ -6,7 +6,7 @@ class Api::V1::PlacesController < ApplicationController
     @places = @tour.places.joins(:image_attachment)
 
     authorize @places
-    # render json: @places.as_json(include: :geolocations), status: :ok
+
     render json: @places.map { |place|
       place.as_json(only: %i[id name body tour_id], include: :geolocations)
            .merge(image_path: url_for(place.image)) }
@@ -15,7 +15,6 @@ class Api::V1::PlacesController < ApplicationController
   def show
     authorize @place
 
-    # render json: @place.as_json(include: :geolocations), status: :ok
     if @place.image.attached?
       # render json: @place.as_json(only: %i[id name body tour_id]).merge(
       #   image_path: url_for(@place.image))
@@ -62,16 +61,10 @@ class Api::V1::PlacesController < ApplicationController
 
   def set_tour
     @tour = Tour.find_by_id(params[:tour_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'tour id not found' }, status: :not_found
   end
 
   def set_place
     @place = Place.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'place id not found' }, status: :not_found
   end
 
   def place_params

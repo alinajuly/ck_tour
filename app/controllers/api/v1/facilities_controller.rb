@@ -40,16 +40,10 @@ class Api::V1::FacilitiesController < ApplicationController
 
   def set_accommodation
     @accommodation = Accommodation.find_by_id(params[:accommodation_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'accommodation id not found' }, status: :not_found
   end
 
   def set_facility
     @facility = @accommodation.facilities
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'accommodation id not found' }, status: :not_found
   end
 
   # Only allow a list of trusted parameters through.

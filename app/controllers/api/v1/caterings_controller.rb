@@ -77,16 +77,10 @@ class Api::V1::CateringsController < ApplicationController
 
   def set_catering
     @catering = policy_scope(Catering).find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'catering id not found' }, status: :not_found
   end
 
   def edit_catering
     @catering = CateringPolicy::EditScope.new(current_user, Catering).resolve.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'catering id not found' }, status: :not_found
   end
 
   def reserved_catering_ids(check_in, check_out)
@@ -104,8 +98,6 @@ class Api::V1::CateringsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def catering_params
     params.require(:catering).permit(policy(@catering).permitted_attributes)
-    # params.permit(:places, :description, :name, :kind, :phone, :email, :reg_code, :address_owner, :person,
-    #               reservations_attributes: %i[id check_in check_out number_of_peoples])
   end
 
   def authorize_policy
