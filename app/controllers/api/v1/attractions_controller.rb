@@ -74,9 +74,6 @@ class Api::V1::AttractionsController < ApplicationController
 
   def set_attraction
     @attraction = Attraction.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'attraction id not found' }, status: :not_found
   end
 
   # Only allow a list of trusted parameters through.

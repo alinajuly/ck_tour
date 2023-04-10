@@ -73,29 +73,19 @@ class Api::V1::ReservationsController < ApplicationController
 
   def set_reservation
     @reservation = @user.reservations.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'reservation id not found' }, status: :not_found
   end
 
   def set_user
     @user = User.find(params[:user_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'user id not found' }, status: :not_found
   end
 
   def set_catering
     @catering = Catering.find(params[:catering_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'catering id not found' }, status: :not_found
   end
 
   # Only allow a list of trusted parameters through.
   def reservation_params
     params.require(:reservation).permit(policy(@reservation).permitted_attributes)
-    # params.permit(:number_of_peoples, :check_in, :check_out, :note, :catering_id)
   end
 
   def authorize_policy
