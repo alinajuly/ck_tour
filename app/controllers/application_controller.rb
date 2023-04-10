@@ -7,6 +7,7 @@ class ApplicationController < ActionController::API
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from Stripe::CardError, with: :stripe_card_error
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   private
 
@@ -27,6 +28,10 @@ class ApplicationController < ActionController::API
 
   def user_not_authorized
     render json: { error: 'You are not authorized to perform this action.' }, status: :unauthorized
+  end
+
+  def record_not_found
+    render json: { error: 'record_not_found' }, status: :not_found
   end
 
   def render_success(data:, status: :ok)
