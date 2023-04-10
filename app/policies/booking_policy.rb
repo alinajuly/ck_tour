@@ -24,12 +24,13 @@ class BookingPolicy < ApplicationPolicy
   end
 
   def show?
-    true
-    # user.admin? || record.user == user ||
+    # debugger
+    # true
+    user.admin? || record.user == user #|| record.room.accommodation.user_id == user.id
   end
 
   def create?
-    user.tourist || user.partner?
+    user.tourist? || user.partner?
   end
 
   def update?
