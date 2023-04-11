@@ -37,52 +37,6 @@ RSpec.describe 'api/v1/bookings', type: :request do
         end
       end
     end
-
-    post('create ACCOMMODATION BOOKING by tourist') do
-      tags 'Tourist Accommodations'
-      consumes 'application/json'
-      security [ jwt_auth: [] ]
-      parameter name: :booking,
-                in: :body,
-                required: true,
-                schema: {
-                  type: :object,
-                  properties: {
-                    number_of_peoples: { type: :integer },
-                    check_in: { type: :string, format: :date },
-                    check_out: { type: :string, format: :date },
-                    note: { type: :string },
-                    phone: { type: :string },
-                    full_name: { type: :string },
-                    room_id: { type: :integer }
-                  },
-                  required: [ :number_of_peoples, :check_in, :check_out, :room_id ]
-                }
-
-      response(201, 'successful created') do
-        it 'should returns status response' do
-          expect(response.status).to eq(201)
-        end
-      end
-
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
-      end
-    end
   end
 
   path '/api/v1/users/{user_id}/bookings/{id}' do
@@ -220,6 +174,52 @@ RSpec.describe 'api/v1/bookings', type: :request do
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
+        end
+      end
+
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+      end
+    end
+
+    post('create ACCOMMODATION BOOKING by tourist') do
+      tags 'Tourist Accommodations'
+      consumes 'application/json'
+      security [ jwt_auth: [] ]
+      parameter name: :booking,
+                in: :body,
+                required: true,
+                schema: {
+                  type: :object,
+                  properties: {
+                    number_of_peoples: { type: :integer },
+                    check_in: { type: :string, format: :date },
+                    check_out: { type: :string, format: :date },
+                    note: { type: :string },
+                    phone: { type: :string },
+                    full_name: { type: :string },
+                    room_id: { type: :integer }
+                  },
+                  required: [ :number_of_peoples, :check_in, :check_out, :room_id ]
+                }
+
+      response(201, 'successful created') do
+        it 'should returns status response' do
+          expect(response.status).to eq(201)
         end
       end
 

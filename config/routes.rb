@@ -27,7 +27,7 @@ Rails.application.routes.draw do
         resources :geolocations
         resources :rooms do
           resources :amenities
-          get '/bookings', to: 'bookings#list_for_partner'
+          resources :bookings
         end
         resources :comments
       end
@@ -48,7 +48,7 @@ Rails.application.routes.draw do
         resources :places do
           resources :geolocations
         end
-        get '/appointments', to: 'appointments#list_for_partner'
+        resources :appointments
         resources :comments
       end
     end
