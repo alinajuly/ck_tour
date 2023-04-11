@@ -92,16 +92,10 @@ class Api::V1::RoomsController < ApplicationController
 
   def set_accommodation
     @accommodation = Accommodation.find_by_id(params[:accommodation_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'accommodation id not found' }, status: :not_found
   end
 
   def set_room
     @room = Room.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'room id not found' }, status: :not_found
   end
 
   def booked_room_ids(check_in, check_out)

@@ -70,23 +70,15 @@ class Api::V1::ToursController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tour
     @tour = policy_scope(Tour).find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'tour id not found' }, status: :not_found
   end
 
   def edit_tour
     @tour = TourPolicy::EditScope.new(current_user, Tour).resolve.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'tour id not found' }, status: :not_found
   end
 
   # Only allow a list of trusted parameters through.
   def tour_params
     params.require(:tour).permit(policy(@tour).permitted_attributes)
-    # params.permit(:title, :description, :address_owner, :reg_code, :person, :seats, :price_per_one,
-    #               :time_start, :time_end, :phone, :email, :user_id)
   end
 
   def authorize_policy

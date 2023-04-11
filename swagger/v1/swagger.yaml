@@ -421,36 +421,6 @@ paths:
           description: not found
         '422':
           description: invalid request
-    post:
-      summary: create TOUR APPOINTMENT by tourist
-      tags:
-      - Tourist Tours
-      security:
-      - jwt_auth: []
-      parameters: []
-      responses:
-        '201':
-          description: successful created
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                number_of_peoples:
-                  type: integer
-                tour_id:
-                  type: integer
-              required:
-              - number_of_peoples
-              - tour_id
-        required: true
   "/api/v1/users/{user_id}/appointments/{id}":
     parameters:
     - name: user_id
@@ -465,21 +435,6 @@ paths:
       required: true
       schema:
         type: string
-    get:
-      summary: show TOUR APPOINTMENT for tourist
-      tags:
-      - Tourist Tours
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     put:
       summary: 'update TOUR APPOINTMENT: confirmation (approved/cancelled) - partner
         only, other attr. by tourist'
@@ -505,6 +460,12 @@ paths:
               properties:
                 number_of_peoples:
                   type: integer
+                note:
+                  type: string
+                phone:
+                  type: string
+                full_name:
+                  type: string
                 confirmation:
                   type: string
     delete:
@@ -542,6 +503,71 @@ paths:
         schema:
           type: string
         description: Archive of old appointments
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    post:
+      summary: create TOUR APPOINTMENT by tourist
+      tags:
+      - Tourist Tours
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number_of_peoples:
+                  type: integer
+                note:
+                  type: string
+                phone:
+                  type: string
+                full_name:
+                  type: string
+                tour_id:
+                  type: integer
+              required:
+              - number_of_peoples
+              - tour_id
+        required: true
+  "/api/v1/tours/{tour_id}/appointments/{id}":
+    parameters:
+    - name: tour_id
+      in: path
+      description: tour id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: appointment id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show TOUR APPOINTMENT for tourist
+      tags:
+      - Tourist Tours
+      security:
+      - jwt_auth: []
       responses:
         '200':
           description: successful
@@ -729,46 +755,6 @@ paths:
           description: not found
         '422':
           description: invalid request
-    post:
-      summary: create ACCOMMODATION BOOKING by tourist
-      tags:
-      - Tourist Accommodations
-      security:
-      - jwt_auth: []
-      parameters: []
-      responses:
-        '201':
-          description: successful created
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                number_of_peoples:
-                  type: integer
-                check_in:
-                  type: string
-                  format: date
-                check_out:
-                  type: string
-                  format: date
-                note:
-                  type: string
-                room_id:
-                  type: integer
-              required:
-              - number_of_peoples
-              - check_in
-              - check_out
-              - room_id
-        required: true
   "/api/v1/users/{user_id}/bookings/{id}":
     parameters:
     - name: user_id
@@ -831,6 +817,10 @@ paths:
                   format: date
                 note:
                   type: string
+                phone:
+                  type: string
+                full_name:
+                  type: string
                 confirmation:
                   type: string
     delete:
@@ -883,6 +873,50 @@ paths:
           description: not found
         '422':
           description: invalid request
+    post:
+      summary: create ACCOMMODATION BOOKING by tourist
+      tags:
+      - Tourist Accommodations
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number_of_peoples:
+                  type: integer
+                check_in:
+                  type: string
+                  format: date
+                check_out:
+                  type: string
+                  format: date
+                note:
+                  type: string
+                phone:
+                  type: string
+                full_name:
+                  type: string
+                room_id:
+                  type: integer
+              required:
+              - number_of_peoples
+              - check_in
+              - check_out
+              - room_id
+        required: true
   "/api/v1/caterings":
     get:
       summary: list CATERING - published for all
@@ -1849,6 +1883,10 @@ paths:
                   format: datetime
                 note:
                   type: string
+                phone:
+                  type: string
+                full_name:
+                  type: string
                 catering_id:
                   type: integer
               required:
@@ -1918,6 +1956,10 @@ paths:
                   type: string
                   format: datetime
                 note:
+                  type: string
+                phone:
+                  type: string
+                full_name:
                   type: string
                 confirmation:
                   type: string

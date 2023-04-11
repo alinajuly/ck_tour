@@ -1,8 +1,8 @@
 class Api::V1::AppointmentsController < ApplicationController
-  before_action :set_user, except: :list_for_partner
-  before_action :set_tour, only: :list_for_partner
+  before_action :authorize_policy, only: %i[index list_for_partner]
+  before_action :set_user, except: %i[list_for_partner show create]
+  before_action :set_tour, only: %i[list_for_partner show create]
   before_action :set_appointment, only: %i[show update destroy]
-  before_action :authorize_policy
 
   def index
     user_appointments = @user.appointments
@@ -12,7 +12,6 @@ class Api::V1::AppointmentsController < ApplicationController
                       user_appointments.joins(:tour).where('time_end >= ?', Time.now)
                     end
 
-    authorize @appointments
     if @appointments
       render json: { data: @appointments }, status: :ok
     else
@@ -24,8 +23,6 @@ class Api::V1::AppointmentsController < ApplicationController
     @appointments = @tour.appointments.all.joins(:tour).where('time_end >= ?', Time.now)
     @appointments = @tour.appointments.all.joins(:tour).where('time_end < ?', Time.now) if params[:archived].present?
 
-    authorize @appointments
-    # authorize @tours, :index_partner?
     if @appointments
       render json: { data: @appointments }, status: :ok
     else
@@ -40,8 +37,7 @@ class Api::V1::AppointmentsController < ApplicationController
   end
 
   def create
-    @tour = Tour.find_by_id(params[:tour_id])
-    @appointment = @current_user.appointments.build(permitted_attributes(Appointment))
+    @appointment = @current_user.appointments.build(appointment_params)
 
     authorize @appointment
 
@@ -56,7 +52,7 @@ class Api::V1::AppointmentsController < ApplicationController
   def update
     authorize @appointment
 
-    if @appointment.update(appointment_params)
+    if @appointment.update(edit_appointment_params)
       render json: { status: 'Update', data: @appointment }, status: :ok
     else
       render json: @appointment.errors, status: :unprocessable_entity
@@ -76,34 +72,27 @@ class Api::V1::AppointmentsController < ApplicationController
   private
 
   def set_appointment
-    @appointment = @user.appointments.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'appointment id not found' }, status: :not_found
+    @appointment = Appointment.find(params[:id])
   end
 
   def set_user
     @user = User.find(params[:user_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'user id not found' }, status: :not_found
   end
 
   def set_tour
     @tour = Tour.find(params[:tour_id])
-  rescue ActiveRecord::RecordNotFound => e
-    logger.info e
-    render json: { message: 'tour id not found' }, status: :not_found
+  end
+
+  def appointment_params
+    params.require(:appointment).permit(:number_of_peoples, :note, :phone, :full_name, :tour_id, :user_id)
   end
 
   # Only allow a list of trusted parameters through.
-  def appointment_params
+  def edit_appointment_params
     params.require(:appointment).permit(policy(@appointment).permitted_attributes)
-    # params.permit(:number_of_peoples, :tour_id)
   end
 
   def authorize_policy
     authorize Appointment
-    # authorize Tour
   end
 end
