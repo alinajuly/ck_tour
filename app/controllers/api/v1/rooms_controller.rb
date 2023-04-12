@@ -30,11 +30,7 @@ class Api::V1::RoomsController < ApplicationController
   def show
     authorize @room
 
-    render json: @room.as_json(include: :images).merge(
-      images: @room.images.map do |image|
-        url_for(image)
-      end
-    )
+    room_json
   end
 
   # POST /api/v1/rooms
@@ -45,12 +41,7 @@ class Api::V1::RoomsController < ApplicationController
 
     build_images if params[:images].present?
     if @room.save
-      render json: {
-        data: {
-          room: @room,
-          image_urls: @room.images.map { |image| url_for(image) }
-        }
-      }, status: :created
+      room_json
     else
       render json: @room.errors, status: :unprocessable_entity
     end
@@ -58,17 +49,11 @@ class Api::V1::RoomsController < ApplicationController
 
   # PATCH/PUT /api/v1/rooms/1
   def update
-    build_images if params[:images].present?
-
     authorize @room
 
-    if @room.update(room_params)
-      render json: {
-        data: {
-          room: @room,
-          image_urls: @room.images.map { |image| url_for(image) }
-        }
-      }, status: :ok
+    if @room.update(room_params.except(:images))
+      build_images if params[:images].present?
+      room_json
     else
       render json: @room.errors, status: :unprocessable_entity
     end
@@ -118,6 +103,15 @@ class Api::V1::RoomsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def room_params
     params.permit(:places, :bed, :name, :quantity, :description, :price_per_night, images: [])
+  end
+
+  def room_json
+    render json: {
+      data: {
+        room: @room,
+        image_urls: @room.images.map { |image| url_for(image) }
+      }
+    }, status: :ok
   end
 
   def authorize_policy
