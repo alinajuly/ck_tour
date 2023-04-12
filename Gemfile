@@ -38,7 +38,7 @@ gem 'stripe', '~> 8.3'
 gem 'stripe-rails', '~> 2.4'
 
 # Use Active Storage variants
-gem 'image_processing', '~> 1.12', '>= 1.12.2'
+# gem 'image_processing', '~> 1.12', '>= 1.12.2'
 
 # Adds typed jsonb backed fields to ActiveRecord models
 gem 'jsonb_accessor', '~> 1.3', '>= 1.3.7'
