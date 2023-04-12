@@ -2078,10 +2078,11 @@ paths:
                   type: string
                 price_per_night:
                   type: integer
-                images:
+                images[]:
                   type: array
                   items:
-                    type: file
+                    type: string
+                    format: binary
               required:
               - name
               - places
@@ -2151,10 +2152,11 @@ paths:
                   type: string
                 price_per_night:
                   type: integer
-                images:
+                images[]:
                   type: array
                   items:
-                    type: file
+                    type: string
+                    format: binary
     delete:
       summary: delete room of accommodation by partner
       tags:

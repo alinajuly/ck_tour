@@ -1,7 +1,8 @@
 class Api::V1::RoomsController < ApplicationController
+  include Rails.application.routes.url_helpers
+  skip_before_action :authenticate_request, only: %i[index show]
   before_action :set_accommodation
   before_action :set_room, only: %i[show update destroy]
-  skip_before_action :authenticate_request, only: %i[index show]
   before_action :authorize_policy
 
   # GET /api/v1/accommodations/1/rooms
@@ -10,7 +11,7 @@ class Api::V1::RoomsController < ApplicationController
     @check_out = params[:check_out]
     @number_of_peoples = params[:number_of_peoples]
 
-    @rooms = if @check_in.present? && @check_out.present? && @number_of_peoples.present?
+    @rooms = if (@check_in && @check_out && @number_of_peoples).present?
                available_rooms
              else
                @accommodation.rooms.all
@@ -19,12 +20,7 @@ class Api::V1::RoomsController < ApplicationController
     authorize @rooms
 
     if @rooms
-      # render json: { data: @rooms }, status: :ok
-      render json: @rooms.as_json(include: :images).merge(
-        images: @rooms.images.map do |image|
-          url_for(image)
-        end
-      )
+      render json: { data: @rooms.map { |room| room.as_json.merge(images: room.images.map { |image| url_for(image) }) } }, status: :ok
     else
       render json: @rooms.errors, status: :bad_request
     end
@@ -43,22 +39,18 @@ class Api::V1::RoomsController < ApplicationController
 
   # POST /api/v1/rooms
   def create
-    @room = @accommodation.rooms.create!(room_params)
-    # @room = @accommodation.rooms.new(room_params.except(:images))
-    @room.images.attach(params[:images])
-
-    # images = params[room: :images]
-    #
-    # if images
-    #   images.each do |image|
-    #     @room.images.attach(image)
-    #   end
-    # end
+    @room = @accommodation.rooms.new(room_params.except(:images))
 
     authorize @room
 
+    build_images if params[:images].present?
     if @room.save
-      render json: { data: @room }, status: :created
+      render json: {
+        data: {
+          room: @room,
+          image_urls: @room.images.map { |image| url_for(image) }
+        }
+      }, status: :created
     else
       render json: @room.errors, status: :unprocessable_entity
     end
@@ -66,12 +58,17 @@ class Api::V1::RoomsController < ApplicationController
 
   # PATCH/PUT /api/v1/rooms/1
   def update
-    @room.images.attach(params[:images]) if params[:images]
+    build_images if params[:images].present?
 
     authorize @room
 
     if @room.update(room_params)
-      render json: { status: 'Update', data: @room }, status: :ok
+      render json: {
+        data: {
+          room: @room,
+          image_urls: @room.images.map { |image| url_for(image) }
+        }
+      }, status: :ok
     else
       render json: @room.errors, status: :unprocessable_entity
     end
@@ -110,6 +107,12 @@ class Api::V1::RoomsController < ApplicationController
     return unless @free_places >= @number_of_peoples.to_i
 
     @available_rooms = @accommodation.rooms.where.not(id: booked_room_ids(@check_in, @check_out))
+  end
+
+  def build_images
+    params[:images].each do |img|
+      @room.images.attach(io: img, filename: img.original_filename)
+    end
   end
 
   # Only allow a list of trusted parameters through.
