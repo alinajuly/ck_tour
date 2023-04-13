@@ -1,9 +1,9 @@
 class Api::V1::RatesController < ApplicationController
   include ResourceFinder
-  skip_before_action :authenticate_request, only: :show
   before_action :current_user, only: :show
   before_action :set_rate, only: %i[update destroy]
   before_action :authorize_policy
+  skip_before_action :authenticate_request, only: :show
   
   # GET /api/v1/rates/1
   def show
@@ -34,8 +34,6 @@ class Api::V1::RatesController < ApplicationController
 
   # DELETE /api/v1/rates/1
   def destroy
-    authorize @rate
-
     if @rate.destroy
       render json: { status: 'Delete' }, status: :ok
     else
@@ -46,7 +44,6 @@ class Api::V1::RatesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_rate
-    # @rate = parentable.rates.find(params[:id])
     @rate = policy_scope(parentable.rates, policy_scope_class: RatePolicy::Scope).find(params[:id])
   end
 

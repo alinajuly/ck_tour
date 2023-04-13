@@ -1,10 +1,10 @@
 class RatePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      if user.admin?
-        scope.all
-      else
+      if user.partner? || user.tourist?
         scope.where(user_id: user.id)
+      else
+        scope.all
       end
     end
   end
@@ -16,5 +16,8 @@ class RatePolicy < ApplicationPolicy
   # the same as in show? method
   alias create? show?
   alias update? show?
-  alias destroy? show?
+
+  def destroy?
+    user.admin?
+  end
 end
