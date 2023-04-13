@@ -68,33 +68,16 @@ RSpec.describe 'api/v1/rooms', type: :request do
                     description: { type: :string },
                     bed: { type: :string },
                     price_per_night: { type: :integer },
-                    # filename: {
-                    images: {
+                    'images[]':
+                    {
                       type: :array,
-                      items: { type: :file }
-                        # { type: :string,
-                        #   format: :binary }
+                      items:
+                        { type: :string,
+                          format: :binary }
                     }
                   },
                   required: %i[name places bed description quantity price_per_night]
                 }
-
-      # consumes 'application/json'
-      # parameter name: :room,
-      #           in: :body,
-      #           required: true,
-      #           schema: {
-      #             type: :object,
-      #             properties: {
-      #               name: { type: :string },
-      #               places: { type: :integer },
-      #               quantity: { type: :integer },
-      #               description: { type: :string },
-      #               bed: { type: :string },
-      #               price_per_night: { type: :integer }
-      #             },
-      #             required: %i[name places bed description quantity price_per_night]
-      #           }
 
       response(201, 'successful created') do
         let(:accommodation_id) { '123' }
@@ -196,7 +179,13 @@ RSpec.describe 'api/v1/rooms', type: :request do
                     description: { type: :string },
                     bed: { type: :string },
                     price_per_night: { type: :integer },
-                    images: { type: :array, items: { type: :file } }
+                    'images[]':
+                      {
+                        type: :array,
+                        items:
+                          { type: :string,
+                            format: :binary }
+                      }
                   }
                 }
 
