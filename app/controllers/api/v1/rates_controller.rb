@@ -1,51 +1,61 @@
 class Api::V1::RatesController < ApplicationController
-  before_action :set_api_v1_rate, only: %i[show update destroy]
-
-  # GET /api/v1/rates
-  def index
-    @api_v1_rates = Api::V1::Rate.all
-
-    render json: @api_v1_rates
-  end
-
+  include ResourceFinder
+  skip_before_action :authenticate_request, only: :show
+  before_action :current_user, only: :show
+  before_action :set_rate, only: %i[update destroy]
+  before_action :authorize_policy
+  
   # GET /api/v1/rates/1
   def show
-    render json: @api_v1_rate
+    @rate = policy_scope(parentable.rates).find(params[:id])
+
+    render json: @rate, status: :ok
   end
 
   # POST /api/v1/rates
   def create
-    @api_v1_rate = Api::V1::Rate.new(api_v1_rate_params)
+    @rate = parentable.rates.new(rate_params)
 
-    if @api_v1_rate.save
-      render json: @api_v1_rate, status: :created, location: @api_v1_rate
+    if @rate.save
+      render json: @rate, status: :created
     else
-      render json: @api_v1_rate.errors, status: :unprocessable_entity
+      render json: @rate.errors, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /api/v1/rates/1
   def update
-    if @api_v1_rate.update(api_v1_rate_params)
-      render json: @api_v1_rate
+    if @rate.update(rate_params)
+      render json: @rate, status: :ok
     else
-      render json: @api_v1_rate.errors, status: :unprocessable_entity
+      render json: @rate.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /api/v1/rates/1
   def destroy
-    @api_v1_rate.destroy
+    authorize @rate
+
+    if @rate.destroy
+      render json: { status: 'Delete' }, status: :ok
+    else
+      render json: @rate.errors, status: :unprocessable_entity
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_api_v1_rate
-      @api_v1_rate = Api::V1::Rate.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_rate
+    # @rate = parentable.rates.find(params[:id])
+    @rate = policy_scope(parentable.rates, policy_scope_class: RatePolicy::Scope).find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def api_v1_rate_params
-      params.fetch(:api_v1_rate, {})
-    end
+  # Only allow a list of trusted parameters through.
+  def rate_params
+    params.require(:rate).permit(:rating, :user_id, :ratable_id, :ratable_type).merge(user_id: current_user.id)
+  end
+
+  def authorize_policy
+    authorize parentable.rates
+  end
 end

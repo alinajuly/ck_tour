@@ -3,6 +3,7 @@ class Tour < ApplicationRecord
   has_many :places
   has_many :appointments
   has_many :comments, as: :commentable
+  has_many :rates, as: :ratable
 
   enum status: { unpublished: 0, published: 1 }
 

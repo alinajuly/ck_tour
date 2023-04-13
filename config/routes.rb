@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :attractions do
         resources :geolocations
         resources :comments
+        resources :rates
       end
 
       resources :accommodations do
@@ -30,12 +31,14 @@ Rails.application.routes.draw do
           resources :bookings
         end
         resources :comments
+        resources :rates
       end
 
       resources :caterings do
         resources :geolocations
         get '/reservations', to: 'reservations#list_for_partner'
         resources :comments
+        resources :rates
       end
 
       # resources :plans, except: :show
@@ -50,6 +53,7 @@ Rails.application.routes.draw do
         end
         resources :appointments
         resources :comments
+        resources :rates
       end
     end
   end

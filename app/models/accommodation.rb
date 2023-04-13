@@ -4,6 +4,7 @@ class Accommodation < ApplicationRecord
   has_many :facilities, dependent: :destroy
   has_many :geolocations, as: :geolocationable
   has_many :comments, as: :commentable
+  has_many :rates, as: :ratable
   has_many_attached :images
 
   enum status: { unpublished: 0, published: 1 }
