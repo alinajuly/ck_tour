@@ -34,7 +34,7 @@ Rails.application.routes.draw do
 
       resources :caterings do
         resources :geolocations
-        get '/reservations', to: 'reservations#list_for_partner'
+        resources :reservations
         resources :comments
       end
 

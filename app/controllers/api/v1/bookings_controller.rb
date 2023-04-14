@@ -6,10 +6,11 @@ class Api::V1::BookingsController < ApplicationController
   before_action :set_booking, only: %i[show update destroy]
 
   def index
+    user_bookings = @user.bookings
     @bookings = if params[:archived].present?
-                  policy_scope(@user.bookings.archival_booking)
+                  policy_scope(user_bookings.archival_booking)
                 else
-                  policy_scope(@user.bookings.upcoming_booking)
+                  policy_scope(user_bookings.upcoming_booking)
                 end
     authorize @bookings
 
@@ -59,10 +60,11 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def list_for_partner
+    room_bookings = @room.bookings
     @bookings = if params[:archived].present?
-                  policy_scope(@room.bookings.archival_booking)
+                  policy_scope(room_bookings.archival_booking)
                 else
-                  policy_scope(@room.bookings.upcoming_booking)
+                  policy_scope(room_bookings.upcoming_booking)
                 end
 
     if @bookings
@@ -96,7 +98,7 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def edit_booking_params
-    params.require(:booking).permit(policy(@booking).permitted_attributes)
+    params.permit(policy(@booking).permitted_attributes)
   end
 
   def authorize_policy
