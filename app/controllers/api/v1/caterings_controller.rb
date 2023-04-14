@@ -1,4 +1,6 @@
 class Api::V1::CateringsController < ApplicationController
+  include Rails.application.routes.url_helpers
+
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :current_user, only: %i[index show]
   before_action :set_catering, only: :show
@@ -12,7 +14,7 @@ class Api::V1::CateringsController < ApplicationController
     @check_out = params[:check_out]
     @number_of_peoples = params[:number_of_peoples]
 
-    @caterings = if check_in.present? && check_out.present? && number_of_peoples.present?
+    @caterings = if (@check_in && @check_out && @number_of_peoples).present?
                    available_caterings
                  elsif params[:user_id].present?
                    policy_scope(Catering).where(user_id: params[:user_id])
@@ -25,7 +27,7 @@ class Api::V1::CateringsController < ApplicationController
     authorize @caterings
 
     if @caterings
-      render json: { data: @caterings }, status: :ok
+      render json: { data: @caterings.map { |catering| catering.as_json.merge(images: catering.images.map { |image| url_for(image) }) } }, status: :ok
     else
       render json: @caterings.errors, status: :bad_request
     end
@@ -35,17 +37,23 @@ class Api::V1::CateringsController < ApplicationController
   def show
     authorize @catering
 
-    render json: @catering, status: :ok
+    render json: {
+      data: {
+        catering: @catering,
+        image_urls: @catering.images.map { |image| url_for(image) }
+      }
+    }, status: :ok
   end
 
   # POST /api/v1/caterings
   def create
-    @catering = Catering.new(permitted_attributes(Catering))
+    @catering = Catering.new(catering_params.except(:images))
 
     authorize @catering
 
+    build_images if params[:images].present?
     if @catering.save
-      render json: { data: @catering }, status: :created
+      catering_json
     else
       render json: @catering.errors, status: :unprocessable_entity
     end
@@ -55,8 +63,9 @@ class Api::V1::CateringsController < ApplicationController
   def update
     authorize @catering
 
-    if @catering.update(catering_params)
-      render json: { status: 'Update', data: @catering }, status: :ok
+    build_images if params[:images].present?
+    if @catering.update(edit_catering_params.except(:images))
+      catering_json
     else
       render json: @catering.errors, status: :unprocessable_entity
     end
@@ -83,6 +92,12 @@ class Api::V1::CateringsController < ApplicationController
     @catering = CateringPolicy::EditScope.new(current_user, Catering).resolve.find(params[:id])
   end
 
+  def build_images
+    params[:images].each do |img|
+      @catering.images.attach(io: img, filename: img.original_filename)
+    end
+  end
+
   def reserved_catering_ids(check_in, check_out)
     Reservation.joins(:catering).where(check_in: ..check_out, check_out: check_in..).pluck(:catering_id)
   end
@@ -95,9 +110,22 @@ class Api::V1::CateringsController < ApplicationController
     @available_caterings = @caterings.where.not(id: reserved_catering_ids(@check_in, @check_out)).published
   end
 
-  # Only allow a list of trusted parameters through.
   def catering_params
-    params.require(:catering).permit(policy(@catering).permitted_attributes)
+    params.require(:catering).permit(:places, :description, :name, :kind, :phone, :email, :reg_code, :address_owner,
+                                     :person, :user_id, images: [])
+  end
+
+  def edit_catering_params
+    params.permit(policy(@catering).permitted_attributes)
+  end
+
+  def catering_json
+    render json: {
+      data: {
+        catering: @catering,
+        image_urls: @catering.images.map { |image| url_for(image) }
+      }
+    }, status: :ok
   end
 
   def authorize_policy

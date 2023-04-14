@@ -16,7 +16,7 @@ class Api::V1::ToursController < ApplicationController
     authorize @tours
 
     if @tours
-      render json: { data: @tours }, status: :ok
+      render json: @tours.as_json(include: { places: { methods: [:image_url] }})
     else
       render json: @tours.errors, status: :bad_request
     end
@@ -26,8 +26,7 @@ class Api::V1::ToursController < ApplicationController
   def show
     authorize @tour
 
-    @places = @tour.places
-    render json: { data: @tour, places: @places }, status: :ok
+    render json: @tour.as_json(include: { places: { methods: [:image_url] }})
   end
 
   # POST /api/v1/tours
@@ -78,7 +77,7 @@ class Api::V1::ToursController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tour_params
-    params.require(:tour).permit(policy(@tour).permitted_attributes)
+    params.permit(policy(@tour).permitted_attributes)
   end
 
   def authorize_policy

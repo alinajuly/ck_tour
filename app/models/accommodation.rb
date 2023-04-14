@@ -4,10 +4,7 @@ class Accommodation < ApplicationRecord
   has_many :facilities, dependent: :destroy
   has_many :geolocations, as: :geolocationable
   has_many :comments, as: :commentable
-  has_many_attached :image do |attachable|
-    attachable.variant :thumb, resize_to_limit: [100, 100]
-    attachable.variant :main, resize_to_limit: [900, 900]
-  end
+  has_many_attached :images
 
   enum status: { unpublished: 0, published: 1 }
 

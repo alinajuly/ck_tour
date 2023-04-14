@@ -1,28 +1,25 @@
 class Api::V1::PlacesController < ApplicationController
+  include Rails.application.routes.url_helpers
+  skip_before_action :authenticate_request, only: %i[index show]
   before_action :set_tour
   before_action :set_place, only: %i[show update destroy]
 
   def index
-    @places = @tour.places.joins(:image_attachment)
+    @places = @tour.places
 
     authorize @places
 
-    render json: @places.map { |place|
-      place.as_json(only: %i[id name body tour_id], include: :geolocations)
-           .merge(image_path: url_for(place.image)) }
+    if @places
+      render json: @places.as_json(include: :geolocations, methods: [:image_url]), status: :ok
+    else
+      render json: @places.errors, status: :bad_request
+    end
   end
 
   def show
     authorize @place
 
-    if @place.image.attached?
-      # render json: @place.as_json(only: %i[id name body tour_id]).merge(
-      #   image_path: url_for(@place.image))
-      render json: @place.as_json(only: %i[id name body tour_id], include: :geolocations)
-                         .merge(image_path: url_for(@place.image))
-    else
-      render json: @place.as_json(only: %i[id name body tour_id], include: :geolocations)
-    end
+    place_json
   end
 
   def create
@@ -31,7 +28,7 @@ class Api::V1::PlacesController < ApplicationController
     authorize @place
 
     if @place.save
-      render json: { data: @place }, status: :created
+      place_json
     else
       render json: @place.errors, status: :unprocessable_entity
     end
@@ -41,7 +38,7 @@ class Api::V1::PlacesController < ApplicationController
     authorize @place
 
     if @place.update(place_params)
-      render json: { status: 'Update', data: @place }, status: :ok
+      place_json
     else
       render json: @place.errors, status: :unprocessable_entity
     end
@@ -65,6 +62,10 @@ class Api::V1::PlacesController < ApplicationController
 
   def set_place
     @place = Place.find(params[:id])
+  end
+
+  def place_json
+    render json: @place.as_json(include: :geolocations, methods: [:image_url]), status: :ok
   end
 
   def place_params

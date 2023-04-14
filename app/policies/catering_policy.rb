@@ -25,7 +25,7 @@ class CateringPolicy < ApplicationPolicy
     if user.admin?
       [:status]
     elsif user.partner?
-      %i[places description name kind phone email reg_code address_owner person user_id]
+      [:places, :description, :name, :kind, :phone, :email, :reg_code, :address_owner, :person, :user_id, { images: [] }]
     end
   end
 
