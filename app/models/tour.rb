@@ -1,4 +1,6 @@
 class Tour < ApplicationRecord
+  include Imaginable
+
   belongs_to :user
   has_many :places
   has_many :appointments

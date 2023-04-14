@@ -1,5 +1,5 @@
 class Attraction < ApplicationRecord
-  include Attractionable
+  include Imaginable
 
   has_many :geolocations, as: :geolocationable
   has_many :comments, as: :commentable

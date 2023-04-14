@@ -48,10 +48,10 @@ RSpec.describe 'api/v1/caterings', type: :request do
     post('create new CATERING - for partner only') do
       tags 'Partner Caterings'
       description 'Creates a new catering'
-      consumes 'application/json'
+      consumes 'multipart/form-data'
       security [ jwt_auth: [] ]
       parameter name: :catering,
-                in: :body,
+                in: :formData,
                 required: true,
                 schema: {
                   type: :object,
@@ -65,7 +65,14 @@ RSpec.describe 'api/v1/caterings', type: :request do
                     address_owner: { type: :string },
                     reg_code: { type: :string },
                     person: { type: :string },
-                    user_id: { type: :string }
+                    user_id: { type: :string },
+                    'images[]':
+                      {
+                        type: :array,
+                        items:
+                          { type: :string,
+                            format: :binary }
+                      }
                   },
                   required: [ :name, :description, :places, :address_owner, :phone, :email, :kind,
                               :user_id, :reg_code, :person ]
@@ -143,10 +150,10 @@ RSpec.describe 'api/v1/caterings', type: :request do
 
     put('update CATERING: status by admin: published/unpublished , other attr. by partner his own only') do
       tags 'Partner Caterings'
-      consumes 'application/json'
+      consumes 'multipart/form-data'
       security [ jwt_auth: [] ]
       parameter name: :catering,
-                in: :body,
+                in: :formData,
                 schema: {
                   type: :object,
                   properties: {
@@ -159,7 +166,14 @@ RSpec.describe 'api/v1/caterings', type: :request do
                     address_owner: { type: :string },
                     reg_code: { type: :string },
                     person: { type: :string },
-                    status: { type: :string }
+                    status: { type: :string },
+                    'images[]':
+                      {
+                        type: :array,
+                        items:
+                          { type: :string,
+                            format: :binary }
+                      }
                   }
                 }
 
