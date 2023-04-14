@@ -1,16 +1,16 @@
 class Api::V1::AppointmentsController < ApplicationController
   before_action :authorize_policy, only: %i[index list_for_partner]
-  before_action :set_user, except: %i[list_for_partner show create]
-  before_action :set_tour, only: %i[list_for_partner show create]
+  before_action :set_user, except: %i[list_for_partner create]
+  before_action :set_tour, only: %i[list_for_partner create]
   before_action :set_appointment, only: %i[show update destroy]
 
   def index
     user_appointments = @user.appointments
-    @appointments = if params[:archived].present?
-                      user_appointments.joins(:tour).where('time_end < ?', Time.now)
-                    else
-                      user_appointments.joins(:tour).where('time_end >= ?', Time.now)
-                    end
+    @appointmentss = if params[:archived].present?
+                       policy_scope(user_appointments.archival_booking)
+                     else
+                       policy_scope(user_appointments.upcoming_booking)
+                     end
 
     if @appointments
       render json: { data: @appointments }, status: :ok
@@ -20,8 +20,12 @@ class Api::V1::AppointmentsController < ApplicationController
   end
 
   def list_for_partner
-    @appointments = @tour.appointments.all.joins(:tour).where('time_end >= ?', Time.now)
-    @appointments = @tour.appointments.all.joins(:tour).where('time_end < ?', Time.now) if params[:archived].present?
+    tour_appointments = @tour.appointments
+    @appointments = if params[:archived].present?
+                      policy_scope(tour_appointments.archival_booking)
+                    else
+                      policy_scope(tour_appointments.upcoming_booking)
+                    end
 
     if @appointments
       render json: { data: @appointments }, status: :ok
