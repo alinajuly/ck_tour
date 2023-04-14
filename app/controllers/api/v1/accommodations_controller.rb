@@ -1,4 +1,5 @@
 class Api::V1::AccommodationsController < ApplicationController
+  include Rails.application.routes.url_helpers
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :current_user, only: %i[index show]
   before_action :authorize_policy
@@ -10,7 +11,7 @@ class Api::V1::AccommodationsController < ApplicationController
   def index
 
     if @accommodations
-      render json: { data: @accommodations }, status: :ok
+      render json: { data: @accommodations.map { |accommodation| accommodation.as_json.merge(images: accommodation.images.map { |image| url_for(image) }) } }, status: :ok
     else
       render json: @accommodations.errors, status: :bad_request
     end
@@ -21,17 +22,24 @@ class Api::V1::AccommodationsController < ApplicationController
     authorize @accommodation
 
     @rooms = @accommodation.rooms
-    render json: { data: @accommodation, rooms: @rooms }, status: :ok
+    render json: {
+      data: {
+        accommodation: @accommodation,
+        room: @rooms,
+        image_urls: @accommodation.images.map { |image| url_for(image) }
+      }
+    }, status: :ok
   end
 
   # POST /api/v1/accommodations
   def create
-    @accommodation = Accommodation.new(permitted_attributes(Accommodation))
+    @accommodation = Accommodation.new(accommodation_params.except(:images))
 
     authorize @accommodation
 
+    build_images if params[:images].present?
     if @accommodation.save
-      render json: { data: @accommodation }, status: :created
+      accommodation_json
     else
       render json: @accommodation.errors, status: :unprocessable_entity
     end
@@ -39,10 +47,12 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # PUT /api/v1/accommodations/1
   def update
+
     authorize @accommodation
 
-    if @accommodation.update(accommodation_params)
-      render_success(data: @accommodation)
+    build_images if params[:images].present?
+    if @accommodation.update(edit_accommodation_params.except(:images))
+      accommodation_json
     else
       render json: @accommodation.errors, status: :unprocessable_entity
     end
@@ -82,13 +92,33 @@ class Api::V1::AccommodationsController < ApplicationController
     @accommodation = policy_scope(Accommodation).find(params[:id])
   end
 
+  def build_images
+    params[:images].each do |img|
+      @accommodation.images.attach(io: img, filename: img.original_filename)
+    end
+  end
+
   def edit_accommodation
     @accommodation = AccommodationPolicy::EditScope.new(current_user, Accommodation).resolve.find(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
   def accommodation_params
-    params.require(:accommodation).permit(policy(@accommodation).permitted_attributes)
+    params.require(:accommodation).permit(:name, :description, :kind, :phone, :email, :reg_code, :address_owner,
+                                          :person, :user_id, images: [])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def edit_accommodation_params
+    params.permit(policy(@accommodation).permitted_attributes)
+  end
+
+  def accommodation_json
+    render json: {
+      data: {
+        accommodation: @accommodation,
+        image_urls: @accommodation.images.map { |image| url_for(image) }
+      }
+    }, status: :ok
   end
 
   def authorize_policy

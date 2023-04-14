@@ -25,7 +25,7 @@ class AccommodationPolicy < ApplicationPolicy
     if user.admin?
       [:status]
     elsif user.partner?
-      %i[name description kind phone email reg_code address_owner person user_id]
+      [:name, :description, :kind, :phone, :email, :reg_code, :address_owner, :person, :user_id, { images: [] }]
     end
   end
 

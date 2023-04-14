@@ -48,10 +48,10 @@ RSpec.describe 'api/v1/accommodations', type: :request do
     post('create new ACCOMMODATION - for partner only') do
       tags 'Partner Accommodations'
       description 'Creates a new accommodation'
-      consumes 'application/json'
       security [ jwt_auth: [] ]
+      consumes 'multipart/form-data'
       parameter name: :accommodation,
-                in: :body,
+                in: :formData,
                 required: true,
                 schema: {
                   type: :object,
@@ -64,7 +64,14 @@ RSpec.describe 'api/v1/accommodations', type: :request do
                     kind: { type: :string },
                     user_id: { type: :string },
                     reg_code: { type: :string },
-                    person: { type: :string }
+                    person: { type: :string },
+                    'images[]':
+                      {
+                        type: :array,
+                        items:
+                          { type: :string,
+                            format: :binary }
+                      }
                   },
                   required: [ :name, :description, :address_owner, :phone, :email, :kind, :user_id, :reg_code, :person ]
                 }
@@ -141,11 +148,10 @@ RSpec.describe 'api/v1/accommodations', type: :request do
 
     put('update ACCOMMODATION: status by admin: published/unpublished , other attr. by partner his own only') do
       tags 'Partner Accommodations'
-      consumes 'application/json'
+      consumes 'multipart/form-data'
       security [ jwt_auth: [] ]
       parameter name: :accommodation,
-                in: :body,
-                description: '',
+                in: :formData,
                 schema: {
                   type: :object,
                   properties: {
@@ -157,7 +163,14 @@ RSpec.describe 'api/v1/accommodations', type: :request do
                     kind: { type: :string },
                     reg_code: { type: :string },
                     person: { type: :string },
-                    status: { type: :string }
+                    status: { type: :string },
+                    'images[]':
+                      {
+                        type: :array,
+                        items:
+                          { type: :string,
+                            format: :binary }
+                      }
                   }
                 }
 

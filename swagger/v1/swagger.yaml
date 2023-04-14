@@ -104,7 +104,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -126,6 +126,11 @@ paths:
                   type: string
                 person:
                   type: string
+                images[]:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
               required:
               - name
               - description
@@ -180,7 +185,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -202,7 +207,11 @@ paths:
                   type: string
                 status:
                   type: string
-        description: ''
+                images[]:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
     delete:
       summary: delete ACCOMMODATION - for admin all, for partner his own only
       tags:
@@ -983,7 +992,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -1007,6 +1016,11 @@ paths:
                   type: string
                 user_id:
                   type: string
+                images[]:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
               required:
               - name
               - description
@@ -1061,7 +1075,7 @@ paths:
           description: invalid request
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -1085,6 +1099,11 @@ paths:
                   type: string
                 status:
                   type: string
+                images[]:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
     delete:
       summary: delete CATERING - for admin all, for partner his own only
       tags:
