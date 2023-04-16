@@ -1,26 +1,24 @@
 class Api::V1::RoomsController < ApplicationController
   include Rails.application.routes.url_helpers
+  include Available
+
   skip_before_action :authenticate_request, only: %i[index show]
+  before_action :authorize_policy
   before_action :set_accommodation
   before_action :set_room, only: %i[show update destroy]
-  before_action :authorize_policy
 
   # GET /api/v1/accommodations/1/rooms
   def index
-    @check_in = params[:check_in]
-    @check_out = params[:check_out]
-    @number_of_peoples = params[:number_of_peoples]
-
-    @rooms = if (@check_in && @check_out && @number_of_peoples).present?
+    @rooms = if (params[:check_in] && params[:check_out] && params[:number_of_peoples]).present?
                available_rooms
              else
                @accommodation.rooms.all
              end
 
-    authorize @rooms
-
-    if @rooms
+    if @rooms.present?
       render json: { data: @rooms.map { |room| room.as_json.merge(images: room.images.map { |image| url_for(image) }) } }, status: :ok
+    elsif @rooms.nil?
+      render json: { data: 'Sorry, is not enough places in our accommodation' }
     else
       render json: @rooms.errors, status: :bad_request
     end
@@ -28,7 +26,6 @@ class Api::V1::RoomsController < ApplicationController
 
   # GET /api/v1/accommodations/1/rooms/1
   def show
-    authorize @room
 
     room_json
   end
@@ -78,20 +75,6 @@ class Api::V1::RoomsController < ApplicationController
 
   def set_room
     @room = Room.find(params[:id])
-  end
-
-  def booked_room_ids(check_in, check_out)
-    Booking.joins(:room)
-           .where(check_in: ..check_out, check_out: check_in..)
-           .pluck(:room_id)
-  end
-
-  def available_rooms
-    @free_places = @accommodation.rooms.where.not(id: booked_room_ids(@check_in, @check_out))
-                                 .pluck(:places).sum
-    return unless @free_places >= @number_of_peoples.to_i
-
-    @available_rooms = @accommodation.rooms.where.not(id: booked_room_ids(@check_in, @check_out))
   end
 
   def build_images
