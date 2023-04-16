@@ -2438,12 +2438,11 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update user
+      summary: change_role
       tags:
       - Users
       security:
       - jwt_auth: []
-      parameters: []
       responses:
         '200':
           description: successful
@@ -2453,50 +2452,10 @@ paths:
           description: not found
         '422':
           description: invalid request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
-              required:
-              - name
-              - email
-              - password
-        required: true
     delete:
       summary: delete user
       tags:
       - Users
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
-  "/api/v1/users/{id}/change_role":
-    parameters:
-    - name: id
-      in: path
-      description: user id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: change_role
-      tags:
-      - Users Tourist
       security:
       - jwt_auth: []
       responses:

@@ -1,12 +1,15 @@
 class Api::V1::UsersController < ApplicationController
   skip_before_action :authenticate_request, only: [:create]
-  before_action :set_user, only: %i[show update destroy change_role]
   before_action :authorize_policy
+  before_action :set_user, only: %i[show update destroy]
 
   # GET api/v1/users
   def index
-    @users = User.all
-    @users = @users.role_filter(params[:role]) if params[:role].present?
+    @users = if params[:role].present?
+               @users.role_filter(params[:role])
+             else
+               User.all
+             end
 
     authorize @users
 
@@ -34,43 +37,29 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # PUT api/v1/users/{name}
   def update
     authorize @user
 
-    if @user.authenticate(params[:current_password])
-      @user.update(password: params[:new_password])
-      render json: { message: 'Password updated successfully' }, status: :ok
+    if @user.tourist?
+      @user.partner!
+
+      render json: { status: 'Role is changed', data: @user }, status: :ok
+    elsif @user.partner?
+      @user.tourist!
+      @user.accommodations.unpublished! if @user.accommodations.present?
+      @user.tours.unpublished! if @user.tours.present?
+      @user.caterings.unpublished! if @user.caterings.present?
+      render json: { status: 'Role is changed, resources are hidden', data: @user }, status: :ok
     else
       render json: { error: 'Invalid current password' }, status: :unprocessable_entity
     end
-    # unless @user.update(user_params)
-    #   render json: { errors: @user.errors.full_messages },
-    #          status: :unprocessable_entity
-    # end
   end
-
-  # PUT api/v1/users/{id}/change_role
 
   # DELETE api/v1/users/{name}
   def destroy
     authorize @user
 
     @user.destroy
-  end
-
-  def change_role
-    authorize @user
-    if @user.tourist?
-      @user.partner!
-
-      render json: { status: 'Role is changed', data: @user }, status: :ok
-    elsif
-      @user.tourist!
-      @user.accommodations.destroy_all
-    else
-      render json: { error: 'Invalid current password' }, status: :unprocessable_entity
-    end
   end
 
   private
