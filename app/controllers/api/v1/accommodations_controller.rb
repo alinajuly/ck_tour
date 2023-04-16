@@ -1,5 +1,7 @@
 class Api::V1::AccommodationsController < ApplicationController
   include Rails.application.routes.url_helpers
+  include Available
+
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :current_user, only: %i[index show]
   before_action :authorize_policy
@@ -72,20 +74,34 @@ class Api::V1::AccommodationsController < ApplicationController
   private
 
   def set_accommodations
-    number_of_peoples = params[:number_of_peoples]
     @accommodations = if (params[:geolocations] && params[:check_in] && params[:check_out] && params[:number_of_peoples]).present?
-                        policy_scope(Accommodation).joins(:rooms)
-                                                   .where('rooms.places >= ?', number_of_peoples)
-                                                   .geolocation_filter(params[:geolocations]).distinct
+                        # list only published accommodations with free rooms
+                        available_accommodations
                       elsif params[:geolocations].present?
+                        # list accommodations in definite location
                         policy_scope(Accommodation).geolocation_filter(params[:geolocations])
                       elsif params[:user_id].present?
+                        # list accommodations of definite partner
                         policy_scope(Accommodation).where(user_id: params[:user_id])
                       elsif params[:status].present?
+                        # list accommodations with definite status
                         policy_scope(Accommodation).where(status: params[:status])
                       else
+                        # list all accommodations
                         policy_scope(Accommodation).all
                       end
+  end
+
+  def available_accommodations
+    available_accommodations = []
+    # select published accommodations in definite location
+    Accommodation.where(status: 1).geolocation_filter(params[:geolocations]).each do |accommodation|
+      # instance variable for Available concern
+      @accommodation = accommodation
+      # check for selected accommodations with free rooms
+      available_accommodations << accommodation if available_rooms.present?
+    end
+    available_accommodations
   end
 
   def set_accommodation
