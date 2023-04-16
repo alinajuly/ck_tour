@@ -11,7 +11,6 @@ Rails.application.routes.draw do
       post 'admins/create_admin', to: 'admins#create_admin'
 
       resources :users do
-        put '/change_role', to: 'users#change_role'
         resources :bookings
         resources :appointments
         resources :reservations
