@@ -6,7 +6,7 @@ class Api::V1::UsersController < ApplicationController
   # GET api/v1/users
   def index
     @users = if params[:role].present?
-               @users.role_filter(params[:role])
+               User.role_filter(params[:role])
              else
                User.all
              end

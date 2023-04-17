@@ -89,8 +89,7 @@ class Api::V1::ReservationsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def reservation_params
-    params.require(:reservation).permit(:number_of_peoples, :check_in, :check_out, :note, :phone, :full_name,
-                                        :catering_id, :user_id)
+    params.permit(:number_of_peoples, :check_in, :check_out, :note, :phone, :full_name, :catering_id, :user_id)
   end
 
   def edit_reservation_params
