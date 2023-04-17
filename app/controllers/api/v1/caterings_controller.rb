@@ -10,16 +10,15 @@ class Api::V1::CateringsController < ApplicationController
   # GET /api/v1/accommodations/1/caterings
   def index
     # methods
-    @check_in = params[:check_in]
-    @check_out = params[:check_out]
-    @number_of_peoples = params[:number_of_peoples]
 
-    @caterings = if (@check_in && @check_out && @number_of_peoples).present?
+    @caterings = if (params[:check_in] && params[:check_out]).present?
                    available_caterings
+                 elsif params[:geolocations].present?
+                   policy_scope(Catering).geolocation_filter(params[:geolocations])
                  elsif params[:user_id].present?
-                   policy_scope(Catering).where(user_id: params[:user_id])
+                   policy_scope(Catering).filter_by_partner(params[:user_id])
                  elsif params[:status].present?
-                   policy_scope(Catering).where(status: params[:status])
+                   policy_scope(Catering).filter_by_status(params[:status])
                  else
                    policy_scope(Catering).all
                  end
@@ -103,16 +102,25 @@ class Api::V1::CateringsController < ApplicationController
   end
 
   def available_caterings
-    @free_places = @caterings.published.where.not(id: reserved_catering_ids(@check_in, @check_out)).pluck(:places).sum
-    return if @number_of_peoples.nil?
-    return unless @free_places >= @number_of_peoples.to_i
-
-    @available_caterings = @caterings.where.not(id: reserved_catering_ids(@check_in, @check_out)).published
+    check_in = params[:check_in].to_time
+    check_out = params[:check_out].to_time
+    # select reserved caterings with number of reserved places
+    time_ranges = Reservation.upcoming_reservation.map { |r| [r.catering_id, r.number_of_peoples, r.check_in...r.check_out] }
+    # select reserved caterings ids (with number of reserved places) overlaping with new reservation time range in query
+    reservation_time_ranges = time_ranges.select { |array| array[2].overlaps?(check_in...check_out) }
+    # select overlaping reserved caterings ids with number of reserved places
+    reserved_places = reservation_time_ranges.map { |array| [array[0], array[1]] }
+    # group reservations by catering_id and sum the number_of_peoples for each group
+    reserved_places_summed = reserved_places.group_by(&:first).map { |id, arr| [id, arr.map(&:last).sum] }
+    # filter out the catering_ids where with no available places
+    full_reserved_catering_ids = reserved_places_summed.select { |id, sum| sum >= Catering.find(id).places }.map(&:first)
+    # filter out the caterings are available for reservation
+    Catering.where.not(id: full_reserved_catering_ids).published
   end
 
   def catering_params
-    params.require(:catering).permit(:places, :description, :name, :kind, :phone, :email, :reg_code, :address_owner,
-                                     :person, :user_id, images: [])
+    params.permit(:places, :description, :name, :kind, :phone, :email, :reg_code, :address_owner, :person,
+                  :user_id, images: [])
   end
 
   def edit_catering_params
