@@ -1,4 +1,4 @@
 class AttractionSerializer
   include JSONAPI::Serializer
-  attributes :id, :title, :description, :image, :created_at, :updated_at, :image_url
+  attributes :id, :title, :description, :image, :image_url
 end
