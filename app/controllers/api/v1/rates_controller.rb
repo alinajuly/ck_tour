@@ -2,12 +2,19 @@ class Api::V1::RatesController < ApplicationController
   include ResourceFinder
   before_action :current_user, only: :show
   before_action :set_rate, only: %i[update destroy]
+  skip_before_action :authenticate_request, only: %i[index show]
   before_action :authorize_policy
-  skip_before_action :authenticate_request, only: :show
   
+  # GET /api/v1/rates
+  def index
+    @rates = parentable.rates.average(:rating).round(1)
+
+    render json: @rates, status: :ok
+  end
+
   # GET /api/v1/rates/1
   def show
-    @rate = policy_scope(parentable.rates).find(params[:id])
+    @rate = parentable.rates.find(params[:id])
 
     render json: @rate, status: :ok
   end

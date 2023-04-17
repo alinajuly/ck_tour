@@ -1826,7 +1826,7 @@ paths:
     parameters:
     - name: parentable_type
       in: path
-      description: f.e. attractions, accommodations, catering, tour
+      description: f.e. attractions, accommodations, caterings, tours
       required: true
       schema:
         type: string
@@ -1836,6 +1836,21 @@ paths:
       required: true
       schema:
         type: string
+    get:
+      summary: averedge rate for all
+      tags:
+      - Rate
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     post:
       summary: create rate by authenticated user
       tags:
@@ -1867,7 +1882,7 @@ paths:
     parameters:
     - name: parentable_type
       in: path
-      description: f.e. attractions, accommodations, catering, tour
+      description: f.e. attractions, accommodations, caterings, tours
       required: true
       schema:
         type: string
@@ -1897,7 +1912,7 @@ paths:
         '422':
           description: invalid request
     put:
-      summary: update rate
+      summary: update rate by authenticated user or admin
       tags:
       - Rate
       security:
@@ -1923,7 +1938,7 @@ paths:
               required:
               - body
     delete:
-      summary: delete rate
+      summary: delete rate by admin
       tags:
       - Rate
       security:

@@ -1,21 +1,22 @@
 class RatePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      if user.partner? || user.tourist?
-        scope.where(user_id: user.id)
-      else
+      if user.admin?
         scope.all
+      else user.present?
+        scope.where(user_id: user.id)
       end
     end
   end
 
-  def show?
+  def index?
     true
   end
 
   # the same as in show? method
-  alias create? show?
-  alias update? show?
+  alias show? index?
+  alias create? index?
+  alias update? index?
 
   def destroy?
     user.admin?
