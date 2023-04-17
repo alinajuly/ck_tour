@@ -9,6 +9,8 @@ class Accommodation < ApplicationRecord
   enum status: { unpublished: 0, published: 1 }
 
   scope :geolocation_filter, ->(locality) { joins(:geolocations).where('locality ILIKE ?', "%#{locality}%") }
+  scope :filter_by_status, ->(status) { where(status: status) }
+  scope :filter_by_partner, ->(user) { where(user_id: user) }
 
   validates :name, :description, :phone, :email, :kind, :reg_code, :address_owner, presence: true
 end

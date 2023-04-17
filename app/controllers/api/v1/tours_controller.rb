@@ -7,11 +7,17 @@ class Api::V1::ToursController < ApplicationController
 
   # GET /api/v1/tours
   def index
-    @tours = policy_scope(Tour).where('time_start >= ?', Time.now)
-    @tours = policy_scope(Tour).geolocation_filter(params[:geolocations]) if params[:geolocations].present?
-    @tours = policy_scope(Tour).where(user_id: params[:user_id]) if params[:user_id].present?
-    @tours = policy_scope(Tour).where(status: params[:status]) if params[:status].present?
-    @tours = policy_scope(Tour).where('time_start < ?', Time.now) if params[:archived].present?
+    @tours = if params[:geolocations].present?
+               policy_scope(Tour).geolocation_filter(params[:geolocations])
+             elsif params[:user_id].present?
+               policy_scope(Tour).filter_by_partner(params[:user_id])
+             elsif params[:status].present?
+               policy_scope(Tour).filter_by_status(params[:status])
+             elsif params[:archived].present?
+               policy_scope(Tour).archival_tours
+             else
+               policy_scope(Tour).upcoming_tours
+             end
 
     authorize @tours
 

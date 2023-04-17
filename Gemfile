@@ -37,9 +37,6 @@ gem "bootsnap", require: false
 gem 'stripe', '~> 8.3'
 gem 'stripe-rails', '~> 2.4'
 
-# Use Active Storage variants
-# gem 'image_processing', '~> 1.12', '>= 1.12.2'
-
 # Adds typed jsonb backed fields to ActiveRecord models
 gem 'jsonb_accessor', '~> 1.3', '>= 1.3.7'
 
@@ -79,7 +76,7 @@ group :development do
   gem 'capistrano-nginx'
   gem 'capistrano-upload-config'
   gem 'sshkit-sudo'
-  
+
   # generate preview of e-mail instead of sending
   gem 'letter_opener', '~> 1.8', '>= 1.8.1'
 end
