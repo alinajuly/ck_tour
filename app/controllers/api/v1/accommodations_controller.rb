@@ -82,10 +82,10 @@ class Api::V1::AccommodationsController < ApplicationController
                         policy_scope(Accommodation).geolocation_filter(params[:geolocations])
                       elsif params[:user_id].present?
                         # list accommodations of definite partner
-                        policy_scope(Accommodation).where(user_id: params[:user_id])
+                        policy_scope(Accommodation).filter_by_partner(params[:user_id])
                       elsif params[:status].present?
                         # list accommodations with definite status
-                        policy_scope(Accommodation).where(status: params[:status])
+                        policy_scope(Accommodation).filter_by_status(params[:status])
                       else
                         # list all accommodations
                         policy_scope(Accommodation).all
@@ -119,8 +119,8 @@ class Api::V1::AccommodationsController < ApplicationController
   end
 
   def accommodation_params
-    params.require(:accommodation).permit(:name, :description, :kind, :phone, :email, :reg_code, :address_owner,
-                                          :person, :user_id, images: [])
+    params.permit(:name, :description, :kind, :phone, :email, :reg_code, :address_owner, :person, :user_id,
+                  images: [])
   end
 
   # Only allow a list of trusted parameters through.
