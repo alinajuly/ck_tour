@@ -88,12 +88,12 @@ class Api::V1::AppointmentsController < ApplicationController
   end
 
   def appointment_params
-    params.require(:appointment).permit(:number_of_peoples, :note, :phone, :full_name, :tour_id, :user_id)
+    params.permit(:number_of_peoples, :note, :phone, :full_name, :tour_id, :user_id)
   end
 
   # Only allow a list of trusted parameters through.
   def edit_appointment_params
-    params.require(:appointment).permit(policy(@appointment).permitted_attributes)
+    params.permit(policy(@appointment).permitted_attributes)
   end
 
   def authorize_policy
