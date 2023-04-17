@@ -1827,6 +1827,136 @@ paths:
           description: not found
         '422':
           description: invalid request
+  "/api/v1/{parentable_type}/{parentable_id}/rates":
+    parameters:
+    - name: parentable_type
+      in: path
+      description: f.e. attractions, accommodations, caterings, tours
+      required: true
+      schema:
+        type: string
+    - name: parentable_id
+      in: path
+      description: f.e. attraction_id, accommodation_id, catering_id, tour_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: averedge rate for all
+      tags:
+      - Rate
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    post:
+      summary: create rate by authenticated user
+      tags:
+      - Rate
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful created
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+              required:
+              - body
+        required: true
+  "/api/v1/{parentable_type}/{parentable_id}/rates/{id}":
+    parameters:
+    - name: parentable_type
+      in: path
+      description: f.e. attractions, accommodations, caterings, tours
+      required: true
+      schema:
+        type: string
+    - name: parentable_id
+      in: path
+      description: f.e. attraction_id, accommodation_id, catering_id, tour_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: rate id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show rate for all
+      tags:
+      - Rate
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+    put:
+      summary: update rate by authenticated user or admin
+      tags:
+      - Rate
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+              required:
+              - body
+    delete:
+      summary: delete rate by admin
+      tags:
+      - Rate
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/users/{id}/reservations":
     parameters:
     - name: id

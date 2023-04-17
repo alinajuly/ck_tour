@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :appointments, dependent: :destroy
   has_many :reservations, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :rates, dependent: :destroy
 
   before_validation :ensure_stripe_customer
 
