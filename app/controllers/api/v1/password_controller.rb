@@ -1,6 +1,6 @@
 module Api::V1
   class PasswordController < ApplicationController
-    skip_before_action :authenticate_request
+    skip_before_action :authenticate_request, except: :update
     def forgot
       return render json: { error: 'Email not present' } if params[:email].blank? # check if email is present
 
@@ -31,6 +31,24 @@ module Api::V1
         end
       else
         render json: { error: ['Link not valid or expired. Try generating a new link.'] }, status: :not_found
+      end
+    end
+
+    def update
+      user = @current_user
+      old_password = params[:old_password]
+      new_password = params[:new_password]
+      confirm_password = params[:confirm_password]
+
+      if user&.authenticate(old_password)
+        if new_password == confirm_password
+          user.update(password: new_password)
+          render json: { status: 'ok' }, status: :ok
+        else
+          render json: { error: ['New password and confirmation do not match'] }, status: :unprocessable_entity
+        end
+      else
+        render json: { error: ['Old password is incorrect'] }, status: :unprocessable_entity
       end
     end
   end

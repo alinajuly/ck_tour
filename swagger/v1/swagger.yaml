@@ -36,6 +36,8 @@ tags:
   description: operate with maps
 - name: Comment
   description: operate with user's comments
+- name: Rate
+  description: operate with user's rates
 paths:
   "/api/v1/accommodations":
     get:
@@ -1645,8 +1647,6 @@ paths:
       tags:
       - Users
       description: forgot users password
-      security:
-      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -1674,8 +1674,6 @@ paths:
       tags:
       - Users
       description: reset password
-      security:
-      - jwt_auth: []
       parameters: []
       responses:
         '200':
@@ -1696,9 +1694,48 @@ paths:
                   type: string
                 password:
                   type: string
+                token:
+                  type: string
               required:
               - email
               - password
+              - token
+        required: true
+  "/api/v1/password/update":
+    put:
+      summary: update password
+      tags:
+      - Users
+      description: update password
+      security:
+      - jwt_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                new_password:
+                  type: string
+                confirm_password:
+                  type: string
+              required:
+              - old_password
+              - new_password
+              - confirm_password
+        required: true
   "/api/v1/tours/{tour_id}/places":
     parameters:
     - name: tour_id

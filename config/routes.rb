@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       post '/auth/login', to: 'authentication#login'
       post 'password/forgot', to: 'password#forgot'
       post 'password/reset', to: 'password#reset'
+      put 'password/update', to: 'password#update'
 
       post 'admins/create_admin', to: 'admins#create_admin'
 

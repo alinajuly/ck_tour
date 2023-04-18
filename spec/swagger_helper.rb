@@ -53,7 +53,9 @@ RSpec.configure do |config|
         { name: 'Map',
           description: 'operate with maps' },
         { name: 'Comment',
-          description: 'operate with user\'s comments' }
+          description: "operate with user's comments" },
+        { name: 'Rate',
+          description: "operate with user's rates" }
       ],
       paths: {},
       servers: [
