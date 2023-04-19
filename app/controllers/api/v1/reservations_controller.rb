@@ -46,7 +46,8 @@ class Api::V1::ReservationsController < ApplicationController
     authorize @reservation
 
     if @reservation.save
-      # ReservationMailer.reservation_confirmation(@reservation.user, @reservation).deliver_now
+      ReservationMailer.reservation_confirmation(@reservation.user, @reservation).deliver_now
+      ReservationMailer.reservation_tourist(@reservation.user, @reservation).deliver_now
       render json: @reservation, status: :created
     else
       render json: @reservation.errors, status: :unprocessable_entity

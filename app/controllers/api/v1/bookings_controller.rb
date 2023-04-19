@@ -34,7 +34,7 @@ class Api::V1::BookingsController < ApplicationController
 
     if @booking.save
       BookingMailer.booking_confirmation(@booking.user, @booking).deliver_now
-      BookingTouristMailer.booking_tourist(@booking.user, @booking).deliver_now
+      BookingMailer.booking_tourist(@booking.user, @booking).deliver_now
       render json: @booking, status: :created
     else
       render json: @booking.errors, status: :unprocessable_entity
