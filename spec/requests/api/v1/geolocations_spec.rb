@@ -19,8 +19,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
                   type: :object,
                   properties: {
                     locality: { type: :string },
-                    latitude: { type: :string, format: :decimal },
-                    longitude: { type: :string, format: :decimal },
+                    latitude: { type: :number, format: :float },
+                    longitude: { type: :number, format: :float },
                     street: { type: :string },
                     suite: { type: :string },
                     zip_code: { type: :string }
@@ -107,8 +107,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
                   type: :object,
                   properties: {
                     locality: { type: :string },
-                    latitude: { type: :string, format: :decimal },
-                    longitude: { type: :string, format: :decimal },
+                    latitude: { type: :number, format: :float },
+                    longitude: { type: :number, format: :float },
                     street: { type: :string },
                     suite: { type: :string },
                     zip_code: { type: :string }

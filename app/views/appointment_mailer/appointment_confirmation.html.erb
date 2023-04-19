@@ -1,0 +1,24 @@
+<table>
+  <tr>
+    <td rowspan=2><img src='https://tour-project-frontend.vercel.app/static/media/Logo.4e721ffbb2d260e4896adeba50d6c472.svg'></td>
+    <td style='padding-left: 10px'><b>Добрий день <%= @tour.email %>!</b></td>
+  </tr>
+  <tr>
+    <td style='padding-left: 10px'>Користувач <b><%= @user.email %></b> щойно здійснив бронювання Вашого туру</td>
+  </tr>
+</table>
+
+<p>Деталі бронювання <b>#<%= @appointment.id %></b>:</p>
+<div>
+  <table style='margin: 5px'>
+    <tr><td>Назва туру</td><td><i><%= @tour.title %></i></td></tr>
+    <tr><td>Кількість туристів</td> <td><i><%= @appointment.number_of_peoples %></i></td></tr>
+    <tr><td>Прізвище ім'я голови групи</td> <td><i><%= @appointment.full_name %></i></td></tr>
+    <tr><td>Телефон голови групи</td> <td><i><%= @appointment.phone %></i></td></tr>
+    <tr><td>Особливі побажання туристів</td> <td><i><%= @appointment.note %></i></td></tr>
+  </table>
+</div>
+
+Будь ласка, схваліть чи відмініть це бронювання у своєму особистому кабінеті і повідомте користувача
+
+<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>

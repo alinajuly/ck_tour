@@ -1,5 +1,26 @@
-<p>Добрий день <%= @accommodation.email %>!</p>
+<table>
+  <tr>
+    <td rowspan=2><img src='https://tour-project-frontend.vercel.app/static/media/Logo.4e721ffbb2d260e4896adeba50d6c472.svg'></td>
+    <td style='padding-left: 10px'><b>Добрий день <%= @accommodation.email %>!</b></td>
+  </tr>
+  <tr>
+    <td style='padding-left: 10px'>Користувач <b><%= @user.email %></b> щойно здійснив бронювання у Вашому помешканні</td>
+  </tr>
+</table>
 
-<p>Користувач <%= @user.email %> щойно здійснив бронювання у Вашому помешканні</p>
+<p>Деталі бронювання <b>#<%= @booking.id %></b>:</p>
+<div>
+  <table style='margin: 5px'>
+    <tr><td>Кімната</td><td>#<i><%= @booking.room_id %></i></td></tr>
+    <tr><td>Дата заїзду</td> <td><i><%= @booking.check_in %></i></td></tr>
+    <tr><td>Дата виїзду</td> <td><i><%= @booking.check_out %></i></td></tr>
+    <tr><td>Кількість гостей</td> <td><i><%= @booking.number_of_peoples %></i></td></tr>
+    <tr><td>Прізвище ім'я головного гостя</td> <td><i><%= @booking.full_name %></i></td></tr>
+    <tr><td>Телефон головного гостя</td> <td><i><%= @booking.phone %></i></td></tr>
+    <tr><td>Особливі побажання гостей</td> <td><i><%= @booking.note %></i></td></tr>
+  </table>
+</div>
 
-<!--<p><%#= link_to 'Ознайомитися з деталями бронювання', api_v1_user_booking_path(@user, @booking) %></p>-->
+Будь ласка, схваліть чи відмініть це бронювання у своєму особистому кабінеті і повідомте користувача
+
+<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>

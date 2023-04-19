@@ -1,0 +1,26 @@
+<table>
+  <tr>
+    <td rowspan=2><img src='https://tour-project-frontend.vercel.app/static/media/Logo.4e721ffbb2d260e4896adeba50d6c472.svg'></td>
+    <td style='padding-left: 10px'><b>Добрий день <%= @catering.email %>!</b></td>
+  </tr>
+  <tr>
+    <td style='padding-left: 10px'>Користувач <b><%= @user.email %></b> щойно здійснив резервування столика у Вашому закладі</td>
+  </tr>
+</table>
+
+<p>Деталі резервування <b>#<%= @reservation.id %></b>:</p>
+<div>
+  <table style='margin: 5px'>
+    <tr><td>Заклад</td><td>#<i><%= @catering.name %></i></td></tr>
+    <tr><td>Час резервації</td> <td><i><%= @reservation.check_in %></i></td></tr>
+    <tr><td>Орієнтовний час закінчення</td> <td><i><%= @reservation.check_out %></i></td></tr>
+    <tr><td>Кількість гостей</td> <td><i><%= @reservation.number_of_peoples %></i></td></tr>
+    <tr><td>Прізвище ім'я головного гостя</td> <td><i><%= @reservation.full_name %></i></td></tr>
+    <tr><td>Телефон головного гостя</td> <td><i><%= @reservation.phone %></i></td></tr>
+    <tr><td>Особливі побажання гостей</td> <td><i><%= @reservation.note %></i></td></tr>
+  </table>
+</div>
+
+Будь ласка, схваліть чи відмініть це резервування у своєму особистому кабінеті і повідомте користувача
+
+<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>
