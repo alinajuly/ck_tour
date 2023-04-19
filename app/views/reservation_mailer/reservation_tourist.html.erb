@@ -1,0 +1,29 @@
+<table>
+  <tr>
+    <td rowspan=2><img src='https://tour-project-frontend.vercel.app/static/media/Logo.4e721ffbb2d260e4896adeba50d6c472.svg'></td>
+    <td style='padding-left: 10px'><b>Добрий день <%= @user.email %>!</b></td>
+  </tr>
+  <tr>
+    <td style='padding-left: 10px'>Ви щойно здійснили резервування в <b><%= @catering.name %></b></td>
+  </tr>
+</table>
+<p>Деталі резервування <b>#<%= @reservation.id %></b>:</p>
+<div>
+  <table style='margin: 5px'>
+    <tr><td>Час резервації</td> <td><i><%= @reservation.check_in %></i></td></tr>
+    <tr><td>Орієнтовний час закінчення</td> <td><i><%= @reservation.check_out %></i></td></tr>
+    <tr><td>Кількість гостей</td> <td><i><%= @reservation.number_of_peoples %></i></td></tr>
+    <tr><td>Прізвище ім'я на кого здійснене резервування</td> <td><i><%= @reservation.full_name %></i></td></tr>
+    <tr><td>Телефон головного гостя</td> <td><i><%= @reservation.phone %></i></td></tr>
+    <tr><td>Ваші особливі побажання</td> <td><i><%= @reservation.note %></i></td></tr>
+    <tr><td></td> <td></td></tr>
+    <tr><td>Контакти закладу:</td> <td></td></tr>
+    <tr><td>Адреса</td> <td><i><%= @geolocation.suite %>, <%= @geolocation.street %>, <%= @geolocation.locality %></i></td></tr>
+    <tr><td>Телефон</td> <td><i><%= @catering.phone %></i></td></tr>
+    <tr><td>Електронна пошта</td> <td><i><%= @catering.email %></i></td></tr>
+  </table>
+</div>
+
+Власники закладу найближчим часом зв'яжуться з вами на вказаний при реєстрації e-mail чи вказаний при бронюванні телефон!
+
+<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>

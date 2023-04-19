@@ -16,7 +16,7 @@ class Api::V1::GeolocationsController < ApplicationController
     authorize @geolocation
 
     if @geolocation.save
-      render json: @geolocation, status: :created
+      render json: GeolocationSerializer.new(@geolocation).serializable_hash[:data][:attributes], status: :created
     else
       render json: @geolocation.errors, status: :unprocessable_entity
     end

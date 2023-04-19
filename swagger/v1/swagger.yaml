@@ -1420,11 +1420,11 @@ paths:
                 locality:
                   type: string
                 latitude:
-                  type: string
-                  format: decimal
+                  type: number
+                  format: float
                 longitude:
-                  type: string
-                  format: decimal
+                  type: number
+                  format: float
                 street:
                   type: string
                 suite:
@@ -1492,11 +1492,11 @@ paths:
                 locality:
                   type: string
                 latitude:
-                  type: string
-                  format: decimal
+                  type: number
+                  format: float
                 longitude:
-                  type: string
-                  format: decimal
+                  type: number
+                  format: float
                 street:
                   type: string
                 suite:

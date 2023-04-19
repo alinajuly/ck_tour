@@ -46,7 +46,8 @@ class Api::V1::AppointmentsController < ApplicationController
     authorize @appointment
 
     if @appointment.save
-      # AppointmentMailer.appointment_confirmation(@appointment.user, @appointment).deliver_now
+      AppointmentMailer.appointment_confirmation(@appointment.user, @appointment).deliver_now
+      AppointmentMailer.appointment_tourist(@appointment.user, @appointment).deliver_now
       render json: @appointment, status: :created
     else
       render json: @appointment.errors, status: :unprocessable_entity
