@@ -76,6 +76,9 @@ group :development do
   gem 'capistrano-nginx'
   gem 'capistrano-upload-config'
   gem 'sshkit-sudo'
+
+  # generate preview of e-mail instead of sending
+  gem 'letter_opener', '~> 1.8', '>= 1.8.1'
 end
 
 # A Ruby binding to the Ed25519 elliptic curve public-key signature system described in RFC 8032.
@@ -91,6 +94,3 @@ gem 'pry'
 gem 'pundit'
 
 gem "jsonapi-serializer", "~> 2.2"
-
-# generate preview of e-mail instead of sending
-gem 'letter_opener', '~> 1.8', '>= 1.8.1'
