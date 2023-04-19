@@ -7,15 +7,25 @@ class Api::V1::RatesController < ApplicationController
   
   # GET /api/v1/rates
   def index
-    @rates = parentable.rates.average(:rating).round(1)
-
+    average_rating = parentable.rates.average(:rating)
+  
+    if average_rating.nil?
+      @rates = 0
+    else
+      @rates = average_rating.round(1)
+    end
+  
     render json: @rates, status: :ok
   end
 
   # GET /api/v1/rates/1
   def show
     @rate = parentable.rates.find(params[:id])
-
+  
+    if @rate.rating.nil?
+      @rate.rating = 0
+    end
+  
     render json: @rate, status: :ok
   end
 
