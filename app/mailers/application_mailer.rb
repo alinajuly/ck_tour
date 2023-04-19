@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "info@cktour.club"
+  default from: "noreply@cktour.club"
   layout "mailer"
 end

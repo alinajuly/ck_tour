@@ -20,7 +20,6 @@ amazon_pro:
   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
   region: us-east-1
   bucket: cktour-images-pro
-#  bucket: cktourphoto
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
