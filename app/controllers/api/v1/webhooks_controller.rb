@@ -5,12 +5,12 @@ class Api::V1::WebhooksController < ApplicationController
     # handle a stripe webhook with signature verification using stripe gem
     payload = request.body.read
     sig_header = request.env['HTTP_STRIPE_SIGNATURE']
-    endpoint_secret = Rails.application.credentials.dig(:stripe, :webhook_signing_secret)
+    # endpoint_secret = Rails.application.credentials.dig(:stripe, :webhook_signing_secret)
     event = nil
 
     begin
       event = Stripe::Webhook.construct_event(
-        payload, sig_header, endpoint_secret
+        payload, sig_header
       )
     rescue JSON::ParserError => e
       # Invalid payload
