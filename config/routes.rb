@@ -41,11 +41,10 @@ Rails.application.routes.draw do
         resources :rates
       end
 
-      # resources :plans, except: :show
-      # get 'plans/show', to: 'plans#show'
-      get 'plans/show'
-      resource :plan
-      resource :billing
+      # get 'plans/show'
+      resource :plans, only: [:show]
+      resources :webhooks, only: [:create]
+      # resource :billing
 
       resources :tours do
         resources :places do
