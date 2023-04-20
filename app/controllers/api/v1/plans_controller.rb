@@ -1,6 +1,6 @@
 class Api::V1::PlansController < ApplicationController
-  skip_before_action :authenticate_request, only: %i[show]
-  # before_action :current_user, only: :show
+  skip_before_action :authenticate_request
+  before_action :current_user
   include ActionView::Layouts
   include ActionController::Rendering
 
