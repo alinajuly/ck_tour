@@ -41,7 +41,7 @@ Rails.application.routes.draw do
         resources :rates
       end
 
-      get 'plans/show'
+      # get 'plans/show'
       resource :plans
       resources :webhooks, only: [:create]
       # resource :billing
