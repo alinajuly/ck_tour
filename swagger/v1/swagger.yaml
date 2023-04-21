@@ -1864,6 +1864,22 @@ paths:
           description: not found
         '422':
           description: invalid request
+  "/api/v1/plans":
+    get:
+      summary: plans for authenticated user
+      tags:
+      - Plans
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/{parentable_type}/{parentable_id}/rates":
     parameters:
     - name: parentable_type
