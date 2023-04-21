@@ -7,7 +7,7 @@ RSpec.describe 'api/v1/plans_controller', type: :request do
     get('plans for authenticated user') do
       tags 'Plans'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      parameter name: :token, in: :query, type: :string, description: 'Authorization token'
 
       response(200, 'successful') do
         it 'should returns status response' do
