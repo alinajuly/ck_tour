@@ -6,7 +6,7 @@ class ReservationPolicy < ApplicationPolicy
         scope.all
       elsif user.partner?
         # partner can see reservations of his own caterings or his own reservations
-        scope.joins(catering:).where(caterings: { id: user.caterings.ids }).or(scope.where(user_id: user.id))
+        scope.joins(:catering).where(caterings: { id: user.caterings.ids }).or(scope.where(user_id: user.id))
       else
         # tourist can see his own reservations only
         scope.where(user_id: user.id)
