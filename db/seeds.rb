@@ -221,53 +221,6 @@ Amenity.create(conditioner: true, tv: true, refrigerator: true, hair_dryer: true
 User.create(name: 'tourist', email: 'tourist@test.com', password: 'User123!', role: 0)
 User.create(name: 'admin', email: 'admin@test.com', password: 'Admin123!', role: 2)
 
-# # Month Subscription
-# Plan.create(
-#   name: '1 місяць',
-#   description: 'Плата за цю підписку стягуватиметься щомісяця.',
-#   interval: 0,
-#   interval_count: 1,
-#   price_cents: 20000
-# )
-
-# # Three Month Subscription
-# Plan.create(
-#   name: '3 місяці',
-#   description: 'Плата за цю підписку стягуватиметься щомісяця. Заощаджуйте 10% з цією підпискою.',
-#   interval: 0,
-#   interval_count: 3,
-#   price_cents: 54000
-# )
-
-# # Six Month Subscription
-# Plan.create(
-#   name: '6 місяців',
-#   description: 'Плата за цю підписку стягуватиметься щомісяця. Заощаджуйте 15% з цією підпискою.',
-#   interval: 0,
-#   interval_count: 6,
-#   price_cents: 102000
-# )
-
-# # Year Subscription
-# Plan.create(
-#   name: '1 рік',
-#   description: 'Плата за цю підписку стягуватиметься щомісяця. Заощаджуйте 20% з цією підпискою.',
-#   interval: 1,
-#   interval_count: 1,
-#   price_cents: 192000
-# )
-
-# Subscription.create(
-#   card_number: '5555555555554444',
-#   exp_month: 06,
-#   exp_year: 2029,
-#   cvc: '123',
-#   user_id: User.last.id,
-#   plan_id: Plan.last.id,
-#   active: true,
-#   trial_period_days: 30
-# )
-
 # Tours create
 
 user = User.create(name: 'partner3', email: 'partner3@test.com', password: 'Partner345!', role: 1)
