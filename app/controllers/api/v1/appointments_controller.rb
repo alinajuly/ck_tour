@@ -1,16 +1,16 @@
 class Api::V1::AppointmentsController < ApplicationController
   before_action :authorize_policy, only: %i[index list_for_partner]
-  before_action :set_user, except: %i[list_for_partner create]
+  before_action :set_user, only: %i[index show update destroy]
   before_action :set_tour, only: %i[list_for_partner create]
   before_action :set_appointment, only: %i[show update destroy]
 
   def index
     user_appointments = @user.appointments
-    @appointmentss = if params[:archived].present?
-                       policy_scope(user_appointments.archival_booking)
-                     else
-                       policy_scope(user_appointments.upcoming_booking)
-                     end
+    @appointments = if params[:archived].present?
+                      policy_scope(user_appointments.archival_appointment)
+                    else
+                       policy_scope(user_appointments.upcoming_appointment)
+                    end
 
     if @appointments
       render json: { data: @appointments }, status: :ok
@@ -22,9 +22,9 @@ class Api::V1::AppointmentsController < ApplicationController
   def list_for_partner
     tour_appointments = @tour.appointments
     @appointments = if params[:archived].present?
-                      policy_scope(tour_appointments.archival_booking)
+                      policy_scope(tour_appointments.archival_appointment)
                     else
-                      policy_scope(tour_appointments.upcoming_booking)
+                      policy_scope(tour_appointments.upcoming_appointment)
                     end
 
     if @appointments
@@ -81,7 +81,7 @@ class Api::V1::AppointmentsController < ApplicationController
   end
 
   def set_user
-    @user = User.find(params[:user_id])
+    @user = User.find(params[:id])
   end
 
   def set_tour
