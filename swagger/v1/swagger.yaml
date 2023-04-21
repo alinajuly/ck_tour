@@ -1869,8 +1869,12 @@ paths:
       summary: plans for authenticated user
       tags:
       - Plans
-      security:
-      - jwt_auth: []
+      parameters:
+      - name: token
+        in: query
+        description: Authorization token
+        schema:
+          type: string
       responses:
         '200':
           description: successful
