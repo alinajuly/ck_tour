@@ -22,6 +22,16 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def authenticate_request_stripe
+    if params[:token].present?
+      token = params[:token]
+      decoded = jwt_decode(token)
+      @current_user = User.find(decoded[:user_id])
+    else
+      render json: { error: 'Unauthorized' }, status: :unauthorized
+    end
+  end
+
   def pundit_user
     @current_user
   end

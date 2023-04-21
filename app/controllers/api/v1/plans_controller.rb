@@ -1,5 +1,6 @@
 class Api::V1::PlansController < ApplicationController
   skip_before_action :authenticate_request
+  before_action :authenticate_request_stripe
   before_action :current_user
   include ActionView::Layouts
   include ActionController::Rendering
