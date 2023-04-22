@@ -3,11 +3,13 @@ class Api::V1::WebhooksController < ApplicationController
 
   def create
     payload = request.body.read
+    sig_header = request.env['HTTP_STRIPE_SIGNATURE']
+    endpoint_secret = Rails.application.credentials.dig(:stripe, :webhook_signing_secret) 
     event = nil
-    
+
     begin
       event = Stripe::Webhook.construct_event(
-        payload
+        payload, sig_header, endpoint_secret
       )
     rescue JSON::ParserError => e
       # Invalid payload
@@ -15,6 +17,7 @@ class Api::V1::WebhooksController < ApplicationController
       return
     rescue Stripe::SignatureVerificationError => e
       # Invalid signature
+      binding.pry
       render json: { error: { message: e }}, status: 400
       return
     end
@@ -70,8 +73,8 @@ class Api::V1::WebhooksController < ApplicationController
       id: checkout_session.subscription,
       expand: ['items.data.price.product']
     )
-
-    Subscription.create!(
+    binding.pry
+    Stripe::Subscription.create!(
       customer: customer,
       stripe_id: subscription.id,
       stripe_price_id: subscription.items.data.first.price.id,

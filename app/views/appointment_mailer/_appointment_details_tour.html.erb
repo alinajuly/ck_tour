@@ -1,0 +1,12 @@
+<div>
+  <table style='margin: 5px'>
+    <tr><td>Назва туру</td> <td><i><%= @tour.title %></i></td></tr>
+    <tr><td>Дата/час виїзду</td> <td><i><%= @tour.time_start %></i></td></tr>
+    <tr><td>Дата/час повернення</td> <td><i><%= @tour.time_end %></i></td></tr>
+    <tr><td>Кількість туристів</td> <td><i><%= @appointment.number_of_peoples %></i></td></tr>
+    <tr><td>Прізвище ім'я голови групи</td> <td><i><%= @appointment.full_name %></i></td></tr>
+    <tr><td>Телефон голови групи</td> <td><i><%= @appointment.phone %></i></td></tr>
+    <tr><td>Особливі побажання туристів</td> <td><i><%= @appointment.note %></i></td></tr>
+    <tr><td></td> <td></td></tr>
+  </table>
+</div>

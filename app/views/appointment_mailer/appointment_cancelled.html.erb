@@ -1,0 +1,14 @@
+<%= render partial: '/booking_mailer/booking_header_tourist' %>
+<p>Організатор туру <b><%= @tour.title %></b> скасував Ваше бронювання</b></p>
+
+<p>Деталі скасованого бронювання <b>#<%= @appointment.id %></b>:</p>
+
+<%= render partial: 'appointment_mailer/appointment_details_tour' %>
+<br>
+<%= render partial: 'appointment_mailer/appointment_details_tourist' %>
+
+<p>Якщо організатор туру не зв'язувався з Вами стосовно причин скасування бронювання, Ви можете самостійно звернутися до нього
+  за вказаними вище контактами за роз'ясненням причин (можливо це було зроблено помилково, і власник відновить Ваше
+  бронювання), або написати відгук на нашому ресурсі</p>
+
+<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>
