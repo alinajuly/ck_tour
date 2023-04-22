@@ -1,0 +1,7 @@
+<%= render partial: 'appointment_mailer/appointment_header_tour' %>
+<p><b>Користувач <b><%= @user.email %></b> щойно скасував своє бронювання Вашого туру!</b></p>
+
+<p>Деталі скасованого бронювання <b>#<%= @appointment.id %></b>:</p>
+
+<%= render partial: 'appointment_mailer/appointment_details_tour' %>
+<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>
