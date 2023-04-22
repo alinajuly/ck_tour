@@ -1,0 +1,11 @@
+<div>
+  <table style='margin: 5px'>
+    <tr><td>Кімната</td><td>#<i><%= @booking.room_id %></i></td></tr>
+    <tr><td>Дата заїзду</td> <td><i><%= @booking.check_in %></i></td></tr>
+    <tr><td>Дата виїзду</td> <td><i><%= @booking.check_out %></i></td></tr>
+    <tr><td>Кількість гостей</td> <td><i><%= @booking.number_of_peoples %></i></td></tr>
+    <tr><td>Прізвище ім'я головного гостя</td> <td><i><%= @booking.full_name %></i></td></tr>
+    <tr><td>Телефон головного гостя</td> <td><i><%= @booking.phone %></i></td></tr>
+    <tr><td>Особливі побажання гостей</td> <td><i><%= @booking.note %></i></td></tr>
+  </table>
+</div>

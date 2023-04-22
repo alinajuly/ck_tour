@@ -1,5 +1,4 @@
 class BookingMailer < ApplicationMailer
-  before_action :logo_attach
 
   def booking_confirmation(user, booking)
     @user = user
@@ -16,9 +15,47 @@ class BookingMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Ваше бронювання')
   end
 
-  private
+  def booking_approved(user, booking)
+    @user = user
+    @booking = booking
+    @accommodation = @booking.room.accommodation
+    @geolocation = Geolocation.find_by(geolocationable_id: @accommodation.id, geolocationable_type: 'Accommodation')
+    mail(to: @user.email, subject: 'Підтвердження Вашого бронювання')
+  end
 
-  def logo_attach
-    attachments.inline['logo.svg'] = File.read((Rails.root.join('public', 'logo.svg')))
+  def booking_cancelled(user, booking)
+    @user = user
+    @booking = booking
+    @accommodation = @booking.room.accommodation
+    @geolocation = Geolocation.find_by(geolocationable_id: @accommodation.id, geolocationable_type: 'Accommodation')
+    mail(to: @user.email, subject: 'Скасування Вашого бронювання')
+  end
+
+  def booking_updated_for_partner(user, booking)
+    @user = user
+    @booking = booking
+    @accommodation = @booking.room.accommodation
+    mail(to: @user.email, subject: 'Зміна в бронюванні Вашого помешкання')
+  end
+
+  def booking_updated_for_tourist(user, booking)
+    @user = user
+    @booking = booking
+    @accommodation = @booking.room.accommodation
+    @geolocation = Geolocation.find_by(geolocationable_id: @accommodation.id, geolocationable_type: 'Accommodation')
+    mail(to: @user.email, subject: 'Зміна в Вашому бронюванні')
+  end
+
+  def booking_deleted(user, booking)
+    @user = user
+    @booking = booking
+    mail(to: @user.email, subject: 'Скасування Вашого бронювання')
+  end
+
+  def booking_deleted_for_partner(user, booking)
+    @user = user
+    @booking = booking
+    @accommodation = @booking.room.accommodation
+    mail(to: @user.email, subject: 'Скасування бронювання у Вашому помешканні')
   end
 end

@@ -45,6 +45,14 @@ class Api::V1::BookingsController < ApplicationController
     authorize @booking
 
     if @booking.update(edit_booking_params)
+      if @booking.approved? && params[:confirmation].present?
+        BookingMailer.booking_approved(@booking.user, @booking).deliver_now
+      elsif @booking.cancelled? && params[:confirmation].present?
+        BookingMailer.booking_cancelled(@booking.user, @booking).deliver_now
+      else
+        BookingMailer.booking_updated_for_partner(@booking.user, @booking).deliver_now
+        BookingMailer.booking_updated_for_tourist(@booking.user, @booking).deliver_now
+      end
       render json: { status: 'Update', data: @booking }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity
@@ -54,6 +62,8 @@ class Api::V1::BookingsController < ApplicationController
   def destroy
 
     if @booking.destroy!
+      BookingMailer.booking_deleted(@booking.user, @booking).deliver_now
+      BookingMailer.booking_deleted_for_partner(@booking.user, @booking).deliver_now
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity
