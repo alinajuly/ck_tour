@@ -17,7 +17,6 @@ class Api::V1::WebhooksController < ApplicationController
       return
     rescue Stripe::SignatureVerificationError => e
       # Invalid signature
-      binding.pry
       render json: { error: { message: e }}, status: 400
       return
     end
@@ -73,7 +72,7 @@ class Api::V1::WebhooksController < ApplicationController
       id: checkout_session.subscription,
       expand: ['items.data.price.product']
     )
-    binding.pry
+    
     Stripe::Subscription.create!(
       customer: customer,
       stripe_id: subscription.id,
