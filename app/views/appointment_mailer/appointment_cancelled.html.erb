@@ -1,10 +1,9 @@
 <%= render partial: '/booking_mailer/booking_header_tourist' %>
-<p>Організатор туру <b><%= @tour.title %></b> скасував Ваше бронювання</b></p>
+<p>Організатор туру <b><%= @tour.title %></b> скасував Ваше бронювання</p>
 
 <p>Деталі скасованого бронювання <b>#<%= @appointment.id %></b>:</p>
 
 <%= render partial: 'appointment_mailer/appointment_details_tour' %>
-<br>
 <%= render partial: 'appointment_mailer/appointment_details_tourist' %>
 
 <p>Якщо організатор туру не зв'язувався з Вами стосовно причин скасування бронювання, Ви можете самостійно звернутися до нього

@@ -1,0 +1,7 @@
+<%= render partial: 'reservation_mailer/reservation_header_catering' %>
+<p><b>Користувач <b><%= @user.email %></b> щойно скасував своє резервування у Вашому закладі!</b></p>
+
+<p>Деталі скасованого резервування <b>#<%= @reservation.id %></b>:</p>
+
+<%= render partial: 'reservation_mailer/reservation_details_catering' %>
+<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>

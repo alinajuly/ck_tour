@@ -1,11 +1,12 @@
 <%= render partial: '/booking_mailer/booking_header_tourist' %>
-<p>Ви щойно здійснили резервування в <b><%= @catering.name %></b></p>
+<p><b>Ваше резервування змінено!</b></p>
 
 <p>Деталі резервування <b>#<%= @reservation.id %></b>:</p>
 
 <%= render partial: 'reservation_mailer/reservation_details_catering' %>
 <%= render partial: 'reservation_mailer/reservation_details_tourist' %>
 
-Власники закладу найближчим часом зв'яжуться з вами на вказаний при реєстрації e-mail чи вказаний при бронюванні телефон!
+<p>Зверніть увагу, якщо Ви змінювали кількість гостей або час резервації, дочекайтеся підтвердження доступності від
+  власника закладу </p>
 
 <p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>
