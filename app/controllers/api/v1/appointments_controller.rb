@@ -58,6 +58,14 @@ class Api::V1::AppointmentsController < ApplicationController
     authorize @appointment
 
     if @appointment.update(edit_appointment_params)
+      if @appointment.approved? && params[:confirmation].present?
+        AppointmentMailer.appointment_approved(@appointment.user, @appointment).deliver_now
+      elsif @appointment.cancelled? && params[:confirmation].present?
+        AppointmentMailer.appointment_cancelled(@appointment.user, @appointment).deliver_now
+      else
+        AppointmentMailer.appointment_updated_for_partner(@appointment.user, @appointment).deliver_now
+        AppointmentMailer.appointment_updated_for_tourist(@appointment.user, @appointment).deliver_now
+      end
       render json: { status: 'Update', data: @appointment }, status: :ok
     else
       render json: @appointment.errors, status: :unprocessable_entity
@@ -68,6 +76,8 @@ class Api::V1::AppointmentsController < ApplicationController
     authorize @appointment
 
     if @appointment.destroy!
+      AppointmentMailer.appointment_deleted(@appointment.user, @appointment).deliver_now
+      AppointmentMailer.appointment_deleted_for_partner(@appointment.user, @appointment).deliver_now
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @appointment.errors, status: :unprocessable_entity
@@ -81,7 +91,7 @@ class Api::V1::AppointmentsController < ApplicationController
   end
 
   def set_user
-    @user = User.find(params[:id])
+    @user = User.find(params[:user_id])
   end
 
   def set_tour
