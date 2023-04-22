@@ -17,7 +17,6 @@ class AppointmentMailer < ApplicationMailer
     @user = user
     @appointment = appointment
     @tour = @appointment.tour
-    @geolocation = Geolocation.find_by(geolocationable_id: @tour.id, geolocationable_type: 'Tour')
     mail(to: @user.email, subject: 'Підтвердження Вашого замовлення')
   end
 
@@ -25,7 +24,6 @@ class AppointmentMailer < ApplicationMailer
     @user = user
     @appointment = appointment
     @tour = @appointment.tour
-    @geolocation = Geolocation.find_by(geolocationable_id: @tour.id, geolocationable_type: 'Tour')
     mail(to: @user.email, subject: 'Скасування Вашого замовлення')
   end
 
@@ -40,7 +38,6 @@ class AppointmentMailer < ApplicationMailer
     @user = user
     @appointment = appointment
     @tour = @appointment.tour
-    @geolocation = Geolocation.find_by(geolocationable_id: @tour.id, geolocationable_type: 'Tour')
     mail(to: @user.email, subject: 'Зміна в Вашому замовленні')
   end
 

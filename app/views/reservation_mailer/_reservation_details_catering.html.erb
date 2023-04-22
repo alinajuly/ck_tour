@@ -1,0 +1,12 @@
+<div>
+  <table style='margin: 5px'>
+    <tr><td>Заклад</td><td><i><%= @catering.name %></i></td></tr>
+    <tr><td>Час резервації</td> <td><i><%= @reservation.check_in %></i></td></tr>
+    <tr><td>Орієнтовний час закінчення</td> <td><i><%= @reservation.check_out %></i></td></tr>
+    <tr><td>Кількість гостей</td> <td><i><%= @reservation.number_of_peoples %></i></td></tr>
+    <tr><td>Прізвище ім'я головного гостя</td> <td><i><%= @reservation.full_name %></i></td></tr>
+    <tr><td>Телефон головного гостя</td> <td><i><%= @reservation.phone %></i></td></tr>
+    <tr><td>Особливі побажання гостей</td> <td><i><%= @reservation.note %></i></td></tr>
+  </table>
+</div>
+<br>
