@@ -58,6 +58,14 @@ class Api::V1::ReservationsController < ApplicationController
     authorize @reservation
 
     if @reservation.update(edit_reservation_params)
+      if @reservation.approved? && params[:confirmation].present?
+        ReservationMailer.reservation_approved(@reservation.user, @reservation).deliver_now
+      elsif @reservation.cancelled? && params[:confirmation].present?
+        ReservationMailer.reservation_cancelled(@reservation.user, @reservation).deliver_now
+      else
+        ReservationMailer.reservation_updated_for_partner(@reservation.user, @reservation).deliver_now
+        ReservationMailer.reservation_updated_for_tourist(@reservation.user, @reservation).deliver_now
+      end
       render json: { status: 'Update', data: @reservation }, status: :ok
     else
       render json: @reservation.errors, status: :unprocessable_entity
@@ -68,6 +76,8 @@ class Api::V1::ReservationsController < ApplicationController
     authorize @reservation
 
     if @reservation.destroy!
+      ReservationMailer.reservation_deleted(@reservation.user, @reservation).deliver_now
+      ReservationMailer.reservation_deleted_for_partner(@reservation.user, @reservation).deliver_now
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @reservation.errors, status: :unprocessable_entity
