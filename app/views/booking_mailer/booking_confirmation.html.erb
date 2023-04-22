@@ -1,26 +1,11 @@
-<table>
-  <tr>
-    <td rowspan=2><%= image_tag attachments['logo.svg'].url %></td>
-    <td style='padding-left: 10px'><b>Добрий день <%= @accommodation.email %>!</b></td>
-  </tr>
-  <tr>
-    <td style='padding-left: 10px'>Користувач <b><%= @user.email %></b> щойно здійснив бронювання у Вашому помешканні</td>
-  </tr>
-</table>
+<%= render partial: 'booking_mailer/booking_header_accommodation' %>
+<p>Користувач <b><%= @user.email %></b> щойно здійснив бронювання у Вашому помешканні</p>
 
 <p>Деталі бронювання <b>#<%= @booking.id %></b>:</p>
-<div>
-  <table style='margin: 5px'>
-    <tr><td>Кімната</td><td>#<i><%= @booking.room_id %></i></td></tr>
-    <tr><td>Дата заїзду</td> <td><i><%= @booking.check_in %></i></td></tr>
-    <tr><td>Дата виїзду</td> <td><i><%= @booking.check_out %></i></td></tr>
-    <tr><td>Кількість гостей</td> <td><i><%= @booking.number_of_peoples %></i></td></tr>
-    <tr><td>Прізвище ім'я головного гостя</td> <td><i><%= @booking.full_name %></i></td></tr>
-    <tr><td>Телефон головного гостя</td> <td><i><%= @booking.phone %></i></td></tr>
-    <tr><td>Особливі побажання гостей</td> <td><i><%= @booking.note %></i></td></tr>
-  </table>
-</div>
 
-Будь ласка, схваліть чи відмініть це бронювання у своєму особистому кабінеті і повідомте користувача
+<%= render partial: 'booking_mailer/booking_details_accommodation' %>
+
+<p>Будь ласка, схваліть чи скасуйте це бронювання у своєму особистому кабінеті.
+  В разі скасування бронювання повідомте користувача про причини</p>
 
 <p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>
