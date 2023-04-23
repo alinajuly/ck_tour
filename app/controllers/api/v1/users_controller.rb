@@ -62,6 +62,16 @@ class Api::V1::UsersController < ApplicationController
     @user.destroy
   end
 
+  # def update_role_after_payment
+  #   if @user.subscription.status == 'trial' || user.subscription.status == 'active'
+  #     # Змінити роль користувача на 'partner'
+  #     @user.update(role: 'partner')
+  #     render json: { status: 'Role is changed, resources are hidden', data: @user }, status: :ok
+  #   else
+  #     render json: { error: 'Invalid current password' }, status: :unprocessable_entity
+  #   end
+  # end
+
   private
 
   def set_user
