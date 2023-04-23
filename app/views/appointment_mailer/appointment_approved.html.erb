@@ -1,4 +1,4 @@
-<%= render partial: '/booking_mailer/booking_header_tourist' %>
+<%= render partial: '/layouts/header_to_user' %>
 <p>Організатор туру <b><%= @tour.title %></b> щойно підтвердив Ваше бронювання</p>
 
 <p>Нагадуємо деталі бронювання <b>#<%= @appointment.id %></b>:</p>
@@ -6,4 +6,4 @@
 <%= render partial: 'appointment_mailer/appointment_details_tour' %>
 <%= render partial: 'appointment_mailer/appointment_details_tourist' %>
 
-<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>
+<%= render partial: '/layouts/regards' %>

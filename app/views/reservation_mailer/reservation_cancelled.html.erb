@@ -1,4 +1,4 @@
-<%= render partial: '/booking_mailer/booking_header_tourist' %>
+<%= render partial: '/layouts/header_to_user' %>
 <p>Власник <b><%= @catering.name %></b> скасував Ваше резервування</p>
 
 <p>Деталі скасованого резервування <b>#<%= @reservation.id %></b>:</p>
@@ -10,4 +10,4 @@
   за вказаними вище контактами за роз'ясненням причин (можливо це було зроблено помилково, і власник відновить Ваше
   резервування), або написати відгук на нашому ресурсі</p>
 
-<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>
+<%= render partial: '/layouts/regards' %>

@@ -30,6 +30,7 @@ class Api::V1::UsersController < ApplicationController
     authorize @user
 
     if @user.save
+      UserMailer.user_welcome(@user).deliver_later
       render json: @user, status: :created
     else
       render json: { errors: @user.errors.full_messages },
@@ -42,10 +43,12 @@ class Api::V1::UsersController < ApplicationController
 
     if @user.tourist?
       @user.partner!
+      UserMailer.user_partner(@user).deliver_later
 
       render json: { status: 'Role is changed', data: @user }, status: :ok
     elsif @user.partner?
       @user.tourist!
+      UserMailer.user_tourist(@user).deliver_later
       @user.accommodations.unpublished! if @user.accommodations.present?
       @user.tours.unpublished! if @user.tours.present?
       @user.caterings.unpublished! if @user.caterings.present?
