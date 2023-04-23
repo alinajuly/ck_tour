@@ -39,4 +39,8 @@ class UserPolicy < ApplicationPolicy
   def create_admin?
     user.admin?
   end
+
+  def unpublished_comments?
+    user.admin?
+  end
 end

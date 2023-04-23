@@ -14,6 +14,16 @@ class Api::V1::AdminsController < ApplicationController
     end
   end
 
+  def unpublished_comments
+    @comments = Comment.unpublished
+
+    if @comments
+      render json: { data: @comments }, status: :ok
+    else
+      render json: @comments.errors, status: :bad_request
+    end
+  end
+
   private
 
   def user_params

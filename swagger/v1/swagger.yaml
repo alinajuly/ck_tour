@@ -264,6 +264,20 @@ paths:
               - email
               - password
         required: true
+  "/api/v1/admins/unpublished_comments":
+    get:
+      summary: list unpublished comments for admin only
+      tags:
+      - Comment
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities":
     parameters:
     - name: accommodation_id

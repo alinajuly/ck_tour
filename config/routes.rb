@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       put 'password/update', to: 'password#update'
 
       post 'admins/create_admin', to: 'admins#create_admin'
+      get 'admins/unpublished_comments', to: 'admins#unpublished_comments'
 
       resources :users do
         resources :bookings
