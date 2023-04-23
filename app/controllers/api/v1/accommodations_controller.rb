@@ -54,6 +54,9 @@ class Api::V1::AccommodationsController < ApplicationController
 
     build_images if params[:images].present?
     if @accommodation.update(edit_accommodation_params.except(:images))
+      if @accommodation.published? && params[:status].present?
+        StatusMailer.accommodation_published(@accommodation.user, @accommodation).deliver_later
+      end
       accommodation_json
     else
       render json: @accommodation.errors, status: :unprocessable_entity

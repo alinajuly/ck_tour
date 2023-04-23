@@ -1,4 +1,4 @@
-<%= render partial: '/booking_mailer/booking_header_tourist' %>
+<%= render partial: '/layouts/header_to_user' %>
 <p>Ви щойно здійснили резервування в <b><%= @catering.name %></b></p>
 
 <p>Деталі резервування <b>#<%= @reservation.id %></b>:</p>
@@ -8,4 +8,4 @@
 
 Власники закладу найближчим часом зв'яжуться з вами на вказаний при реєстрації e-mail чи вказаний при бронюванні телефон!
 
-<p>З повагою, команда <a href='https://tour-project-frontend.vercel.app/'>"Черкаський туристичний портал"</a></p>
+<%= render partial: '/layouts/regards' %>

@@ -53,6 +53,9 @@ class Api::V1::ToursController < ApplicationController
     authorize @tour
 
     if @tour.update(tour_params)
+      if @tour.published? && params[:status].present?
+        StatusMailer.tour_published(@tour.user, @tour).deliver_later
+      end
       render json: { status: 'Update', data: @tour }, status: :ok
     else
       render json: @tour.errors, status: :unprocessable_entity

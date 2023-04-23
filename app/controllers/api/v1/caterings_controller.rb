@@ -64,6 +64,9 @@ class Api::V1::CateringsController < ApplicationController
 
     build_images if params[:images].present?
     if @catering.update(edit_catering_params.except(:images))
+      if @catering.published? && params[:status].present?
+        StatusMailer.catering_published(@catering.user, @catering).deliver_later
+      end
       catering_json
     else
       render json: @catering.errors, status: :unprocessable_entity
