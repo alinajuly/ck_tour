@@ -13,10 +13,10 @@ class Api::V1::WebhooksController < ApplicationController
       event = Stripe::Webhook.construct_event(
         payload, sig_header, endpoint_secret
       )
-    rescue JSON::ParserError => e       # Invalid payload
+    rescue JSON::ParserError => e
       render json: { error: { message: e }}, status: 400
       return
-    rescue Stripe::SignatureVerificationError => e # Invalid signature
+    rescue Stripe::SignatureVerificationError => e
       render json: { error: { message: e }}, status: 400
       return
     end
@@ -24,61 +24,80 @@ class Api::V1::WebhooksController < ApplicationController
     # Handle the event
     case event.type
     when 'customer.created'
-      email = event.data['email'] # Get email from the event
-      user = User.find_by(email: email) # Find user by email
-      
-      if user # If user is found, update stripe_id
-        response = Stripe::Customer.create(email: email)
-        user.update(stripe_id: response.id)
-      end
-    when 'subscription.created' # Get subscription data from the event
-      plan_id = event.data['plan_id']
-      customer_id = event.data['customer_id']
-      user_id = event.data['user_id']
-      status = event.data['status']
-      current_period_end = event.data['current_period_end']
-      current_period_start = event.data['current_period_start']
-      interval = event.data['interval']
-      subscription_id = event.data['subscription_id']
-
-      subscription = Subscription.create( # Create a new subscription in the database
-        plan_id: plan_id,
-        customer_id: customer_id,
-        user_id: user_id,
-        status: status,
-        current_period_end: current_period_end,
-        current_period_start: current_period_start,
-        interval: interval,
-        subscription_id: subscription_id,
-      )
+      handle_customer_created(event)
+    when 'customer.subscription.created'
+      handle_subscription_created(event)
     when 'customer.subscription.updated'
-      subscription_id = event.data['object']['id'] # Get subscription ID from the event
-      subscription = Subscription.find_by(subscription_id: subscription_id) # Find corresponding subscription by subscription ID
-
-      if subscription
-        subscription.plan_id = event.data['object']['items']['data'][0]['plan']['id']
-        subscription.status = event.data['object']['status']
-        subscription.current_period_end = Time.at(event.data['object']['current_period_end'])
-        subscription.current_period_start = Time.at(event.data['object']['current_period_start'])
-        subscription.interval = event.data['object']['items']['data'][0]['plan']['interval']
-        subscription.save
-      end
+      handle_subscription_updated(event)
     when 'customer.subscription.deleted'
-      subscription_id = event.data.object.id # Get subscription ID from the event
-      subscription = Subscription.find_by(subscription_id: subscription_id) # Find corresponding subscription by subscription ID
+      handle_subscription_deleted(event)
+    else
+      puts "Unhandled event type: #{event.type}"
+    end
+  end  
 
-      if subscription
-        subscription.update!(status: event.data.object.status)
-      end
-    when 'checkout.session.completed'
-      payment_intent_id = event.data['object']['payment_intent']
-      user = User.find_by(stripe_id: payment_intent_id)
+    private
 
-      if user # Check if the subscription is still in trial period
-        if user.subscription_status == 'trialling' && user.subscription_trial_end > Time.now
-          user.update(subscription_status: 'active')
-        end
+  def handle_customer_created(event)
+    email = event.data['email'] # Get email from the event
+    user = User.find_by(email: email) # Find user by email
+      
+    if user
+      response = Stripe::Customer.create(email: email)
+      user.update(stripe_id: response.id)
+    end
+  end
+
+  def handle_subscription_created(event)
+    subscription = event.data.object
+    subscription = Subscription.create
+
+    if ['trialling', 'active'].include?(subscription.status)
+      user = User.find_by(id: user_id)
+      if user
+        user.update(role: 'partner')
       end
     end
   end
+
+  def handle_subscription_updated(event)
+    subscription_id = event.data.object.id 
+    subscription = Subscription.find_by(subscription_id: subscription_id) 
+
+    if subscription
+      subscription.plan_id = event.data.object.items.data[0].plan.id
+      subscription.status = event.data.object.status
+      subscription.current_period_end = Time.at(event.data.object.current_period_end)
+      subscription.current_period_start = Time.at(event.data.object.current_period_start)
+      subscription.interval = event.data.object.items.data[0].plan.interval
+      subscription.save
+    end
+
+    if ['unpaid', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'paused'].include?(subscription.status)
+      user = User.find_by(id: user_id)
+      if user
+        user.update(role: 'tourist')
+      end
+    end
+  end
+
+  def handle_subscription_deleted(event)
+    subscription_id = event.data.object.id 
+    subscription = Subscription.find_by(subscription_id: subscription_id)
+
+    if subscription
+      subscription.update!(status: event.data.object.status)
+    end
+  end
+
+    # when 'checkout.session.completed'
+    #   payment_intent_id = event.data.object.payment_intent
+    #   user = User.find_by(stripe_id: payment_intent_id)
+
+    #   if user # Check if the subscription is still in trial period
+    #     if user.subscription_status == 'trial' && user.subscription_trial_end > Time.now
+    #       user.update(subscription_status: 'active')
+    #     end
+    #   end
+    # end
 end
