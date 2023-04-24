@@ -1,3 +1,6 @@
+
+ 
+
 class Api::V1::WebhooksController < ApplicationController
   skip_before_action :authenticate_request
 
@@ -5,7 +8,6 @@ class Api::V1::WebhooksController < ApplicationController
     payload = request.body.read
     sig_header = request.env['HTTP_STRIPE_SIGNATURE']
     endpoint_secret = Rails.application.credentials.dig(:stripe, :webhook_signing_secret)
-    event = nil
 
     begin
       event = Stripe::Webhook.construct_event(
@@ -48,7 +50,6 @@ class Api::V1::WebhooksController < ApplicationController
         current_period_start: current_period_start,
         interval: interval,
         subscription_id: subscription_id,
-        subscription_status: 'trial'
       )
     when 'customer.subscription.updated'
       subscription_id = event.data['object']['id'] # Get subscription ID from the event
@@ -64,7 +65,7 @@ class Api::V1::WebhooksController < ApplicationController
       end
     when 'customer.subscription.deleted'
       subscription_id = event.data.object.id # Get subscription ID from the event
-      subscription = Subscription.find_by(stripe_id: subscription_id) # Find corresponding subscription by subscription ID
+      subscription = Subscription.find_by(subscription_id: subscription_id) # Find corresponding subscription by subscription ID
 
       if subscription
         subscription.update!(status: event.data.object.status)
@@ -74,7 +75,7 @@ class Api::V1::WebhooksController < ApplicationController
       user = User.find_by(stripe_id: payment_intent_id)
 
       if user # Check if the subscription is still in trial period
-        if user.subscription_status == 'trial' && user.subscription_trial_end > Time.now
+        if user.subscription_status == 'trialling' && user.subscription_trial_end > Time.now
           user.update(subscription_status: 'active')
         end
       end
