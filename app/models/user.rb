@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :reservations, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :rates, dependent: :destroy
+  has_one :subscription, dependent: :destroy
 
   before_validation :ensure_stripe_customer
 
@@ -49,25 +50,23 @@ class User < ApplicationRecord
     save!(validate: false)
   end
 
-  def stripe_attributes(pay_customer)
-    {
-      description: 'Created with pay',
-      metadata: {
-        pay_customer_id: pay_customer.id,
-        user_id: id
-      }
-    }
-  end
-
   def ensure_stripe_customer
     response = Stripe::Customer.create(email: email)
     self.stripe_id = response.id
   end
-
+  
   # to retrieve all the Stripe info for user
   def retrieve_stripe_reference
     Stripe::Customer.retrieve(stripe_id)
   end
+
+  # def update_models_status
+  #   if subscription.status != 'trialing' || 'active'
+  #     accommodations.update(status: 'unpublished')
+  #     tours.update(status: 'unpublished')
+  #     caterings.update(status: 'unpublished')
+  #   end
+  # end
 
   private
 
