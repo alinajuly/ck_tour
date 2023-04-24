@@ -46,9 +46,6 @@ gem "aws-sdk-s3", require: false
 # RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter
 gem 'rubocop', require: false
 
-# Fake data for seeds
-gem 'faker', '~> 3.1', '>= 3.1.1'
-
 # Generate API documentation and rspec integration tests
 gem 'rswag', '~> 2.8'
 
@@ -64,6 +61,10 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem 'rspec-rails'
   gem 'rswag-specs'
+  # Fake data for tests
+  gem 'faker', '~> 3.1', '>= 3.1.1'
+  # fixtures replacement for tests
+  gem 'factory_bot_rails', '~> 6.2'
 end
 
 group :development do
