@@ -737,6 +737,22 @@ paths:
               - email
               - password
         required: true
+  "/api/v1/billing_portals":
+    post:
+      summary: billing portal for authenticated user
+      tags:
+      - Billing portal
+      security:
+      - jwt_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/users/{id}/bookings":
     parameters:
     - name: id

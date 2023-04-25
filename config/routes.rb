@@ -47,7 +47,7 @@ Rails.application.routes.draw do
       # get 'plans/show'
       resource :plans
       resources :webhooks, only: [:create]
-      resources :billing_portal, only: [:create]
+      resource :billing_portals, only: [:create]
 
       resources :tours do
         resources :places do

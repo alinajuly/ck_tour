@@ -10,8 +10,6 @@ class User < ApplicationRecord
   has_many :rates, dependent: :destroy
   has_one :subscription, dependent: :destroy
 
-  before_validation :ensure_stripe_customer
-
   has_secure_password
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i

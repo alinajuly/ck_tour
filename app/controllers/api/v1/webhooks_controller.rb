@@ -22,9 +22,8 @@ class Api::V1::WebhooksController < ApplicationController
     end
 
     # Handle the event
+
     case event.type
-    when 'customer.created'
-      handle_customer_created(event)
     when 'customer.subscription.created'
       handle_subscription_created(event)
     when 'customer.subscription.updated'
@@ -36,24 +35,29 @@ class Api::V1::WebhooksController < ApplicationController
     end
   end  
 
-    private
-
-  def handle_customer_created(event)
-    email = event.data['email'] # Get email from the event
-    user = User.find_by(email: email) # Find user by email
-      
-    if user
-      response = Stripe::Customer.create(email: email)
-      user.update(stripe_id: response.id)
-    end
-  end
+  private
 
   def handle_subscription_created(event)
     subscription = event.data.object
-    subscription = Subscription.create
+    customer = Stripe::Customer.retrieve(event.data.object.customer)
+    user = User.find_by(email: customer.email)
+    user.update(stripe_id: customer.id)
 
-    if ['trialling', 'active'].include?(subscription.status)
-      user = User.find_by(id: user_id)
+    Subscription.create(
+      user: user,
+      customer_id: user.stripe_id,
+      status: subscription.status,
+      current_period_end: Time.at(subscription.current_period_end),
+      current_period_start: Time.at(subscription.current_period_start),
+      subscription_id: subscription.id,
+      created_at: Time.at(subscription.created),
+      updated_at: Time.at(subscription.created),
+      plan_id: subscription.plan.id,
+      interval: event.data.object.plan.interval
+    )
+
+    if ['trialing', 'active'].include?(subscription.status)
+      user = User.find_by(email: customer.email)
       if user
         user.update(role: 'partner')
       end
@@ -63,20 +67,24 @@ class Api::V1::WebhooksController < ApplicationController
   def handle_subscription_updated(event)
     subscription_id = event.data.object.id 
     subscription = Subscription.find_by(subscription_id: subscription_id) 
+    customer = Stripe::Customer.retrieve(event.data.object.customer)
 
     if subscription
       subscription.plan_id = event.data.object.items.data[0].plan.id
       subscription.status = event.data.object.status
-      subscription.current_period_end = Time.at(event.data.object.current_period_end)
-      subscription.current_period_start = Time.at(event.data.object.current_period_start)
+      subscription.current_period_end = event.data.object.current_period_end
+      subscription.current_period_start = event.data.object.current_period_start
       subscription.interval = event.data.object.items.data[0].plan.interval
       subscription.save
     end
 
     if ['unpaid', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'paused'].include?(subscription.status)
-      user = User.find_by(id: user_id)
+      user = User.find_by(email: customer.email)
       if user
         user.update(role: 'tourist')
+        user.accommodations.unpublished! if user.accommodations.present?
+        user.tours.unpublished! if user.tours.present?
+        user.caterings.unpublished! if user.caterings.present?
       end
     end
   end
@@ -84,20 +92,22 @@ class Api::V1::WebhooksController < ApplicationController
   def handle_subscription_deleted(event)
     subscription_id = event.data.object.id 
     subscription = Subscription.find_by(subscription_id: subscription_id)
+    customer = Stripe::Customer.retrieve(event.data.object.customer)
 
     if subscription
       subscription.update!(status: event.data.object.status)
     end
+
+    if ['unpaid', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'paused'].include?(subscription.status)
+      user = User.find_by(email: customer.email)
+      if user
+        user.update(role: 'tourist')
+        user.accommodations.unpublished! if user.accommodations.present?
+        user.tours.unpublished! if user.tours.present?
+        user.caterings.unpublished! if user.caterings.present?
+      end
+    end
   end
 
-    # when 'checkout.session.completed'
-    #   payment_intent_id = event.data.object.payment_intent
-    #   user = User.find_by(stripe_id: payment_intent_id)
-
-    #   if user # Check if the subscription is still in trial period
-    #     if user.subscription_status == 'trial' && user.subscription_trial_end > Time.now
-    #       user.update(subscription_status: 'active')
-    #     end
-    #   end
-    # end
+  # billing_portal.session.created
 end
