@@ -91,7 +91,6 @@ paths:
       summary: create new ACCOMMODATION - for partner only
       tags:
       - Partner Accommodations
-      description: Creates a new accommodation
       security:
       - jwt_auth: []
       parameters: []
@@ -2608,8 +2607,6 @@ paths:
       responses:
         '201':
           description: successful created
-        '401':
-          description: unauthorized
         '404':
           description: not found
         '422':
@@ -2643,6 +2640,11 @@ paths:
       summary: show user
       tags:
       - Users
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
       security:
       - jwt_auth: []
       responses:
