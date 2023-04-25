@@ -1,13 +1,13 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-RSpec.describe 'api/v1/billing_portal_controller', type: :request do
+RSpec.describe 'api/v1/billing_portals_controller', type: :request do
 
-  path '/api/v1/billing_portal_index' do
-    put('billing portal for authenticated user') do
+  path '/api/v1/billing_portals' do
+    post('billing portal for authenticated user') do
       tags 'Billing portal'
       produces 'application/json'
-      parameter name: :token, in: :query, type: :string, description: 'Authorization token'
+      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         it 'should returns status response' do
