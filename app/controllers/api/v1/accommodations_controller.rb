@@ -1,6 +1,7 @@
 class Api::V1::AccommodationsController < ApplicationController
   include Rails.application.routes.url_helpers
   include Available
+  include AccommodationableUtilities
 
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :current_user, only: %i[index show]
@@ -95,30 +96,8 @@ class Api::V1::AccommodationsController < ApplicationController
                       end
   end
 
-  def available_accommodations
-    available_accommodations = []
-    # select published accommodations in definite location
-    Accommodation.where(status: 1).geolocation_filter(params[:geolocations]).each do |accommodation|
-      # instance variable for Available concern
-      @accommodation = accommodation
-      # check for selected accommodations with free rooms
-      available_accommodations << accommodation if available_rooms.present?
-    end
-    available_accommodations
-  end
-
   def set_accommodation
     @accommodation = policy_scope(Accommodation).find(params[:id])
-  end
-
-  def build_images
-    params[:images].each do |img|
-      @accommodation.images.attach(io: img, filename: img.original_filename)
-    end
-  end
-
-  def edit_accommodation
-    @accommodation = AccommodationPolicy::EditScope.new(current_user, Accommodation).resolve.find(params[:id])
   end
 
   def accommodation_params
@@ -126,18 +105,8 @@ class Api::V1::AccommodationsController < ApplicationController
                   images: [])
   end
 
-  # Only allow a list of trusted parameters through.
-  def edit_accommodation_params
-    params.permit(policy(@accommodation).permitted_attributes)
-  end
-
-  def accommodation_json
-    render json: {
-      data: {
-        accommodation: @accommodation,
-        image_urls: @accommodation.images.map { |image| url_for(image) }
-      }
-    }, status: :ok
+  def edit_accommodation
+    @accommodation = AccommodationPolicy::EditScope.new(current_user, Accommodation).resolve.find(params[:id])
   end
 
   def authorize_policy
