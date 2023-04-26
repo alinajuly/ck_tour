@@ -4,7 +4,7 @@ class Booking < ApplicationRecord
   belongs_to :user
   belongs_to :room
 
-  enum confirmation: { pending: 0, approved: 1, cancelled: 2 }
+  enum confirmation: [:pending, :approved, :cancelled]
 
   scope :upcoming_booking, -> { where('check_out > ?', Date.today) }
   scope :archival_booking, -> { where('check_out =< ?', Date.today) }

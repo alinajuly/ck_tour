@@ -28,7 +28,7 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8, maximum: 255 }, format: { with: VALID_PASSWORD_REGEX }, on: :create
   validates :name, presence: true, uniqueness: true, length: { minimum: 3, maximum: 50 }
 
-  enum role: { tourist: 0, partner: 1, admin: 2 }
+  enum role: [:tourist, :partner, :admin]
 
   scope :role_filter, ->(role) { where(role: role) }
 end

@@ -8,7 +8,7 @@ class Tour < ApplicationRecord
   has_many :comments, as: :commentable
   has_many :rates, as: :ratable
 
-  enum status: { unpublished: 0, published: 1 }
+  enum status: [:unpublished, :published]
 
   scope :geolocation_filter, ->(locality) { joins(places: :geolocations).where('locality ILIKE ?', "%#{locality}%") }
   scope :filter_by_partner, ->(user) { where(user_id: user) }

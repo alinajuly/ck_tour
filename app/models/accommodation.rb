@@ -7,7 +7,7 @@ class Accommodation < ApplicationRecord
   has_many :rates, as: :ratable
   has_many_attached :images
 
-  enum status: { unpublished: 0, published: 1 }
+  enum status: [:unpublished, :published]
 
   scope :geolocation_filter, ->(locality) { joins(:geolocations).where('locality ILIKE ?', "%#{locality}%") }
   scope :filter_by_status, ->(status) { where(status: status) }
