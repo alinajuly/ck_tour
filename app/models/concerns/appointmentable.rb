@@ -1,4 +1,4 @@
-module AppointmentValidations
+module Appointmentable
   extend ActiveSupport::Concern
 
   def enough_seats

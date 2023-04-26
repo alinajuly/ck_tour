@@ -1,7 +1,7 @@
 class Api::V1::AccommodationsController < ApplicationController
   include Rails.application.routes.url_helpers
   include Available
-  include AccommodationUtilities
+  include AccommodationableUtilities
 
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :current_user, only: %i[index show]

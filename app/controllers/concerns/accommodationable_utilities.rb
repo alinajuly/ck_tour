@@ -1,4 +1,4 @@
-module AccommodationUtilities
+module AccommodationableUtilities
   extend ActiveSupport::Concern
   
   def accommodation_json

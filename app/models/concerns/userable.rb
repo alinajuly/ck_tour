@@ -1,4 +1,4 @@
-module UserValidations
+module Userable
   extend ActiveSupport::Concern
 
   def generate_password_token!

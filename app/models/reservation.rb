@@ -1,5 +1,5 @@
 class Reservation < ApplicationRecord
-  include ReservationValidations
+  include Reservationable
 
   belongs_to :user
   belongs_to :catering

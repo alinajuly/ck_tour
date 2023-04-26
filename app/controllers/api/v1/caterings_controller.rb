@@ -1,6 +1,6 @@
 class Api::V1::CateringsController < ApplicationController
   include Rails.application.routes.url_helpers
-  include CateringUtilities
+  include CateringableUtilities
 
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :current_user, only: %i[index show]

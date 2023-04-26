@@ -1,7 +1,7 @@
 class Api::V1::RoomsController < ApplicationController
   include Rails.application.routes.url_helpers
   include Available
-  include RoomUtilities
+  include RoomableUtilities
 
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :authorize_policy

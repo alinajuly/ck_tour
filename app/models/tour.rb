@@ -1,6 +1,6 @@
 class Tour < ApplicationRecord
   include Imaginable
-  include TourValidations
+  include Tourable
 
   belongs_to :user
   has_many :places

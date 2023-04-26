@@ -1,5 +1,5 @@
 class Appointment < ApplicationRecord
-  include AppointmentValidations
+  include Appointmentable
 
   belongs_to :user
   belongs_to :tour

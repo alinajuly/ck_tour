@@ -1,4 +1,4 @@
-module CateringUtilities
+module CateringableUtilities
   extend ActiveSupport::Concern
   
   def build_images

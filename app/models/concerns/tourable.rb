@@ -1,4 +1,4 @@
-module TourValidations
+module Tourable
   extend ActiveSupport::Concern
 
   def not_in_past

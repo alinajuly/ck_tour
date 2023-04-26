@@ -1,4 +1,4 @@
-module ReservationValidations
+module Reservationable
   extend ActiveSupport::Concern
 
   def not_in_past

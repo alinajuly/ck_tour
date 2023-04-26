@@ -1,4 +1,4 @@
-module RoomUtilities
+module RoomableUtilities
   extend ActiveSupport::Concern
   
   def build_images

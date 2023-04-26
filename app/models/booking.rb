@@ -1,5 +1,5 @@
 class Booking < ApplicationRecord
-  include BookingValidations
+  include Bookingable
   
   belongs_to :user
   belongs_to :room

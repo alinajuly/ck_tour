@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   require 'securerandom'
-  include UserValidations
+  include Userable
 
   has_many :accommodations, dependent: :destroy
   has_many :tours, dependent: :destroy

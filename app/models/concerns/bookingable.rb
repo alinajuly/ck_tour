@@ -1,4 +1,4 @@
-module BookingValidations
+module Bookingable
   extend ActiveSupport::Concern
 
   def not_in_past
