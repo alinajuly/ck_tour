@@ -1,6 +1,7 @@
 class Api::V1::RoomsController < ApplicationController
   include Rails.application.routes.url_helpers
   include Available
+  include RoomUtilities
 
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :authorize_policy
@@ -77,24 +78,9 @@ class Api::V1::RoomsController < ApplicationController
     @room = Room.find(params[:id])
   end
 
-  def build_images
-    params[:images].each do |img|
-      @room.images.attach(io: img, filename: img.original_filename)
-    end
-  end
-
   # Only allow a list of trusted parameters through.
   def room_params
     params.permit(:places, :bed, :name, :quantity, :description, :price_per_night, images: [])
-  end
-
-  def room_json
-    render json: {
-      data: {
-        room: @room,
-        image_urls: @room.images.map { |image| url_for(image) }
-      }
-    }, status: :ok
   end
 
   def authorize_policy
