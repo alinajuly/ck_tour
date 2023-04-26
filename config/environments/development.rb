@@ -12,7 +12,7 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   
   # Enable ngrok webhooks
-  config.hosts << /.*\.ngrok\.io/
+  # config.hosts << /.*\.ngrok\.io/
 
   config.cache_classes = false
 
