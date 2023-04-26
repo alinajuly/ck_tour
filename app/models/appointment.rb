@@ -4,7 +4,7 @@ class Appointment < ApplicationRecord
   belongs_to :user
   belongs_to :tour
 
-  enum confirmation: { pending: 0, approved: 1, cancelled: 2 }
+  enum confirmation: [:pending, :approved, :cancelled]
 
   scope :upcoming_appointment, -> { joins(:tour).where('time_end >= ?', Time.now) }
   scope :archival_appointment, -> { joins(:tour).where('time_end < ?', Time.now) }
