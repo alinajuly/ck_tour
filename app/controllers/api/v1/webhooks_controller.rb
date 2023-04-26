@@ -22,7 +22,6 @@ class Api::V1::WebhooksController < ApplicationController
     end
 
     # Handle the event
-
     case event.type
     when 'customer.subscription.created'
       handle_subscription_created(event)
@@ -108,6 +107,4 @@ class Api::V1::WebhooksController < ApplicationController
       end
     end
   end
-
-  # billing_portal.session.created
 end
