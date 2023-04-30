@@ -26,7 +26,7 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { minimum: 5, maximum: 255 }, format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 8, maximum: 255 }, format: { with: VALID_PASSWORD_REGEX }, on: :create
-  validates :name, presence: true, uniqueness: true, length: { minimum: 3, maximum: 50 }
+  validates :name, presence: true, length: { minimum: 3, maximum: 50 }
 
   enum role: [:tourist, :partner, :admin]
 
