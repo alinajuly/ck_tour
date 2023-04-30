@@ -12,37 +12,37 @@ RSpec.describe 'api/v1/users', type: :request do
       parameter name: :role, in: :query, schema: { type: :string },
                 description: 'admin/partner/tourist'
 
-      # response(200, 'successful') do
-      #   it 'should returns status response' do
-      #     expect(response.status).to eq(200)
-      #   end
-      #
-      #   run_test!
-      # end
-      #
-      # response(401, 'unauthorized') do
-      #   it 'should returns status response' do
-      #     expect(response.status).to eq(401)
-      #   end
-      #
-      #   run_test!
-      # end
-      #
-      # response(404, 'not found') do
-      #   it 'should returns status response' do
-      #     expect(response.status).to eq(404)
-      #   end
-      #
-      #   run_test!
-      # end
-      #
-      # response(422, 'invalid request') do
-      #   it 'should returns status response' do
-      #     expect(response.status).to eq(422)
-      #   end
-      #
-      #   run_test!
-      # end
+      response(200, 'successful') do
+        it 'should returns status response' do
+          expect(response.status).to eq(200)
+        end
+
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
+        end
+
+        run_test!
+      end
+
+      response(404, 'not found') do
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+
+        run_test!
+      end
+
+      response(422, 'invalid request') do
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+
+        run_test!
+      end
     end
 
     post('create user') do

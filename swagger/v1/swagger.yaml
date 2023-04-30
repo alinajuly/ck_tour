@@ -1568,12 +1568,6 @@ paths:
       required: true
       schema:
         type: string
-    - name: id
-      in: path
-      description: geolocation id
-      required: true
-      schema:
-        type: string
     post:
       summary: create geolocation for tour by partner
       tags:
@@ -1615,6 +1609,26 @@ paths:
               - latitude
               - longitude
         required: true
+  "/api/v1/tours/{tour_id}/places/{place_id}/geolocations/{id}":
+    parameters:
+    - name: tour_id
+      in: path
+      description: tour id
+      required: true
+      schema:
+        type: string
+    - name: place_id
+      in: path
+      description: place id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: geolocation id
+      required: true
+      schema:
+        type: string
     get:
       summary: show geolocation for tour for all
       tags:
@@ -2584,6 +2598,27 @@ paths:
         '422':
           description: invalid request
   "/api/v1/users":
+    get:
+      summary: list users
+      tags:
+      - Users Admin
+      security:
+      - jwt_auth: []
+      parameters:
+      - name: role
+        in: query
+        schema:
+          type: string
+        description: admin/partner/tourist
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     post:
       summary: create user
       tags:
