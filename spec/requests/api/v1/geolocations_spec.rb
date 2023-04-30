@@ -301,7 +301,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     end
   end
 
-  path '/api/v1/tours/{tour_id}/places/{place_id}/geolocations' do
+  path '/api/v1/tours/{tour_id}/places/{place_id}/geolocations/{id}' do
     parameter name: 'tour_id', in: :path, type: :string, description: 'tour id'
     parameter name: 'place_id', in: :path, type: :string, description: 'place id'
     parameter name: :id, in: :path, type: :string, description: 'geolocation id'
