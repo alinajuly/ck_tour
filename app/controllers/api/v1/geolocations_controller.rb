@@ -1,8 +1,18 @@
 class Api::V1::GeolocationsController < ApplicationController
   include ResourceFinder
-  skip_before_action :authenticate_request, only: %i[show]
+  skip_before_action :authenticate_request, only: %i[index show geolocations_map]
   before_action :authorize_policy
   before_action :set_geolocation, only: %i[show update destroy]
+
+  def index
+    @geolocations = parentable.geolocations
+
+    if @geolocations
+      render json: @geolocations, status: :ok
+    else
+      render json: @geolocations.errors, status: :bad_request
+    end
+  end
 
   def show
     authorize @geolocation
@@ -39,6 +49,16 @@ class Api::V1::GeolocationsController < ApplicationController
       render json: { status: 'Delete' }, status: :no_content
     else
       render json: @geolocation.errors, status: :unprocessable_entity
+    end
+  end
+
+  def geolocations_map
+    @geolocations = Geolocation.all
+
+    if @geolocations
+      render json: @geolocations, status: :ok
+    else
+      render json: @geolocations.errors, status: :bad_request
     end
   end
 
