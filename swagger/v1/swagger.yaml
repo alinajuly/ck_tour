@@ -99,8 +99,6 @@ paths:
           description: successful created
         '401':
           description: unauthorized
-        '404':
-          description: not found
         '422':
           description: invalid request
       requestBody:
@@ -161,12 +159,8 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
     put:
       summary: 'update ACCOMMODATION: status by admin: published/unpublished , other
         attr. by partner his own only'
@@ -220,14 +214,10 @@ paths:
       security:
       - jwt_auth: []
       responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
+        '204':
+          description: no content
         '404':
           description: not found
-        '422':
-          description: invalid request
   "/api/v1/admins/create_admin":
     post:
       summary: create admin
@@ -623,10 +613,8 @@ paths:
           description: successful created
         '401':
           description: unauthorized
-        '404':
-          description: not found
         '422':
-          description: invalid request
+          description: unprocessable entity
       requestBody:
         content:
           multipart/form-data:
@@ -661,8 +649,6 @@ paths:
           description: successful
         '404':
           description: not found
-        '422':
-          description: invalid request
     put:
       summary: update attraction by admin
       tags:
@@ -698,14 +684,12 @@ paths:
       security:
       - jwt_auth: []
       responses:
-        '200':
+        '204':
           description: successful
         '401':
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
   "/api/v1/auth/login":
     post:
       summary: authentication user
@@ -1410,6 +1394,18 @@ paths:
           description: not found
         '422':
           description: invalid request
+  "/api/v1/geolocations":
+    get:
+      summary: list geolocations for all
+      tags:
+      - Map
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '422':
+          description: invalid request
   "/api/v1/{parentable_type}/{parentable_id}/geolocations":
     parameters:
     - name: parentable_type
@@ -1424,6 +1420,17 @@ paths:
       required: true
       schema:
         type: string
+    get:
+      summary: list geolocations for all
+      tags:
+      - Map
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '422':
+          description: invalid request
     post:
       summary: create geolocation by admin (attraction) or partner (catering/tour)
       tags:
@@ -2577,38 +2584,14 @@ paths:
         '422':
           description: invalid request
   "/api/v1/users":
-    get:
-      summary: list users
-      tags:
-      - Users Admin
-      security:
-      - jwt_auth: []
-      parameters:
-      - name: role
-        in: query
-        schema:
-          type: string
-        description: admin/partner/tourist
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     post:
       summary: create user
       tags:
       - Users Tourist
-      description: Creates a new user
       parameters: []
       responses:
         '201':
           description: successful created
-        '404':
-          description: not found
         '422':
           description: invalid request
       requestBody:
@@ -2654,8 +2637,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
     put:
       summary: change_role
       tags:
@@ -2669,8 +2650,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
     delete:
       summary: delete user
       tags:
@@ -2678,14 +2657,12 @@ paths:
       security:
       - jwt_auth: []
       responses:
-        '200':
-          description: successful
+        '204':
+          description: no content
         '401':
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
 servers:
 - url: http://{defaultHost}
   variables:

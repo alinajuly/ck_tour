@@ -1,7 +1,10 @@
 class GeolocationPolicy < ApplicationPolicy
-  def show?
+  def index?
     true
   end
+
+  alias show? index?
+  alias geolocations_map? index?
 
   def create?
     user.partner? || user.admin?

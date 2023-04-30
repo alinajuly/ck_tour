@@ -58,6 +58,8 @@ Rails.application.routes.draw do
         resources :comments
         resources :rates
       end
+
+      get '/geolocations', to: 'geolocations#geolocations_map'
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
