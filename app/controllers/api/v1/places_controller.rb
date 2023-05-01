@@ -64,10 +64,6 @@ class Api::V1::PlacesController < ApplicationController
     @place = Place.find(params[:id])
   end
 
-  def place_json
-    render json: @place.as_json(include: :geolocations, methods: [:image_url]), status: :ok
-  end
-
   def place_params
     params.permit(:name, :body, :tour_id, :image)
   end
