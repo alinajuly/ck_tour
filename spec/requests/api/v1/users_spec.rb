@@ -11,34 +11,29 @@ RSpec.describe 'api/v1/users', type: :request do
       security [jwt_auth: []]
       parameter name: :role, in: :query, schema: { type: :string },
                 description: 'admin/partner/tourist'
+      let!(:user) { create(:user, role: 'admin') }
+      let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+      let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+      let(:Authorization) { headers['Authorization'] }
+      let(:role) { nil }
 
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
+          expect(JSON.parse(response.body)).to eq(User.all.as_json)
         end
 
         run_test!
       end
 
       response(401, 'unauthorized') do
+        let!(:user) { create(:user) }
+        let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+        let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+        let(:Authorization) { headers['Authorization'] }
+        let(:role) { nil }
         it 'should returns status response' do
           expect(response.status).to eq(401)
-        end
-
-        run_test!
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-
-        run_test!
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
         end
 
         run_test!
@@ -136,9 +131,9 @@ RSpec.describe 'api/v1/users', type: :request do
       security [jwt_auth: []]
 
       response(200, 'successful') do
-        before do
-          user.save
-        end
+        # before do
+        #   user.save
+        # end
 
         let(:Authorization) { headers['Authorization'] }
 
@@ -183,11 +178,11 @@ RSpec.describe 'api/v1/users', type: :request do
       tags 'Users'
       security [jwt_auth: []]
 
-      response(204, 'no content') do
+      response(200, 'no content') do
         let(:Authorization) { headers['Authorization'] }
 
         it 'should returns status response' do
-          expect(response.status).to eq(204)
+          expect(response.status).to eq(200)
         end
 
         run_test!

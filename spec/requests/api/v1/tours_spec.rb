@@ -1,7 +1,12 @@
 require 'rails_helper'
 require 'swagger_helper'
+require_relative '../../../../app/controllers/concerns/json_web_token'
 
 RSpec.describe 'api/v1/tours', type: :request do
+  let!(:user) { create(:user, role: 'partner') }
+  let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+  let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+
   path '/api/v1/tours' do
     get('list TOUR - published for all') do
       tags 'Tour'
@@ -16,28 +21,21 @@ RSpec.describe 'api/v1/tours', type: :request do
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old tours'
 
+      let(:Authorization) { headers['Authorization'] }
+      let!(:tour1) { create(:tour, user_id: user.id) }
+      let!(:tour2) { create(:tour, user_id: user.id, status: 'published') }
+      let!(:places) { [] }
+      let(:geolocations) { nil }
+      let(:user_id) { nil }
+      let(:status) { 'unpublished' }
+      let(:archived) { nil }
+
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
-      end
 
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -70,25 +68,31 @@ RSpec.describe 'api/v1/tours', type: :request do
                 }
 
       response(201, 'successful created') do
-        it 'should returns status response' do
+        let(:Authorization) { headers['Authorization'] }
+        let!(:tour) { build(:tour, user_id: user.id) }
+
+        run_test! do
           expect(response.status).to eq(201)
         end
       end
 
       response(401, 'unauthorized') do
-        it 'should returns status response' do
+        let!(:user) { create(:user) }
+        let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+        let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+        let(:Authorization) { headers['Authorization'] }
+        let!(:tour) { build(:tour, user_id: user.id) }
+
+        run_test! do
           expect(response.status).to eq(401)
         end
       end
 
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
       response(422, 'invalid request') do
-        it 'should returns status response' do
+        let(:Authorization) { headers['Authorization'] }
+        let!(:tour) { build(:tour, user_id: user.id, time_start: Date.today - 7) }
+
+        run_test! do
           expect(response.status).to eq(422)
         end
       end
@@ -97,6 +101,8 @@ RSpec.describe 'api/v1/tours', type: :request do
 
   path '/api/v1/tours/{id}' do
     parameter name: :id, in: :path, type: :string, description: 'tour id'
+    let(:Authorization) { headers['Authorization'] }
+    let!(:tour) { create(:tour, user_id: user.id) }
 
     get('show TOUR - published for all') do
       tags 'Tour'
@@ -104,39 +110,22 @@ RSpec.describe 'api/v1/tours', type: :request do
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
-        let(:id) { '123' }
+        let(:id) { tour.id }
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-      end
-
-      response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
-      end
 
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
+        run_test!
       end
 
       response(404, 'not found') do
+        let(:id) { 'invalid' }
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -165,38 +154,47 @@ RSpec.describe 'api/v1/tours', type: :request do
                 }
 
       response(200, 'successful') do
-        let(:id) { '123' }
+        let(:id) { tour.id }
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-      end
-
-      response(200, 'successful') do
-        it 'should returns status response' do
+        run_test! do
           expect(response.status).to eq(200)
+        end
+
+        run_test! do
+          tour.update(title: 'The Best Tour of the Year')
+          expect(Tour.find_by(title: 'The Best Tour of the Year')).to eq(tour)
+          tour.update(description: 'Really the Best')
+          expect(Tour.find_by(description: 'Really the Best')).to eq(tour)
         end
       end
 
       response(401, 'unauthorized') do
-        it 'should returns status response' do
+        let(:id) { tour.id }
+        let(:Authorization) { nil }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          tour.update(title: 'The Best Tour of the Year')
           expect(response.status).to eq(401)
         end
       end
 
       response(404, 'not found') do
-        it 'should returns status response' do
+        let(:id) { 'invalid' }
+        let(:tour_attributes) { attributes_for(:tour) }
+
+        run_test! do
           expect(response.status).to eq(404)
         end
       end
 
       response(422, 'invalid request') do
-        it 'should returns status response' do
+        let(:id) { tour.id }
+        let(:tour_attributes) { attributes_for(:tour, time_start: Date.today - 7) }
+
+        run_test! do
           expect(response.status).to eq(422)
+          expect(json[:time_start]).to eq(["can't be in the past"])
         end
       end
     end
@@ -206,26 +204,27 @@ RSpec.describe 'api/v1/tours', type: :request do
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
-        it 'should returns status response' do
+        let(:id) { tour.id }
+
+        run_test! do
           expect(response.status).to eq(200)
         end
       end
 
       response(401, 'unauthorized') do
-        it 'should returns status response' do
+        let(:id) { tour.id }
+        let(:Authorization) { nil }
+
+        run_test! do
           expect(response.status).to eq(401)
         end
       end
 
       response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
+        let(:id) { 'invalid' }
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
+        run_test! do
+          expect(response.status).to eq(404)
         end
       end
     end
