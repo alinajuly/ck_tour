@@ -14,13 +14,15 @@ class Api::V1::UsersController < ApplicationController
     authorize @users
 
     render json: @users, status: :ok
+    # render json: UserSerializer.new(@users), status: :ok
   end
 
   # GET api/v1/users/{name}
   def show
     authorize @user
 
-    render json: @user, status: :ok
+    render json: UserSerializer.new(@user), status: :ok
+    # render json: @user, status: :ok
   end
 
   # POST api/v1/users
@@ -31,7 +33,8 @@ class Api::V1::UsersController < ApplicationController
 
     if @user.save
       UserMailer.user_welcome(@user).deliver_later
-      render json: @user, status: :created
+      render json: UserSerializer.new(@user), status: :created
+      # render json: @user, status: :created
     else
       render json: { errors: @user.errors.full_messages },
              status: :unprocessable_entity
