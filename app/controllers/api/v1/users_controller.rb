@@ -13,8 +13,8 @@ class Api::V1::UsersController < ApplicationController
 
     authorize @users
 
-    render json: @users, status: :ok
-    # render json: UserSerializer.new(@users), status: :ok
+    # render json: @users, status: :ok
+    render json: UserSerializer.new(@users), status: :ok
   end
 
   # GET api/v1/users/{name}
