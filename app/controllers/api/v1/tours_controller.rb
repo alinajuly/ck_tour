@@ -32,7 +32,7 @@ class Api::V1::ToursController < ApplicationController
   def show
     authorize @tour
 
-    render json: @tour.as_json(include: { places: { methods: [:image_url] }})
+    render json: TourSerializer.new(@tour).as_json(include: { places: { methods: [:image_url] }})
   end
 
   # POST /api/v1/tours
@@ -42,7 +42,7 @@ class Api::V1::ToursController < ApplicationController
     authorize @tour
 
     if @tour.save
-      render json: @tour, status: :created
+      render json: TourSerializer.new(@tour), status: :created
     else
       render json: @tour.errors, status: :unprocessable_entity
     end
@@ -56,7 +56,7 @@ class Api::V1::ToursController < ApplicationController
       if @tour.published? && params[:status].present?
         StatusMailer.tour_published(@tour.user, @tour).deliver_later
       end
-      render json: { status: 'Update', data: @tour }, status: :ok
+      render json: TourSerializer.new(@tour), status: :ok
     else
       render json: @tour.errors, status: :unprocessable_entity
     end

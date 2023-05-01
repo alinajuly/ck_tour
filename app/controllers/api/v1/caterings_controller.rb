@@ -8,10 +8,8 @@ class Api::V1::CateringsController < ApplicationController
   before_action :edit_catering, only: %i[update destroy]
   before_action :authorize_policy
 
-  # GET /api/v1/accommodations/1/caterings
+  # GET /api/v1/caterings
   def index
-    # methods
-
     @caterings = if (params[:check_in] && params[:check_out]).present?
                    available_caterings
                  elsif params[:geolocations].present?
@@ -33,16 +31,11 @@ class Api::V1::CateringsController < ApplicationController
     end
   end
 
-  # GET /api/v1/accommodations/1/caterings/1
+  # GET /api/v1/caterings/1
   def show
     authorize @catering
 
-    render json: {
-      data: {
-        catering: @catering,
-        image_urls: @catering.images.map { |image| url_for(image) }
-      }
-    }, status: :ok
+    catering_json
   end
 
   # POST /api/v1/caterings

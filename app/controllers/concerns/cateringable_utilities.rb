@@ -35,7 +35,7 @@ module CateringableUtilities
   def catering_json
     render json: {
       data: {
-        catering: @catering,
+        catering: CateringSerializer.new(@catering),
         image_urls: @catering.images.map { |image| url_for(image) }
       }
     }, status: :ok
