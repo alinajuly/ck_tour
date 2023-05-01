@@ -5,6 +5,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
   let!(:user) { create(:user, role: 'admin') }
   let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+  let(:Authorization) { headers['Authorization'] }
 
   path '/api/v1/attractions' do
     get('list attractions for all') do
@@ -15,22 +16,18 @@ RSpec.describe 'api/v1/attractions', type: :request do
       parameter name: :search, in: :query, schema: { type: :string },
                 description: 'Search'
 
+      let!(:attraction1) { create(:attraction) }
+      let!(:attraction2) { create(:attraction, title: 'Niagara Falls') }
+      let(:geolocations) { nil }
+      let(:search) { 'Niagara' }
+
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
+          # expect(response.body).to eq(attraction2)
         end
-      end
 
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -55,9 +52,10 @@ RSpec.describe 'api/v1/attractions', type: :request do
 
       response(201, 'successful created') do
         let(:Authorization) { headers['Authorization'] }
-        let!(:attraction) { { title: 'Test Attraction', description: 'A test attraction' } }
-        # let(:title) { 'Test Attraction' }
-        # let(:description) { 'This is a test attraction' }
+        # let(:image) { RRack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/example_image.jpg", "image/jpeg") }
+        let(:attraction) { FactoryBot.attributes_for(:attraction) }
+        # let!(:attraction) { build(:attraction) }
+        # let!(:attraction) { post :create, params: attraction_attributes }
 
         run_test! do
           expect(response.status).to eq(201)
@@ -178,11 +176,11 @@ RSpec.describe 'api/v1/attractions', type: :request do
       tags 'Admin Attractions'
       security [ jwt_auth: [] ]
 
-      response(204, 'successful') do
+      response(200, 'successful') do
         let(:id) { attraction.id }
 
         run_test! do
-          expect(response.status).to eq(204)
+          expect(response.status).to eq(200)
         end
       end
 

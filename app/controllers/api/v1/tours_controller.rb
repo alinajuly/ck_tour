@@ -22,7 +22,7 @@ class Api::V1::ToursController < ApplicationController
     authorize @tours
 
     if @tours
-      render json: @tours.as_json(include: { places: { methods: [:image_url] }})
+      render json: @tours.as_json(include: { places: { methods: [:image_url] } })
     else
       render json: @tours.errors, status: :bad_request
     end

@@ -8,7 +8,7 @@ class Tour < ApplicationRecord
   has_many :comments, as: :commentable
   has_many :rates, as: :ratable
 
-  enum status: [:unpublished, :published]
+  enum status: %i[unpublished published]
 
   scope :geolocation_filter, ->(locality) { joins(places: :geolocations).where('locality ILIKE ?', "%#{locality}%") }
   scope :filter_by_partner, ->(user) { where(user_id: user) }
@@ -18,5 +18,5 @@ class Tour < ApplicationRecord
 
   validates :title, :description, :phone, :email, :seats, :time_start, :time_end, :reg_code, :address_owner, presence: true
   validates :price_per_one, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validate :not_in_past, on: :create
+  validate :not_in_past, on: %i[create update]
 end

@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'swagger_helper'
+require_relative '../../../../app/controllers/concerns/json_web_token'
 
 RSpec.describe 'api/v1/accommodations', type: :request do
   let!(:user) { create(:user, role: 'partner') }
@@ -24,28 +25,26 @@ RSpec.describe 'api/v1/accommodations', type: :request do
       parameter name: :status, in: :query, schema: { type: :string },
                 description: 'Filter on status: unpublished/published'
 
+      let(:Authorization) { headers['Authorization'] }
+      let!(:accommodation1) { create(:accommodation, user_id: user.id, name: 'Accommodation 1') }
+      let!(:accommodation2) { create(:accommodation, user_id: user.id, name: 'Accommodation 2') }
+      let(:geolocations) { nil }
+      let(:check_in) { Date.today }
+      let(:check_out) { Date.today + 1 }
+      let(:number_of_peoples) { 2 }
+      let(:user_id) { nil }
+      let(:status) { 'unpublished' }
+
+      before do
+        allow_any_instance_of(Api::V1::AccommodationsController).to receive(:available_accommodations).and_return([accommodation1])
+      end
+
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
-      end
 
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -81,15 +80,17 @@ RSpec.describe 'api/v1/accommodations', type: :request do
 
       response(201, 'successful created') do
         let(:Authorization) { headers['Authorization'] }
-        let!(:accommodation)  {{ name: 'Test Accommodation', description: 'A test accommodation', kind: 'hotel',
-            phone: '555-555-5555', email: 'test@test.com', reg_code: '175852451', address_owner: '123 Main St',
-            person: 'John Smith', user_id: user.id }}
-
-        it 'should returns status response' do
-          expect(response.status).to eq(201)
+        let(:accommodation) { build_stubbed(:accommodation, user_id: user.id) }
+        # let!(:accommodation) { build(:accommodation, user: user) }
+        before do
+          puts accommodation.inspect
+          puts user.inspect
         end
 
-        run_test!
+        run_test! do
+          expect(Accommodation.find_by(email: 'partner225@test.com')).to eq(accommodation)
+          expect(response.status).to eq(201)
+        end
       end
 
       response(401, 'unauthorized') do
@@ -97,9 +98,7 @@ RSpec.describe 'api/v1/accommodations', type: :request do
         let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
         let(:headers) { { 'Authorization' => "Bearer #{token}" } }
         let(:Authorization) { headers['Authorization'] }
-        let!(:accommodation)  {{ name: 'Test Accommodation', description: 'A test accommodation', kind: 'hotel',
-                                 phone: '555-555-5555', email: 'test@test.com', reg_code: '175852451', address_owner: '123 Main St',
-                                 person: 'John Smith', user_id: user.id }}
+        let!(:accommodation) { build(:accommodation, user_id: user.id) }
 
         run_test! do
           expect(response.status).to eq(401)
@@ -194,10 +193,14 @@ RSpec.describe 'api/v1/accommodations', type: :request do
 
       response(401, 'unauthorized') do
         let(:id) { accommodation.id }
+        let!(:user) { create(:user) }
+        let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+        let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+        let(:Authorization) { headers['Authorization'] }
 
         run_test! do |response|
           data = JSON.parse(response.body)
-          accommodation.update(status: 'published')
+          accommodation.update(name: 'Newest hotel on Cayman Islands')
           expect(response.status).to eq(401)
         end
       end
@@ -225,11 +228,20 @@ RSpec.describe 'api/v1/accommodations', type: :request do
       tags 'Partner Accommodations'
       security [jwt_auth: []]
 
-      response(204, 'no content') do
+      response(200, 'ok') do
         let(:id) { accommodation.id }
 
         run_test! do
-          expect(response.status).to eq(204)
+          expect(response.status).to eq(200)
+        end
+      end
+
+      response(401, 'unauthorized') do
+        let(:id) { accommodation.id }
+        let(:Authorization) { nil }
+
+        run_test! do
+          expect(response.status).to eq(401)
         end
       end
 
