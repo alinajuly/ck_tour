@@ -1,6 +1,3 @@
-
- 
-
 class Api::V1::WebhooksController < ApplicationController
   skip_before_action :authenticate_request
 
