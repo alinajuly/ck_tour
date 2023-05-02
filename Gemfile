@@ -49,6 +49,7 @@ gem 'rubocop', require: false
 # Generate API documentation and rspec integration tests
 gem 'rswag', '~> 2.8'
 
+# This library provides functionality to send internet mail via SMTP, the Simple Mail Transfer Protocol
 gem 'net-smtp', require: false
 gem 'net-imap', require: false
 gem 'net-pop', require: false
