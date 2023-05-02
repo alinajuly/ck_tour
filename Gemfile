@@ -94,4 +94,5 @@ gem 'pry'
 # Pundit provides a set of helpers which guide you in leveraging regular Ruby classes and object oriented design patterns to build a simple, robust and scalable authorization system
 gem 'pundit'
 
+# A fast JSON:API serializer for Ruby Objects
 gem "jsonapi-serializer", "~> 2.2"
