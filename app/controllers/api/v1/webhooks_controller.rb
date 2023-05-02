@@ -88,6 +88,14 @@ class Api::V1::WebhooksController < ApplicationController
         user.caterings.unpublished! if user.caterings.present?
       end
     end
+
+    if ['trialing', 'active'].include?(subscription.status)
+      user = User.find_by(email: customer.email)
+      if user
+        user.update(role: 'partner')
+        UserMailer.user_partner(user).deliver_later
+      end
+    end
   end
 
   def handle_subscription_deleted(event)
