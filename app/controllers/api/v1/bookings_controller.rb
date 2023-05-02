@@ -1,4 +1,6 @@
 class Api::V1::BookingsController < ApplicationController
+  include BookingableUtilities
+
   before_action :authorize_policy, only: %i[index list_for_partner]
   before_action :set_user, except: %i[create list_for_partner]
   before_action :set_accommodation, only: :list_for_partner
@@ -67,21 +69,6 @@ class Api::V1::BookingsController < ApplicationController
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity
-    end
-  end
-
-  def list_for_partner
-    room_bookings = @room.bookings
-    @bookings = if params[:archived].present?
-                  policy_scope(room_bookings.archival_booking)
-                else
-                  policy_scope(room_bookings.upcoming_booking)
-                end
-
-    if @bookings
-      render json: { data: @bookings }, status: :ok
-    else
-      render json: @bookings.errors, status: :bad_request
     end
   end
 
