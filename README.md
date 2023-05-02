@@ -1,6 +1,6 @@
 # API application Tourist portal of Cherkasy region
 
-GeekHub graduation project by [Alina Cheriapkina] (https://github.com/alinajuly “Alina Cheriapkina”) and [Serge Krynytsia] (https://github.com/Haidamac “Serge Krynytsia”)
+GeekHub graduation project by **[Alina Cheriapkina](https://github.com/alinajuly) and **[Serge Krynytsia](https://github.com/Haidamac)
 
 ## How to install
 
@@ -61,10 +61,9 @@ http://localhost:3000
 ```
 
 ## Open Swagger UI in browser:
-```ruby
-http://localhost:3000/api-docs/index.html
-```
+
+[localhost:3000/api-docs](http://localhost:3000/api-docs/index.html)
 
 ## Visit to see project with front-end and design
 
-[cktour project] (https://tour-project-frontend.vercel.app/ “cktour project”)
+[cktour project](https://tour-project-frontend.vercel.app)
