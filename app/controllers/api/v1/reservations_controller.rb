@@ -1,4 +1,6 @@
 class Api::V1::ReservationsController < ApplicationController
+  include ReservationableUtilities
+
   before_action :authorize_policy, only: %i[index list_for_partner]
   before_action :set_user, except: %i[create list_for_partner]
   before_action :set_catering, only: %i[create list_for_partner]
@@ -10,21 +12,6 @@ class Api::V1::ReservationsController < ApplicationController
                       policy_scope(user_reservations.archival_reservation)
                     else
                       policy_scope(user_reservations.upcoming_reservation)
-                    end
-
-    if @reservations
-      render json: { data: @reservations }, status: :ok
-    else
-      render json: @reservations.errors, status: :bad_request
-    end
-  end
-
-  def list_for_partner
-    catering_reservations = @catering.reservations
-    @reservations = if params[:archived].present?
-                      policy_scope(catering_reservations.archival_reservation)
-                    else
-                      policy_scope(catering_reservations.upcoming_reservation)
                     end
 
     if @reservations
