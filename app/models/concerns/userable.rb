@@ -8,7 +8,7 @@ module Userable
   end
 
   def password_token_valid?
-    (reset_password_sent_at + 4.hours) > Time.now.utc
+    (reset_password_sent_at + PASSWORD_RESET_EXPIRATION) > Time.now.utc
   end
 
   def reset_password!(password)

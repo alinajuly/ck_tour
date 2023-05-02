@@ -13,7 +13,8 @@ class User < ApplicationRecord
   has_one :subscription, dependent: :destroy
 
   has_secure_password
-
+  
+  PASSWORD_RESET_EXPIRATION = 4.hours
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /\A
     (?=.*\d)           # At least one digit
