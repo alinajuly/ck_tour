@@ -59,6 +59,7 @@ class Api::V1::WebhooksController < ApplicationController
       user = User.find_by(email: customer.email)
       if user
         user.update(role: 'partner')
+        UserMailer.user_partner(user).deliver_later
       end
     end
   end
@@ -81,6 +82,7 @@ class Api::V1::WebhooksController < ApplicationController
       user = User.find_by(email: customer.email)
       if user
         user.update(role: 'tourist')
+        UserMailer.user_tourist(user).deliver_later
         user.accommodations.unpublished! if user.accommodations.present?
         user.tours.unpublished! if user.tours.present?
         user.caterings.unpublished! if user.caterings.present?

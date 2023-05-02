@@ -125,55 +125,6 @@ RSpec.describe 'api/v1/users', type: :request do
       end
     end
 
-    put('change_role') do
-      tags 'Users'
-      consumes 'application/json'
-      security [jwt_auth: []]
-
-      response(200, 'successful') do
-        # before do
-        #   user.save
-        # end
-
-        let(:Authorization) { headers['Authorization'] }
-
-        it 'should returns status response' do
-          expect(response.status).to eq(200)
-        end
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-
-        run_test!
-      end
-
-      response(401, 'unauthorized') do
-        let(:Authorization) { headers['invalid'] }
-
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
-
-        run_test!
-      end
-
-      response(404, 'not found') do
-        let(:id) { 'invalid' }
-        let(:Authorization) { headers['Authorization'] }
-
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-
-        run_test!
-      end
-    end
-
     delete('delete user') do
       tags 'Users'
       security [jwt_auth: []]

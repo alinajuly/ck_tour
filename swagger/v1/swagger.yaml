@@ -81,12 +81,6 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     post:
       summary: create new ACCOMMODATION - for partner only
       tags:
@@ -214,8 +208,10 @@ paths:
       security:
       - jwt_auth: []
       responses:
-        '204':
-          description: no content
+        '200':
+          description: ok
+        '401':
+          description: unauthorized
         '404':
           description: not found
   "/api/v1/admins/create_admin":
@@ -596,10 +592,6 @@ paths:
       responses:
         '200':
           description: successful
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     post:
       summary: create attraction by admin
       tags:
@@ -684,7 +676,7 @@ paths:
       security:
       - jwt_auth: []
       responses:
-        '204':
+        '200':
           description: successful
         '401':
           description: unauthorized
@@ -1803,12 +1795,6 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     post:
       summary: create place for tour by partner
       tags:
@@ -1821,8 +1807,6 @@ paths:
           description: successful created
         '401':
           description: unauthorized
-        '404':
-          description: not found
         '422':
           description: invalid request
       requestBody:
@@ -1865,12 +1849,8 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
     put:
       summary: update place of tour by partner
       tags:
@@ -1912,8 +1892,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
   "/api/v1/plans":
     get:
       summary: plans for authenticated user
@@ -2445,12 +2423,6 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     post:
       summary: create new TOUR - for partner only
       tags:
@@ -2464,8 +2436,6 @@ paths:
           description: successful created
         '401':
           description: unauthorized
-        '404':
-          description: not found
         '422':
           description: invalid request
       requestBody:
@@ -2529,12 +2499,8 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
     put:
       summary: 'update TOUR: status by admin: published/unpublished , other attr.
         by partner his own only'
@@ -2595,8 +2561,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
   "/api/v1/users":
     get:
       summary: list users
@@ -2615,10 +2579,6 @@ paths:
           description: successful
         '401':
           description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     post:
       summary: create user
       tags:
@@ -2672,19 +2632,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-    put:
-      summary: change_role
-      tags:
-      - Users
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
     delete:
       summary: delete user
       tags:
@@ -2692,7 +2639,7 @@ paths:
       security:
       - jwt_auth: []
       responses:
-        '204':
+        '200':
           description: no content
         '401':
           description: unauthorized
