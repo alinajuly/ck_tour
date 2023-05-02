@@ -1,6 +1,6 @@
 # Rails API Tourist portal of Cherkasy region
 
-GeekHub graduation project by **[Alina Cheriapkina](https://github.com/alinajuly) and **[Serge Krynytsia](https://github.com/Haidamac)
+GeekHub graduation project by **[Alina Cheriapkina](https://github.com/alinajuly)** and **[Serge Krynytsia](https://github.com/Haidamac)**
 
 ## How to install
 
