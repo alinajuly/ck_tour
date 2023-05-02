@@ -1,6 +1,6 @@
 # API application Tourist portal of Cherkasy region
 
-GeekHub graduation project
+GeekHub graduation project by [Alina Cheriapkina] (https://github.com/alinajuly “Alina Cheriapkina”) and [Serge Krynytsia] (https://github.com/Haidamac “Serge Krynytsia”)
 
 ## How to install
 
@@ -46,7 +46,7 @@ rails db:migrate
 rails db:seed
 ```
 
-## How to open in browser
+## How to use
 
 type in console
 
@@ -60,83 +60,11 @@ visit
 http://localhost:3000
 ```
 
-## Notice
-
-* After each command `git pull`, please, type in console
-
-```
-bundle install
-```
-
-```
-rails db:migrate
-```
-
-## How it works
-type in Postman:
-
-1) Authorization:
-method POST http://127.0.0.1:3000/auth/login
-
-Params:
-- KEY email  VALUE  example@ukr.net
-- KEY password VALUE qwerty
-
-### save the token you received!!!
-
-2) GET data:
-
-method GET:
-
-Headers: 
-- KEY Authorization   VALUE ```your token```
-
-routes:
-
-list of accommodations: http://127.0.0.1:3000/api/v1/accommodations
-
-show accommodation with rooms: http://127.0.0.1:3000/api/v1/accommodations/:id
-
-show all rooms in accommodation http://127.0.0.1:3000/api/v1/accommodations/1/rooms/
-
-show room http://127.0.0.1:3000/api/v1/accommodations/:id/rooms/:id
-
-3) POST/PUT/PATCH data:
-
-method POST:
-
-Headers:
-- KEY Authorization   VALUE ```your token```
-
-new accommodation: http://127.0.0.1:3000/api/v1/accommodations
-
-Params:
-- KEY name VALUE ```string```
-- KEY description VALUE ```string```
-- KEY address VALUE ```string```
-- KEY kind VALUE ```string```
-- KEY latitude VALUE ```decimal (scale 6)```
-- KEY longitude VALUE ```decimal (scale 6)```
-
-new room: http://127.0.0.1:3000/api/v1/accommodations/:id/rooms
-
-Params:
-- KEY places VALUE ```integer```
-- KEY bed VALUE ```string```
-- KEY description VALUE ```string```
-- KEY breakfast VALUE ```boolean```
-- KEY conditioner VALUE ```boolean```
-- KEY price_per_night VALUE ```decimal```
-
-4) DELETE data:
-
-Headers:
-- KEY Authorization   VALUE ```your token```
-
-- delete accommodation: http://127.0.0.1:3000/api/v1/accommodations/:id
-- delete room: http://127.0.0.1:3000/api/v1/accommodations/:id/rooms/:id
-
-Open Swagger UI in browser:
+## Open Swagger UI in browser:
 ```ruby
 http://localhost:3000/api-docs/index.html
 ```
+
+## Visit to see project with front-end and design
+
+[cktour project] (https://tour-project-frontend.vercel.app/ “cktour project”)
