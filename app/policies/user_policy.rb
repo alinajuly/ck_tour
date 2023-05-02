@@ -17,22 +17,13 @@ class UserPolicy < ApplicationPolicy
 
   def show?
     true
-    # @user.admin? || @user.id == @current_user.id || @user.partner? || @user.tourist?
   end
 
   def create?
     true
   end
 
-  def update?
-    true
-  end
-
   def destroy?
-    true
-  end
-
-  def change_role?
     true
   end
 

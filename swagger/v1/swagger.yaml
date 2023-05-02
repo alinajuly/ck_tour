@@ -2632,19 +2632,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-    put:
-      summary: change_role
-      tags:
-      - Users
-      security:
-      - jwt_auth: []
-      responses:
-        '200':
-          description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
     delete:
       summary: delete user
       tags:

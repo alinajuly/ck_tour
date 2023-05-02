@@ -38,26 +38,6 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def update
-    authorize @user
-
-    if @user.tourist?
-      @user.partner!
-      UserMailer.user_partner(@user).deliver_later
-
-      render json: { status: 'Role is changed', data: @user }, status: :ok
-    elsif @user.partner?
-      @user.tourist!
-      UserMailer.user_tourist(@user).deliver_later
-      @user.accommodations.unpublished! if @user.accommodations.present?
-      @user.tours.unpublished! if @user.tours.present?
-      @user.caterings.unpublished! if @user.caterings.present?
-      render json: { status: 'Role is changed, resources are hidden', data: @user }, status: :ok
-    else
-      render json: { error: 'Invalid current password' }, status: :unprocessable_entity
-    end
-  end
-
   # DELETE api/v1/users/{name}
   def destroy
     authorize @user
