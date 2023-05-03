@@ -1,6 +1,5 @@
 class Attraction < ApplicationRecord
   include Imaginable
-  include ImageValidable
 
   has_many :geolocations, as: :geolocationable
   has_many :comments, as: :commentable
