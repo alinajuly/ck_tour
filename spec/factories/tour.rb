@@ -7,9 +7,9 @@ FactoryBot.define do
     time_start { Date.today + 7 }
     time_end { Date.today + 9 }
     address_owner { Faker::Address.full_address }
-    phone { Faker::PhoneNumber.phone_number_with_country_code }
+    phone { '067-222-2222' }
     email { 'test@test.com' }
-    reg_code { Faker::IDNumber.spanish_citizen_number }
-    person { Faker::Name.last_name }
+    reg_code { '11111111' }
+    person { Faker::Name.name_with_middle }
   end
 end

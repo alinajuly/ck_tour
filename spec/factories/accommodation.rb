@@ -3,11 +3,11 @@ FactoryBot.define do
     name { Faker::Name.female_first_name }
     description { Faker::Quotes::Chiquito.expression }
     address_owner { Faker::Address.full_address }
-    phone { Faker::PhoneNumber.phone_number_with_country_code }
-    email { 'partner225@test.com' }
+    phone { '067-222-2222' }
+    email { 'test@test.com' }
+    reg_code { '11111111' }
     kind { Faker::House.room }
-    reg_code { Faker::IDNumber.spanish_citizen_number }
-    person { Faker::Name.last_name }
+    person { Faker::Name.name_with_middle }
 
     association :user, factory: :user
   end
