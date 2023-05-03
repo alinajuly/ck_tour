@@ -13,7 +13,7 @@ class User < ApplicationRecord
   has_one :subscription, dependent: :destroy
 
   has_secure_password
-  
+
   PASSWORD_RESET_EXPIRATION = 4.hours
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /\A
@@ -29,7 +29,7 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8, maximum: 255 }, format: { with: VALID_PASSWORD_REGEX }, on: :create
   validates :name, presence: true, length: { minimum: 3, maximum: 50 }
 
-  enum role: [:tourist, :partner, :admin]
+  enum role: %i[tourist partner admin]
 
   scope :role_filter, ->(role) { where(role: role) }
 end
