@@ -1,6 +1,6 @@
 class Api::V1::AppointmentsController < ApplicationController
   include AppointmentableUtilities
-  
+
   before_action :authorize_policy, only: %i[index list_for_partner]
   before_action :set_user, only: %i[index show update destroy]
   before_action :set_tour, only: %i[list_for_partner create]
@@ -11,7 +11,7 @@ class Api::V1::AppointmentsController < ApplicationController
     @appointments = if params[:archived].present?
                       policy_scope(user_appointments.archival_appointment)
                     else
-                       policy_scope(user_appointments.upcoming_appointment)
+                      policy_scope(user_appointments.upcoming_appointment)
                     end
 
     if @appointments

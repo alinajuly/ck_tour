@@ -1,5 +1,7 @@
 class Api::V1::PlacesController < ApplicationController
   include Rails.application.routes.url_helpers
+  include PlaceableUtilities
+
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :set_tour
   before_action :set_place, only: %i[show update destroy]

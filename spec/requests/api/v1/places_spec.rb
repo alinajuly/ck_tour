@@ -15,7 +15,7 @@ RSpec.describe 'api/v1/places', type: :request do
     get('list places of tour for all') do
       tags 'Tour'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let!(:place) { create(:place, tour_id: tour.id) }
@@ -45,28 +45,20 @@ RSpec.describe 'api/v1/places', type: :request do
                   required: %i[name body image]
                 }
 
-      # let(:valid_attributes) { { name: 'Sample Place', body: 'Sample place description', image: Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/example_image.jpg", 'image/jpeg') } }
-      # let(:place) { { name: 'Sample Place', body: 'Sample place description', tour_id: tour.id, as: :multipart } }
-      # context 'when the request is valid' do
-      #
-      #   it 'creates a place' do
-      #     expect(json['name']).to eq('Sample Place')
-      #     expect(json['body']).to eq('Sample place description')
-      #   end
-      #
-      #   it 'returns status code 201' do
-      #     expect(response).to eq(201)
-      #   end
-      # end
-
       response(201, 'successful created') do
-        let!(:place) { build_stubbed(:place, tour_id: tour.id, as: :multipart) }
+        # let!(:place_new) { build_stubbed(:place, tour_id: tour.id) }
+        let!(:place) { { name: 'Paris', body: 'really Paris', tour_id: tour.id } }
 
         before do
           puts tour.inspect
           puts place.inspect
         end
 
+        # it 'create the requested place' do
+        #   post "/api/v1/tours/#{tour.id}/places", params: attributes
+        #   # expect(place.name).to eq('Paris')
+        #   expect(response).to eq(200)
+        # end
         run_test! do
           expect(response.status).to eq(201)
         end
@@ -101,7 +93,7 @@ RSpec.describe 'api/v1/places', type: :request do
 
     get('show place of tour for all') do
       tags 'Tour'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let(:id) { place.id }
