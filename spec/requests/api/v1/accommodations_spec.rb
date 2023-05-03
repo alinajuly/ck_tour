@@ -80,8 +80,8 @@ RSpec.describe 'api/v1/accommodations', type: :request do
 
       response(201, 'successful created') do
         let(:Authorization) { headers['Authorization'] }
-        let(:accommodation) { build_stubbed(:accommodation, user_id: user.id) }
-        # let!(:accommodation) { build(:accommodation, user: user) }
+        let(:accommodation) { create(:accommodation, user_id: user.id) }
+
         before do
           puts accommodation.inspect
           puts user.inspect
