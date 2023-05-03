@@ -1,5 +1,6 @@
 class Attraction < ApplicationRecord
   include Imaginable
+  include ImageValidable
 
   has_many :geolocations, as: :geolocationable
   has_many :comments, as: :commentable
@@ -10,4 +11,5 @@ class Attraction < ApplicationRecord
   scope :search_filter, ->(search) { joins(:geolocations).where('title||description||locality ILIKE ?', "%#{search}%") }
 
   validates :title, :description, presence: true
+  validate :validate_image_format
 end
