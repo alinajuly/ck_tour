@@ -50,13 +50,15 @@ Rails.application.routes.draw do
       resource :billing_portals, only: [:create]
 
       resources :tours do
-        resources :places do
-          resources :geolocations
-        end
+        resources :places
         get '/appointments', to: 'appointments#list_for_partner'
         resources :appointments
         resources :comments
         resources :rates
+      end
+
+      resources :places do
+        resources :geolocations
       end
 
       get '/geolocations', to: 'geolocations#geolocations_map'

@@ -6,5 +6,6 @@ FactoryBot.define do
     zip_code { '000000' }
     latitude { 49.445000 }
     longitude { 32.063333 }
+    geolocationable_type { 'Attraction' }
   end
 end
