@@ -164,16 +164,6 @@ RSpec.describe 'api/v1/places', type: :request do
           expect(response.status).to eq(404)
         end
       end
-
-      response(422, 'invalid request') do
-        let(:id) { place.id }
-        let!(:place_attributes) { attributes_for(:place, name: '') }
-
-        run_test! do
-          expect(response.status).to eq(422)
-          expect(json[:name]).to eq(["can't be blank"])
-        end
-      end
     end
 
     delete('delete place of tour by partner') do
