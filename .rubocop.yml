@@ -17,3 +17,9 @@ Style/ClassAndModuleChildren:
   Enabled: false
 Metrics/BlockLength:
   Max: 150
+Metrics/AbcSize:
+  Max: 20
+Metrics/MethodLength:
+  Max: 20
+Layout/LineLength:
+  Max: 150

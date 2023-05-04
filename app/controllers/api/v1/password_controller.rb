@@ -8,7 +8,7 @@ class Api::V1::PasswordController < ApplicationController
 
     if user.present?
       user.generate_password_token! # generate pass token
-      PasswordResetMailer.with(user:)).password_reset.deliver_now
+      PasswordResetMailer.with(user:).password_reset.deliver_now
       render json: { reset_password_token: user.reset_password_token }, status: :ok
       # render json: { status: 'We will send you password reset instructions as soon as we find you in the database' }, status: :ok
     else
