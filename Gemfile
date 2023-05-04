@@ -49,6 +49,7 @@ gem 'rubocop', require: false
 # Generate API documentation and rspec integration tests
 gem 'rswag', '~> 2.8'
 
+# This library provides functionality to send internet mail via SMTP, the Simple Mail Transfer Protocol
 gem 'net-smtp', require: false
 gem 'net-imap', require: false
 gem 'net-pop', require: false
@@ -94,4 +95,5 @@ gem 'pry'
 # Pundit provides a set of helpers which guide you in leveraging regular Ruby classes and object oriented design patterns to build a simple, robust and scalable authorization system
 gem 'pundit'
 
+# A fast JSON:API serializer for Ruby Objects
 gem "jsonapi-serializer", "~> 2.2"
