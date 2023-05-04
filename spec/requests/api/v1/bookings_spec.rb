@@ -112,21 +112,25 @@ RSpec.describe 'api/v1/bookings', type: :request do
       end
 
       response(401, 'unauthorized') do
+        let(:id) { booking.id }
+        let(:Authorization) { nil }
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
+
+        run_test!
       end
 
       response(404, 'not found') do
+        let(:id) { 'invalid' }
+        let(:booking_attributes) { attributes_for(:booking) }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -135,27 +139,34 @@ RSpec.describe 'api/v1/bookings', type: :request do
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
+        let(:id) { booking.id }
+
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
+        let(:id) { booking.id }
+        let(:Authorization) { nil }
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
+
+        run_test!
       end
 
       response(404, 'not found') do
+        let(:id) { 'invalid' }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
   end
@@ -164,35 +175,39 @@ RSpec.describe 'api/v1/bookings', type: :request do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
 
+    let(:accommodation_id) { accommodation.id }
+    let(:room_id) { room.id }
+
     get('list ACCOMMODATION BOOKING for partner') do
       tags 'Partner Accommodations'
       produces 'application/json'
       security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old bookings'
+      
+      let(:archived) { nil }
 
       response(200, 'successful') do
+        let!(:booking) { create(:booking, room_id: room.id, user_id: user.id) }
+        let(:token) { JWT.encode({ user_id: partner.id }, Rails.application.secret_key_base) }
+        let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+        let(:Authorization) { headers['Authorization'] }
+
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
+        let!(:booking) { create(:booking, room_id: room.id, user_id: user.id) }
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
-      end
 
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -218,27 +233,28 @@ RSpec.describe 'api/v1/bookings', type: :request do
                 }
 
       response(201, 'successful created') do
+        let!(:booking) { create(:booking, room_id: room.id, user_id: user.id) }
+
         it 'should returns status response' do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:number_of_peoples]).to eq(1)
+          expect(json[:phone]).to eq(booking.phone)
+          expect(json[:full_name]).to eq(booking.full_name)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
+        let(:Authorization) { nil }
+        let!(:booking) { create(:booking, room_id: room.id, user_id: user.id) }
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
-      end
 
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
   end
