@@ -60,7 +60,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
 
       response(201, 'successful created') do
         let!(:amenity) { build(:amenity, room_id: room.id) }
-
+        
         it 'should returns status response' do
           expect(response.status).to eq(201)
         end
@@ -144,7 +144,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
         let(:headers) { { 'Authorization' => "Bearer #{token}" } }
         let(:Authorization) { headers['Authorization'] }
         let(:id) { amenity.id }
-
+        
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
