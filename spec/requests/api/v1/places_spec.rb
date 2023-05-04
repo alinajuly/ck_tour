@@ -46,21 +46,13 @@ RSpec.describe 'api/v1/places', type: :request do
                 }
 
       response(201, 'successful created') do
-        # let!(:place_new) { build_stubbed(:place, tour_id: tour.id) }
-        let!(:place) { { name: 'Paris', body: 'really Paris', tour_id: tour.id } }
+        let!(:place) { build_stubbed(:place, tour_id: tour.id) }
 
-        before do
-          puts tour.inspect
-          puts place.inspect
-        end
-
-        # it 'create the requested place' do
-        #   post "/api/v1/tours/#{tour.id}/places", params: attributes
-        #   # expect(place.name).to eq('Paris')
-        #   expect(response).to eq(200)
-        # end
         run_test! do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:name]).to eq(place.name)
+          expect(json[:body]).to eq(place.body)
         end
       end
 

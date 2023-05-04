@@ -64,6 +64,8 @@ RSpec.describe 'api/v1/comments', type: :request do
       response(201, 'successful created') do
         it 'should returns status response' do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:body]).to eq('Nice view')
         end
 
         run_test!
