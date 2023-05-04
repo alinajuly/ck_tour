@@ -22,8 +22,8 @@ RSpec.describe 'api/v1/rooms', type: :request do
                 description: 'Guests quantity'
 
       response(200, 'successful') do
-        let(:check_in) { Time.now + 3.days }
-        let(:check_out) { Time.now + 7.days }
+        let(:check_in) { Date.today + 3.days }
+        let(:check_out) { Date.today + 7.days }
         let(:number_of_peoples) { 2 }
         let!(:room) { build(:room, accommodation_id: accommodation.id) }
 
