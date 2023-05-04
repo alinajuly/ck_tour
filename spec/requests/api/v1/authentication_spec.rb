@@ -16,15 +16,15 @@ RSpec.describe 'api/v1/authentication', type: :request do
                     email: { type: :string },
                     password: { type: :string }
                   },
-                  required: [ :email, :password ]
+                  required: %i[email password]
                 }
-      
+
       response(201, 'successful created') do
         it 'should returns status response' do
           expect(response.status).to eq(201)
         end
       end
-            
+
       response(401, 'unauthorized') do
         it 'should returns status response' do
           expect(response.status).to eq(401)

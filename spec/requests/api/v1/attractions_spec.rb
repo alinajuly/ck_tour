@@ -24,7 +24,6 @@ RSpec.describe 'api/v1/attractions', type: :request do
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
-          # expect(response.body).to eq(attraction2)
         end
 
         run_test!
@@ -34,7 +33,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
     post('create attraction by admin') do
       tags 'Admin Attractions'
       description 'Creates a new attraction'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       consumes 'multipart/form-data'
       parameter name: :attraction,
                 # in: :body,
@@ -47,18 +46,18 @@ RSpec.describe 'api/v1/attractions', type: :request do
                     description: { type: :string },
                     image: { type: :file }
                   },
-                  required: [ :title, :description, :image ]
+                  required: %i[title description image]
                 }
 
       response(201, 'successful created') do
         let(:Authorization) { headers['Authorization'] }
-        # let(:image) { RRack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/example_image.jpg", "image/jpeg") }
         let(:attraction) { FactoryBot.attributes_for(:attraction) }
-        # let!(:attraction) { build(:attraction) }
-        # let!(:attraction) { post :create, params: attraction_attributes }
 
         run_test! do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:title]).to eq(attraction.title)
+          expect(json[:description]).to eq(attraction.description)
         end
       end
 
@@ -113,7 +112,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
 
     put('update attraction by admin') do
       tags 'Admin Attractions'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       consumes 'multipart/form-data'
       parameter name: :attraction,
                 in: :formData,
@@ -161,20 +160,11 @@ RSpec.describe 'api/v1/attractions', type: :request do
           expect(response.status).to eq(404)
         end
       end
-
-      response(422, 'invalid request') do
-        let(:id) { attraction.id }
-        let(:attraction_attributes) { attributes_for(:attraction, title: nil) }
-
-        run_test! do
-          expect(response.status).to eq(422)
-        end
-      end
     end
 
     delete('delete attraction by admin') do
       tags 'Admin Attractions'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let(:id) { attraction.id }

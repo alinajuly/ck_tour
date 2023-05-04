@@ -29,6 +29,8 @@ RSpec.describe 'api/v1/bookings', type: :request do
       
       let(:archived) { nil }
 
+      let(:archived) { nil }
+
       response(200, 'successful') do
         let!(:booking) { create(:booking, room_id: room.id, user_id: user.id) }
 

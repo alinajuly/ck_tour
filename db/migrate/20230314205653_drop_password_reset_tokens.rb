@@ -4,6 +4,6 @@ class DropPasswordResetTokens < ActiveRecord::Migration[7.0]
   end
 
   def down
-    fail ActiveRecord::IrreversibleMigration
+    raise ActiveRecord::IrreversibleMigration
   end
 end

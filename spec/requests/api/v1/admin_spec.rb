@@ -11,7 +11,7 @@ RSpec.describe 'api/v1/admins', type: :request do
       tags 'Users Admin'
       description 'Creates a new admin'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :user,
                 in: :body,
                 required: true,
@@ -28,19 +28,22 @@ RSpec.describe 'api/v1/admins', type: :request do
       let(:Authorization) { headers['Authorization'] }
 
       response(201, 'successful created') do
-        let(:user_new_attributes) { { name: 'Jack Dow', email: 'jackdow@test.com', password: 'Password123!', role: 'admin' } }
+        let(:user) { { name: 'Jack Dow', email: 'jackdow@test.com', password: 'Password123!' } }
 
-        before { post '/api/v1/admins/create_admin', params: { user: user_new_attributes } }
-
-        run_test! do |response|
-          json = JSON.parse(response.body)
-          # expect(json['email']).to eq(user_new[:email])
+        it 'should returns status response' do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:email]).to eq('jackdow@test.com')
+          expect(json[:name]).to eq('Jack Dow')
+          expect(json[:role]).to eq('admin')
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
         let(:Authorization) { nil }
+        let(:user) { { name: 'Jack Dow', email: 'jackdow@test.com', password: 'Password123!' } }
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
@@ -49,7 +52,7 @@ RSpec.describe 'api/v1/admins', type: :request do
       end
 
       response(422, 'invalid request') do
-        let(:user_new_attributes) { { name: 'Jack Dow', email: 'jackdow@test.com', password: '123', role: 'admin' } }
+        let(:user) { { name: 'Jack Dow', email: 'jackdow@test.com', password: '123' } }
         it 'should returns status response' do
           expect(response.status).to eq(422)
         end
@@ -63,14 +66,17 @@ RSpec.describe 'api/v1/admins', type: :request do
     get('list unpublished comments for admin only') do
       tags 'Comment'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       let(:Authorization) { headers['Authorization'] }
-      let!(:attraction1) { create(:attraction) }
+      let!(:attraction) { create(:attraction) }
       let!(:user) { create(:user, email: 'new_user_tourist@test.com') }
       let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
       let(:headers) { { 'Authorization' => "Bearer #{token}" } }
       let(:Authorization) { headers['Authorization'] }
-      let!(:comment) { create(:comment, user_id: user.id) }
+      let!(:comment) { create(:comment, commentable_id: attraction.id, user_id: user.id) }
+      let(:token) { JWT.encode({ user_id: admin.id }, Rails.application.secret_key_base) }
+      let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+      let(:Authorization) { headers['Authorization'] }
 
       response(200, 'successful') do
         it 'should returns status response' do
@@ -80,16 +86,13 @@ RSpec.describe 'api/v1/admins', type: :request do
         run_test!
       end
 
-      response(404, 'not found') do
+      response(401, 'unauthorized') do
+        let(:Authorization) { nil }
         it 'should returns status response' do
-          expect(response.status).to eq(404)
+          expect(response.status).to eq(401)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
   end

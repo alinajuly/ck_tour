@@ -62,7 +62,6 @@ class Api::V1::BookingsController < ApplicationController
   end
 
   def destroy
-
     if @booking.destroy!
       BookingMailer.booking_deleted(@booking.user, @booking).deliver_now
       BookingMailer.booking_deleted_for_partner(@booking.user, @booking).deliver_now

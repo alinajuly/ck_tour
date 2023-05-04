@@ -10,7 +10,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     get('list TOUR - published for all') do
       tags 'Tour'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :geolocations, in: :query, schema: { type: :string },
                 description: 'Locality'
       parameter name: :user_id, in: :query, schema: { type: :integer },
@@ -42,7 +42,7 @@ RSpec.describe 'api/v1/tours', type: :request do
       tags 'Partner Tours'
       description 'Creates a new tour'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :tour,
                 in: :body,
                 required: true,
@@ -62,16 +62,43 @@ RSpec.describe 'api/v1/tours', type: :request do
                     person: { type: :string },
                     user_id: { type: :string }
                   },
-                  required: [ :title, :description, :seats, :address_owner, :phone, :email, :price_per_one,
-                              :user_id, :reg_code, :person, :time_start, :time_end ]
+                  required: %i[title description seats address_owner phone email price_per_one
+                               user_id reg_code person time_start time_end]
                 }
 
       response(201, 'successful created') do
         let(:Authorization) { headers['Authorization'] }
-        let!(:tour) { build(:tour, user_id: user.id) }
+        let!(:tour) { build(:tour, title: 'Tour to Atacama Desert', user_id: user.id) }
+        # let!(:tour) { build_stubbed(:tour, user_id: user.id) }
+        # post 'api/v1/tours', params: {
+        # let(:tour_new) do
+        #   {
+        #     title: 'Tour to Atacama Desert',
+        #     description: 'Fantastic tour',
+        #     seats: 10,
+        #     address_owner: '215, 5th Avenue New York',
+        #     phone: '001-222-2222',
+        #     email: 'macupacchu@test.com',
+        #     price_per_one: 2000,
+        #     reg_code: '11111111',
+        #     person: 'Black Jack',
+        #     user_id: user.id,
+        #     time_start: Time.now + 240.hours,
+        #     time_end: Time.now + 680.hours
+        #   }
+        # end
 
         run_test! do
           expect(response.status).to eq(201)
+          expect(Tour.find_by(title: 'Tour to Atacama Desert')).to eq(tour)
+          # json = JSON.parse(response.body).deep_symbolize_keys
+          # expect(json[:title]).to eq(tour.title)
+          # expect(json[:description]).to eq(tour.description)
+          # expect(json[:seats]).to eq(10)
+        end
+
+        after do
+          puts tour.title.inspect
         end
       end
 
@@ -106,7 +133,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     get('show TOUR - published for all') do
       tags 'Tour'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let(:id) { tour.id }
@@ -131,7 +158,7 @@ RSpec.describe 'api/v1/tours', type: :request do
     put('update TOUR: status by admin: published/unpublished , other attr. by partner his own only') do
       tags 'Partner Tours'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :tour,
                 in: :body,
                 schema: {
@@ -172,7 +199,6 @@ RSpec.describe 'api/v1/tours', type: :request do
         let(:Authorization) { nil }
 
         run_test! do |response|
-          data = JSON.parse(response.body)
           tour.update(title: 'The Best Tour of the Year')
           expect(response.status).to eq(401)
         end
@@ -200,7 +226,7 @@ RSpec.describe 'api/v1/tours', type: :request do
 
     delete('delete TOUR - for admin all, for partner his own only') do
       tags 'Partner Tours'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let(:id) { tour.id }

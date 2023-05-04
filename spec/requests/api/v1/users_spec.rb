@@ -2,7 +2,6 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/users', type: :request do
-
   path '/api/v1/users' do
     get('list users') do
       tags 'Users Admin'
@@ -60,6 +59,10 @@ RSpec.describe 'api/v1/users', type: :request do
 
         it 'should returns status response' do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:email]).to eq('john@example.com')
+          expect(json[:name]).to eq('John')
+          expect(json[:role]).to eq('tourist')
         end
 
         run_test!

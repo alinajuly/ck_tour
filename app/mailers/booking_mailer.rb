@@ -1,5 +1,4 @@
 class BookingMailer < ApplicationMailer
-
   def booking_confirmation(user, booking)
     set_mail_variables(user, booking)
     mail(to: @accommodation.email, subject: 'Нове бронювання Вашого помешкання')

@@ -15,14 +15,12 @@ module Available
     raw_rooms_ids = rooms_date_ranges.select { |array| array[1].overlaps?(check_in...check_out) }
                                      .map(&:first)
     # add room quantities to raw_rooms_ids
-    room_ids_with_quantities = raw_rooms_ids.map { |id| [id, Room.find_by(id: id).quantity] }
+    room_ids_with_quantities = raw_rooms_ids.map { |id| [id, Room.find_by(id:).quantity] }
     # select booked room ids (regard of room quantity with same id) overlaping with new booking date range in query
     booked_room_ids = []
     room_ids_with_quantities.group_by { |r| r[0] }.each do |room_id, room_quantities|
       total_quantity = room_quantities.sum { |r| r[1] }
-      if total_quantity >= room_quantities.map(&:second).uniq.sum
-        booked_room_ids << room_id
-      end
+      booked_room_ids << room_id if total_quantity >= room_quantities.map(&:second).uniq.sum
     end
 
     # counting how many free places are left in accommodation

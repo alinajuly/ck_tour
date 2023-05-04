@@ -2,9 +2,7 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/password', type: :request do
-
   path '/api/v1/password/forgot' do
-
     post('forgot password') do
       tags 'Users'
       description 'forgot users password'
@@ -15,9 +13,9 @@ RSpec.describe 'api/v1/password', type: :request do
                 schema: {
                   type: :object,
                   properties: {
-                    email: { type: :string },
+                    email: { type: :string }
                   },
-                  required: [ :email ]
+                  required: [:email]
                 }
 
       response(200, 'successful') do
@@ -47,7 +45,6 @@ RSpec.describe 'api/v1/password', type: :request do
   end
 
   path '/api/v1/password/reset' do
-
     post('reset password') do
       tags 'Users'
       description 'reset password'
@@ -62,7 +59,7 @@ RSpec.describe 'api/v1/password', type: :request do
                     password: { type: :string },
                     token: { type: :string }
                   },
-                  required: [ :email, :password, :token ]
+                  required: %i[email password token]
                 }
 
       response(200, 'successful') do
@@ -92,12 +89,11 @@ RSpec.describe 'api/v1/password', type: :request do
   end
 
   path '/api/v1/password/update' do
-
     put('update password') do
       tags 'Users'
       description 'update password'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :user,
                 in: :body,
                 required: true,
@@ -106,9 +102,9 @@ RSpec.describe 'api/v1/password', type: :request do
                   properties: {
                     old_password: { type: :string },
                     new_password: { type: :string },
-                    confirm_password: { type: :string },
+                    confirm_password: { type: :string }
                   },
-                  required: [ :old_password, :new_password, :confirm_password ]
+                  required: %i[old_password new_password confirm_password]
                 }
 
       response(200, 'successful') do
