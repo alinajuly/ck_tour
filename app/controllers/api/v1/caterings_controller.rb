@@ -97,6 +97,10 @@ class Api::V1::CateringsController < ApplicationController
                   :user_id, images: [])
   end
 
+  def edit_catering_params
+    params.permit(policy(@catering).permitted_attributes)
+  end
+
   def authorize_policy
     authorize Catering
   end

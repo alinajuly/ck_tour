@@ -32,10 +32,6 @@ module CateringableUtilities
     Catering.where.not(id: full_reserved_catering_ids).published
   end
 
-  def edit_catering_params
-    params.permit(policy(@catering).permitted_attributes)
-  end
-
   def catering_json
     render json: {
       data: {

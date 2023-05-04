@@ -27,9 +27,4 @@ module AccommodationableUtilities
     end
     available_accommodations
   end
-
-  # Only allow a list of trusted parameters through.
-  def edit_accommodation_params
-    params.permit(policy(@accommodation).permitted_attributes)
-  end
 end
