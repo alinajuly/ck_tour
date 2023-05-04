@@ -1,10 +1,10 @@
 class Api::V1::RatesController < ApplicationController
   include ResourceFinder
   before_action :current_user, only: :show
+  before_action :authorize_policy
   before_action :set_rate, only: %i[update destroy]
   skip_before_action :authenticate_request, only: %i[index show]
-  before_action :authorize_policy
-  
+
   # GET /api/v1/rates
   def index
     average_rating = parentable.rates.average(:rating)
@@ -59,6 +59,7 @@ class Api::V1::RatesController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_rate
     @rate = policy_scope(parentable.rates, policy_scope_class: RatePolicy::Scope).find(params[:id])

@@ -156,6 +156,14 @@ RSpec.describe 'api/v1/comments', type: :request do
         end
       end
 
+      response(401, 'unauthorized') do
+        let(:Authorization) { nil }
+        it 'should returns status response' do
+          put "/api/v1/attractions/#{parent.id}/rates/#{comment.id}", params: new_attributes
+          expect(response.status).to eq(401)
+        end
+      end
+
       response(422, 'invalid request') do
         let(:id) { comment.id }
         let(:new_attributes) { { status: 'approved' } }
