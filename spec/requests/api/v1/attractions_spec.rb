@@ -132,8 +132,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
           expect(response).to have_http_status(:ok)
         end
 
-        run_test! do |response|
-          data = JSON.parse(response.body)
+        run_test! do
           attraction.update(title: 'Niagara Falls')
           expect(Attraction.find_by(title: 'Niagara Falls')).to eq(attraction)
           attraction.update(description: 'Really Niagara Falls')

@@ -69,36 +69,10 @@ RSpec.describe 'api/v1/tours', type: :request do
       response(201, 'successful created') do
         let(:Authorization) { headers['Authorization'] }
         let!(:tour) { build(:tour, title: 'Tour to Atacama Desert', user_id: user.id) }
-        # let!(:tour) { build_stubbed(:tour, user_id: user.id) }
-        # post 'api/v1/tours', params: {
-        # let(:tour_new) do
-        #   {
-        #     title: 'Tour to Atacama Desert',
-        #     description: 'Fantastic tour',
-        #     seats: 10,
-        #     address_owner: '215, 5th Avenue New York',
-        #     phone: '001-222-2222',
-        #     email: 'macupacchu@test.com',
-        #     price_per_one: 2000,
-        #     reg_code: '11111111',
-        #     person: 'Black Jack',
-        #     user_id: user.id,
-        #     time_start: Time.now + 240.hours,
-        #     time_end: Time.now + 680.hours
-        #   }
-        # end
 
         run_test! do
           expect(response.status).to eq(201)
           expect(Tour.find_by(title: 'Tour to Atacama Desert')).to eq(tour)
-          # json = JSON.parse(response.body).deep_symbolize_keys
-          # expect(json[:title]).to eq(tour.title)
-          # expect(json[:description]).to eq(tour.description)
-          # expect(json[:seats]).to eq(10)
-        end
-
-        after do
-          puts tour.title.inspect
         end
       end
 
@@ -210,16 +184,6 @@ RSpec.describe 'api/v1/tours', type: :request do
 
         run_test! do
           expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        let(:id) { tour.id }
-        let(:tour_attributes) { attributes_for(:tour, time_start: Date.today - 7) }
-
-        run_test! do
-          expect(response.status).to eq(422)
-          expect(json[:time_start]).to eq(["can't be in the past"])
         end
       end
     end

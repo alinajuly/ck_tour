@@ -48,7 +48,7 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
 
       response(201, 'successful created') do
         let!(:facility) { build(:facility, accommodation_id: accommodation.id) }
-        
+
         it 'should returns status response' do
           expect(response.status).to eq(201)
         end
@@ -112,7 +112,7 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
       response(401, 'unauthorized') do
         let!(:user) { create(:user, role: 'partner') }
         let(:Authorization) { nil }
-        
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end

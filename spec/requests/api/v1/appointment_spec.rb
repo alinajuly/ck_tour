@@ -103,7 +103,6 @@ RSpec.describe 'api/v1/appointments', type: :request do
         let(:Authorization) { nil }
 
         run_test! do |response|
-          data = JSON.parse(response.body)
           appointment.update(note: 'additional peoples!!!')
           expect(response.status).to eq(401)
         end

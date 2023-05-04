@@ -141,7 +141,6 @@ RSpec.describe 'api/v1/places', type: :request do
         let(:Authorization) { nil }
 
         run_test! do |response|
-          data = JSON.parse(response.body)
           place.update(name: 'Machu Picchu')
           expect(response.status).to eq(401)
         end

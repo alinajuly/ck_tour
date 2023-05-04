@@ -14,7 +14,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
   path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities' do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
-    
+
     get('list amenities of room') do
       tags 'Accommodation'
 
@@ -41,7 +41,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
     post('create amenity of room - for partner only') do
       tags 'Partner Accommodations'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :amenity,
                 in: :body,
                 required: true,
@@ -56,12 +56,12 @@ RSpec.describe "Api::V1::Amenities", type: :request do
                     hair_dryer: { type: :boolean },
                     nice_view: { type: :boolean },
                     inclusive: { type: :boolean }
-                  },
+                  }
                 }
 
       response(201, 'successful created') do
         let!(:amenity) { build(:amenity, room_id: room.id) }
-        
+
         it 'should returns status response' do
           expect(response.status).to eq(201)
         end
@@ -145,7 +145,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
         let(:headers) { { 'Authorization' => "Bearer #{token}" } }
         let(:Authorization) { headers['Authorization'] }
         let(:id) { amenity.id }
-        
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
