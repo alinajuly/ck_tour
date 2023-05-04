@@ -107,8 +107,10 @@ RSpec.describe 'api/v1/accommodations', type: :request do
 
       response(422, 'invalid request') do
         let(:Authorization) { headers['Authorization'] }
-        let!(:accommodation)  {{ name: 'Test Accommodation', description: 'A test accommodation', kind: 'hotel',
-                                       user_id: user.id }}
+        let!(:accommodation)  do
+          { name: 'Test Accommodation', description: 'A test accommodation', kind: 'hotel',
+            user_id: user.id }
+        end
 
         run_test! do
           expect(response.status).to eq(422)

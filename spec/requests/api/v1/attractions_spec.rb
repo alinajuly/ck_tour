@@ -33,7 +33,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
     post('create attraction by admin') do
       tags 'Admin Attractions'
       description 'Creates a new attraction'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       consumes 'multipart/form-data'
       parameter name: :attraction,
                 # in: :body,
@@ -46,7 +46,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
                     description: { type: :string },
                     image: { type: :file }
                   },
-                  required: [ :title, :description, :image ]
+                  required: %i[title description image]
                 }
 
       response(201, 'successful created') do
@@ -112,7 +112,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
 
     put('update attraction by admin') do
       tags 'Admin Attractions'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       consumes 'multipart/form-data'
       parameter name: :attraction,
                 in: :formData,
@@ -164,7 +164,7 @@ RSpec.describe 'api/v1/attractions', type: :request do
 
     delete('delete attraction by admin') do
       tags 'Admin Attractions'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let(:id) { attraction.id }

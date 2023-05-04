@@ -11,10 +11,10 @@ class Api::V1::WebhooksController < ApplicationController
         payload, sig_header, endpoint_secret
       )
     rescue JSON::ParserError => e
-      render json: { error: { message: e }}, status: 400
+      render json: { error: { message: e } }, status: 400
       return
     rescue Stripe::SignatureVerificationError => e
-      render json: { error: { message: e }}, status: 400
+      render json: { error: { message: e } }, status: 400
       return
     end
 
@@ -29,7 +29,7 @@ class Api::V1::WebhooksController < ApplicationController
     else
       puts "Unhandled event type: #{event.type}"
     end
-  end  
+  end
 
   private
 
@@ -40,7 +40,7 @@ class Api::V1::WebhooksController < ApplicationController
     user.update(stripe_id: customer.id)
 
     Subscription.create(
-      user: user,
+      user:,
       customer_id: user.stripe_id,
       status: subscription.status,
       current_period_end: Time.at(subscription.current_period_end),
@@ -52,18 +52,18 @@ class Api::V1::WebhooksController < ApplicationController
       interval: event.data.object.plan.interval
     )
 
-    if ['trialing', 'active'].include?(subscription.status)
+    return unless ['trialing', 'active'].include?(subscription.status)
       user = User.find_by(email: customer.email)
-      if user
+      return unless user
         user.update(role: 'partner')
         UserMailer.user_partner(user).deliver_later
-      end
-    end
+      
+    
   end
 
   def handle_subscription_updated(event)
-    subscription_id = event.data.object.id 
-    subscription = Subscription.find_by(subscription_id: subscription_id) 
+    subscription_id = event.data.object.id
+    subscription = Subscription.find_by(subscription_id:))
     customer = Stripe::Customer.retrieve(event.data.object.customer)
 
     if subscription
@@ -86,32 +86,32 @@ class Api::V1::WebhooksController < ApplicationController
       end
     end
 
-    if ['trialing', 'active'].include?(subscription.status)
+    return unless ['trialing', 'active'].include?(subscription.status)
       user = User.find_by(email: customer.email)
-      if user
+      return unless user
         user.update(role: 'partner')
         UserMailer.user_partner(user).deliver_later
-      end
-    end
+      
+    
   end
 
   def handle_subscription_deleted(event)
-    subscription_id = event.data.object.id 
-    subscription = Subscription.find_by(subscription_id: subscription_id)
+    subscription_id = event.data.object.id
+    subscription = Subscription.find_by(subscription_id:))
     customer = Stripe::Customer.retrieve(event.data.object.customer)
 
-    if subscription
-      subscription.update!(status: event.data.object.status)
-    end
+    subscription.update!(status: event.data.object.status) if subscription
 
-    if ['unpaid', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'paused'].include?(subscription.status)
+    unless ['unpaid', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'paused'].include?(subscription.status)
+  return
+end
       user = User.find_by(email: customer.email)
-      if user
+      return unless user
         user.update(role: 'tourist')
         user.accommodations.unpublished! if user.accommodations.present?
         user.tours.unpublished! if user.tours.present?
         user.caterings.unpublished! if user.caterings.present?
-      end
-    end
+      
+    
   end
 end

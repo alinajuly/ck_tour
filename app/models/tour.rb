@@ -12,11 +12,11 @@ class Tour < ApplicationRecord
 
   scope :geolocation_filter, ->(locality) { joins(places: :geolocations).where('locality ILIKE ?', "%#{locality}%") }
   scope :filter_by_partner, ->(user) { where(user_id: user) }
-  scope :filter_by_status, ->(status) { where(status: status) }
+  scope :filter_by_status, ->(status) { where(status:) }
   scope :upcoming_tours, -> { where('time_start >= ?', Time.now) }
   scope :archival_tours, -> { where('time_start < ?', Time.now) }
 
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d-]+(\.[a-z\d-]+)*\.[a-z]+\z/i
   VALID_PHONE_REGEX = /\A\d{3}-\d{3}-\d{4}\z/
   VALID_REG_CODE_REGEX = /\A\d{8,10}\z/
   validates :title, :address_owner, :person, presence: true, length: { maximum: 255 }

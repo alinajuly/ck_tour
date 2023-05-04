@@ -12,9 +12,12 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # GET /api/v1/accommodations
   def index
-
     if @accommodations
-      render json: { data: @accommodations.map { |accommodation| accommodation.as_json.merge(images: accommodation.images.map { |image| url_for(image) }) } }, status: :ok
+      render json: { data: @accommodations.map do |accommodation|
+                             accommodation.as_json.merge(images: accommodation.images.map do |image|
+                                                                   url_for(image)
+                                                                 end)
+                           end }, status: :ok
     else
       render json: @accommodations.errors, status: :bad_request
     end
@@ -50,7 +53,6 @@ class Api::V1::AccommodationsController < ApplicationController
 
   # PUT /api/v1/accommodations/1
   def update
-
     authorize @accommodation
 
     build_images if params[:images].present?

@@ -13,14 +13,20 @@ namespace :puma do
   desc 'Stop puma'
   task :stop do
     on roles(:app) do
-      execute "cd #{release_path} && #{bundle_wrapper_path} exec pumactl -P #{shared_path}/tmp/pids/puma.pid stop" rescue nil
+      execute "cd #{release_path} && #{bundle_wrapper_path} exec pumactl -P #{shared_path}/tmp/pids/puma.pid stop"
+    rescue StandardError
+      nil
     end
   end
 
   desc 'Restart puma'
   task :restart do
-    on roles(:app) do  
-      execute("cd #{release_path} && #{bundle_wrapper_path} exec pumactl -P #{shared_path}/tmp/pids/puma.pid stop") rescue nil
+    on roles(:app) do
+      begin
+        execute("cd #{release_path} && #{bundle_wrapper_path} exec pumactl -P #{shared_path}/tmp/pids/puma.pid stop")
+      rescue StandardError
+        nil
+      end
 
       sudo 'service puma restart'
     end

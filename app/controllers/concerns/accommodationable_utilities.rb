@@ -1,6 +1,6 @@
 module AccommodationableUtilities
   extend ActiveSupport::Concern
-  
+
   def accommodation_json
     render json: {
       data: {

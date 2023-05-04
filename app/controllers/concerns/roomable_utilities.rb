@@ -1,6 +1,6 @@
 module RoomableUtilities
   extend ActiveSupport::Concern
-  
+
   def build_images
     params[:images].each do |img|
       @room.images.attach(io: img, filename: img.original_filename)

@@ -11,7 +11,7 @@ RSpec.describe 'api/v1/admins', type: :request do
       tags 'Users Admin'
       description 'Creates a new admin'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :user,
                 in: :body,
                 required: true,
@@ -66,7 +66,7 @@ RSpec.describe 'api/v1/admins', type: :request do
     get('list unpublished comments for admin only') do
       tags 'Comment'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       let(:Authorization) { headers['Authorization'] }
       let!(:attraction) { create(:attraction) }
       let!(:user) { create(:user, email: 'new_user_tourist@test.com') }

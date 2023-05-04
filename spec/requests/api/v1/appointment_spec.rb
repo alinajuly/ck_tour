@@ -19,7 +19,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     get('list TOUR APPOINTMENT for tourist') do
       tags 'Tourist Tours'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old appointments'
       let(:archived) { nil }
@@ -45,10 +45,9 @@ RSpec.describe 'api/v1/appointments', type: :request do
 
     get('show TOUR APPOINTMENT for tourist') do
       tags 'Tourist Tours'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
-
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
@@ -70,7 +69,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     put('update TOUR APPOINTMENT: confirmation (approved/cancelled) - partner only, other attr. by tourist') do
       tags 'Tourist Tours'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :appointment,
                 in: :body,
                 schema: {
@@ -122,7 +121,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
 
     delete('delete TOUR APPOINTMENT by tourist') do
       tags 'Tourist Tours'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let(:id) { appointment.id }
@@ -158,7 +157,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     get('list TOUR APPOINTMENT for partner') do
       tags 'Partner Tours'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old appointments'
       let(:archived) { nil }
@@ -190,7 +189,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
     post('create TOUR APPOINTMENT by tourist') do
       tags 'Tourist Tours'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :appointment,
                 in: :body,
                 required: true,
@@ -203,7 +202,7 @@ RSpec.describe 'api/v1/appointments', type: :request do
                     full_name: { type: :string },
                     tour_id: { type: :integer }
                   },
-                  required: [ :number_of_peoples, :tour_id ]
+                  required: %i[number_of_peoples tour_id]
                 }
 
       response(201, 'successful created') do

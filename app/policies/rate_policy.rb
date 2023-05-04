@@ -3,7 +3,8 @@ class RatePolicy < ApplicationPolicy
     def resolve
       if user.admin?
         scope.all
-      else user.present?
+      else
+        user.present?
         scope.where(user_id: user.id)
       end
     end

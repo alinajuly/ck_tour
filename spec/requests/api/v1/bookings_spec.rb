@@ -2,14 +2,13 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/bookings', type: :request do
-
   path '/api/v1/users/{id}/bookings' do
     parameter name: 'id', in: :path, type: :string, description: 'user id'
 
     get('list ACCOMMODATION BOOKING for tourist') do
       tags 'Tourist Accommodations'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old bookings'
 
@@ -45,7 +44,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
 
     get('show ACCOMMODATION BOOKING for tourist') do
       tags 'Tourist Accommodations'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let(:user_id) { '123' }
@@ -89,7 +88,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     put('update ACCOMMODATION BOOKING: confirmation (approved/cancelled) - partner only, other attr. by tourist') do
       tags 'Tourist Accommodations'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :booking,
                 in: :body,
                 schema: {
@@ -132,7 +131,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
 
     delete('delete ACCOMMODATION BOOKING by tourist') do
       tags 'Tourist Accommodations'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         it 'should returns status response' do
@@ -167,7 +166,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     get('list ACCOMMODATION BOOKING for partner') do
       tags 'Partner Accommodations'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old bookings'
 
@@ -199,7 +198,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     post('create ACCOMMODATION BOOKING by tourist') do
       tags 'Tourist Accommodations'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :booking,
                 in: :body,
                 required: true,
@@ -214,7 +213,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
                     full_name: { type: :string },
                     room_id: { type: :integer }
                   },
-                  required: [ :number_of_peoples, :check_in, :check_out, :room_id ]
+                  required: %i[number_of_peoples check_in check_out room_id]
                 }
 
       response(201, 'successful created') do

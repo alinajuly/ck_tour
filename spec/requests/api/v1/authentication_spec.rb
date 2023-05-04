@@ -16,7 +16,7 @@ RSpec.describe 'api/v1/authentication', type: :request do
                     email: { type: :string },
                     password: { type: :string }
                   },
-                  required: [ :email, :password ]
+                  required: %i[email password]
                 }
 
       response(201, 'successful created') do

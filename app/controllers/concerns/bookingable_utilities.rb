@@ -1,6 +1,6 @@
 module BookingableUtilities
   extend ActiveSupport::Concern
-  
+
   def list_for_partner
     room_bookings = @room.bookings
     @bookings = if params[:archived].present?

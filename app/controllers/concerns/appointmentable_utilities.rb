@@ -1,6 +1,6 @@
 module AppointmentableUtilities
   extend ActiveSupport::Concern
-  
+
   def list_for_partner
     tour_appointments = @tour.appointments
     @appointments = if params[:archived].present?

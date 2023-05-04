@@ -14,10 +14,14 @@ class Api::V1::RoomsController < ApplicationController
                available_rooms
              elsif @accommodation.rooms.present?
                @accommodation.rooms.all
-end
+             end
 
     if @rooms.present?
-      render json: { data: @rooms.map { |room| room.as_json.merge(images: room.images.map { |image| url_for(image) }) } }, status: :ok
+      render json: { data: @rooms.map do |room|
+                             room.as_json.merge(images: room.images.map do |image|
+                                                          url_for(image)
+                                                        end)
+                           end }, status: :ok
     elsif @rooms.nil?
       render json: { data: 'Sorry, is not enough places in our accommodation' }
     else
@@ -27,7 +31,6 @@ end
 
   # GET /api/v1/accommodations/1/rooms/1
   def show
-
     room_json
   end
 

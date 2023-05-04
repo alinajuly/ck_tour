@@ -1,4 +1,4 @@
-server '164.92.135.103', user: "#{fetch(:user)}", roles: %w{app db web}, primary: true
+server '164.92.135.103', user: "#{fetch(:user)}", roles: %w[app db web], primary: true
 
 set :application, 'cktour'
 set :deploy_to, "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
@@ -18,8 +18,6 @@ set :puma_conf, "#{shared_path}/config/puma.rb"
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-
-
 # role-based syntax
 # ==================
 
@@ -32,8 +30,6 @@ set :puma_conf, "#{shared_path}/config/puma.rb"
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
 
-
-
 # Configuration
 # =============
 # You can set any configuration variable like in config/deploy.rb
@@ -41,8 +37,6 @@ set :puma_conf, "#{shared_path}/config/puma.rb"
 # For available Capistrano configuration variables see the documentation page.
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
-
-
 
 # Custom SSH Options
 # ==================
