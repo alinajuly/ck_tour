@@ -8,6 +8,7 @@ class ApplicationController < ActionController::API
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from Stripe::CardError, with: :stripe_card_error
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  rescue_from ArgumentError, with: :invalid_argument
 
   private
 
@@ -42,6 +43,10 @@ class ApplicationController < ActionController::API
 
   def record_not_found
     render json: { error: 'record_not_found' }, status: :not_found
+  end
+
+  def invalid_argument
+    render json: { error: 'invalid argument' }, status: :unprocessable_entity
   end
 
   def render_success(data:, status: :ok)
