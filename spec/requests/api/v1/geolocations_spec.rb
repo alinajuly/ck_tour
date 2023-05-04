@@ -76,6 +76,9 @@ RSpec.describe 'api/v1/geolocations', type: :request do
       response(201, 'successful created') do
         it 'should returns status response' do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:locality]).to eq('New York')
+          expect(json[:suite]).to eq('25')
         end
 
         run_test!

@@ -61,6 +61,8 @@ RSpec.describe 'api/v1/rates', type: :request do
       response(201, 'successful created') do
         it 'should returns status response' do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:rating]).to eq(5)
         end
 
         run_test!

@@ -12,9 +12,9 @@ class Api::V1::RoomsController < ApplicationController
   def index
     @rooms = if (params[:check_in] && params[:check_out] && params[:number_of_peoples]).present?
                available_rooms
-             else
+             elsif @accommodation.rooms.present?
                @accommodation.rooms.all
-             end
+end
 
     if @rooms.present?
       render json: { data: @rooms.map { |room| room.as_json.merge(images: room.images.map { |image| url_for(image) }) } }, status: :ok

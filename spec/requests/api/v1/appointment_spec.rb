@@ -211,6 +211,10 @@ RSpec.describe 'api/v1/appointments', type: :request do
 
         it 'should returns status response' do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:number_of_peoples]).to eq(5)
+          expect(json[:phone]).to eq(appointment.phone)
+          expect(json[:full_name]).to eq(appointment.full_name)
         end
 
         run_test!

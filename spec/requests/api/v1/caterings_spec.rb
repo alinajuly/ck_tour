@@ -87,6 +87,9 @@ RSpec.describe 'api/v1/caterings', type: :request do
         run_test! do
           expect(Catering.find_by(name: 'Abscdgytraed')).to eq(catering)
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:places]).to eq(catering.places)
+          expect(json[:description]).to eq(catering.description)
         end
       end
 
