@@ -35,24 +35,18 @@ RSpec.describe 'api/v1/bookings', type: :request do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
-      end
 
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
+        run_test!
       end
 
       response(404, 'not found') do
+        let!(:id) { 'invalid' }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
   end
@@ -60,47 +54,31 @@ RSpec.describe 'api/v1/bookings', type: :request do
   path '/api/v1/users/{user_id}/bookings/{id}' do
     parameter name: 'user_id', in: :path, type: :string, description: 'user id'
     parameter name: 'id', in: :path, type: :string, description: 'booking id'
+    let(:user_id) { user.id }
+    let!(:booking) { create(:booking, room_id: room.id, user_id: user.id) }
+    let(:id) { booking.id }
+
 
     get('show ACCOMMODATION BOOKING for tourist') do
       tags 'Tourist Accommodations'
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
-        let(:user_id) { '123' }
-        let(:booking_id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-
-      response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
-      end
 
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
+        run_test!
       end
 
       response(404, 'not found') do
+        let(:id) { 'invalid' }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -124,9 +102,13 @@ RSpec.describe 'api/v1/bookings', type: :request do
                 }
 
       response(200, 'successful') do
+        let(:id) { booking.id }
+
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
