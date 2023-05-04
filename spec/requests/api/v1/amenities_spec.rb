@@ -5,6 +5,11 @@ RSpec.describe "Api::V1::Amenities", type: :request do
   let!(:user) { create(:user, role: 'partner') }
   let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+  let(:Authorization) { headers['Authorization'] }
+  let!(:accommodation) { create(:accommodation, user_id: user.id) }
+  let!(:room) { create(:room, accommodation_id: accommodation.id) }
+  let!(:accommodation_id) { accommodation.id }
+  let!(:room_id) { room.id }
 
   path '/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities' do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
@@ -13,12 +18,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       tags 'Accommodation'
 
       response(200, 'successful') do
-        let(:Authorization) { headers['Authorization'] }
-        let!(:accommodation) { create(:accommodation, user_id: user.id) }
-        let!(:room) { create(:room, accommodation_id: accommodation.id) }
-        let!(:accommodation_id) { accommodation.id }
-        let!(:room_id) { room.id }
-
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
@@ -27,9 +26,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       end
 
       response(404, 'not found') do
-        let(:Authorization) { headers['Authorization'] }
-        let!(:accommodation) { create(:accommodation, user_id: user.id) }
-        let!(:room) { create(:room, accommodation_id: accommodation.id) }
         let!(:accommodation_id) { 'invalid' }
         let!(:room_id) { 'invalid' }
 
@@ -63,11 +59,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
                 }
 
       response(201, 'successful created') do
-        let(:Authorization) { headers['Authorization'] }
-        let!(:accommodation) { create(:accommodation, user_id: user.id) }
-        let!(:room) { create(:room, accommodation_id: accommodation.id) }
-        let!(:accommodation_id) { accommodation.id }
-        let!(:room_id) { room.id }
         let!(:amenity) { build(:amenity, room_id: room.id) }
         
         it 'should returns status response' do
@@ -82,10 +73,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
         let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
         let(:headers) { { 'Authorization' => "Bearer #{token}" } }
         let(:Authorization) { headers['Authorization'] }
-        let!(:accommodation) { create(:accommodation, user_id: user.id) }
-        let!(:room) { create(:room, accommodation_id: accommodation.id) }
-        let!(:accommodation_id) { accommodation.id }
-        let!(:room_id) { room.id }
         let!(:amenity) { build(:amenity, room_id: room.id) }
 
         it 'should returns status response' do
@@ -96,9 +83,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       end
 
       response(404, 'not found') do
-        let(:Authorization) { headers['Authorization'] }
-        let!(:accommodation) { create(:accommodation, user_id: user.id) }
-        let!(:room) { create(:room, accommodation_id: accommodation.id) }
         let!(:accommodation_id) { 'invalid' }
         let!(:room_id) { 'invalid' }
         let!(:amenity) { build(:amenity, room_id: room.id) }
@@ -159,11 +143,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
         let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
         let(:headers) { { 'Authorization' => "Bearer #{token}" } }
         let(:Authorization) { headers['Authorization'] }
-        let!(:accommodation) { create(:accommodation, user_id: user.id) }
-        let!(:room) { create(:room, accommodation_id: accommodation.id) }
-        let!(:accommodation_id) { accommodation.id }
-        let!(:room_id) { room.id }
-        let!(:amenity) { create(:amenity, room_id: room.id) }
         let(:id) { amenity.id }
         
         it 'should returns status response' do
@@ -189,7 +168,6 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
-        let!(:accommodation_id) { accommodation.id }
         let(:id) { amenity.id }
 
         it 'should returns status response' do
