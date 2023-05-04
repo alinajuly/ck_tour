@@ -423,12 +423,6 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
   "/api/v1/users/{user_id}/appointments/{id}":
     parameters:
     - name: user_id
@@ -452,12 +446,8 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
     put:
       summary: 'update TOUR APPOINTMENT: confirmation (approved/cancelled) - partner
         only, other attr. by tourist'
@@ -473,8 +463,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
       requestBody:
         content:
           application/json:
@@ -504,8 +492,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
   "/api/v1/tours/{tour_id}/appointments":
     parameters:
     - name: tour_id
@@ -531,10 +517,6 @@ paths:
           description: successful
         '401':
           description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     post:
       summary: create TOUR APPOINTMENT by tourist
       tags:
@@ -547,8 +529,6 @@ paths:
           description: successful created
         '401':
           description: unauthorized
-        '404':
-          description: not found
         '422':
           description: invalid request
       requestBody:
@@ -958,12 +938,6 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     post:
       summary: create new CATERING - for partner only
       tags:
@@ -977,8 +951,6 @@ paths:
           description: successful created
         '401':
           description: unauthorized
-        '404':
-          description: not found
         '422':
           description: invalid request
       requestBody:
@@ -1041,12 +1013,8 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
     put:
       summary: 'update CATERING: status by admin: published/unpublished , other attr.
         by partner his own only'
@@ -1062,8 +1030,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
       requestBody:
         content:
           multipart/form-data:
@@ -1103,13 +1069,11 @@ paths:
       - jwt_auth: []
       responses:
         '200':
-          description: successful
+          description: ok
         '401':
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
   "/api/v1/{parentable_type}/{parentable_id}/comments":
     parameters:
     - name: parentable_type
@@ -1479,7 +1443,7 @@ paths:
       responses:
         '200':
           description: successful
-        '400':
+        '422':
           description: bad request
       requestBody:
         content:
@@ -1696,8 +1660,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
       requestBody:
         content:
           multipart/form-data:
@@ -1766,12 +1728,8 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
     post:
       summary: create rate by authenticated user
       tags:
@@ -1784,8 +1742,6 @@ paths:
           description: successful created
         '401':
           description: unauthorized
-        '404':
-          description: not found
         '422':
           description: invalid request
       requestBody:
@@ -1797,7 +1753,7 @@ paths:
                 rating:
                   type: integer
               required:
-              - body
+              - rating
         required: true
   "/api/v1/{parentable_type}/{parentable_id}/rates/{id}":
     parameters:
@@ -1830,8 +1786,6 @@ paths:
           description: successful
         '404':
           description: not found
-        '422':
-          description: invalid request
     put:
       summary: update rate by authenticated user or admin
       tags:
@@ -1857,7 +1811,7 @@ paths:
                 rating:
                   type: integer
               required:
-              - body
+              - rating
     delete:
       summary: delete rate by admin
       tags:
@@ -1896,12 +1850,6 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
   "/api/v1/users/{user_id}/reservations/{id}":
     parameters:
     - name: user_id
@@ -1925,12 +1873,8 @@ paths:
       responses:
         '200':
           description: successful
-        '401':
-          description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
     put:
       summary: 'update CATERING RESERVATION: confirmation (approved/cancelled) - partner
         only, other attr. by tourist'
@@ -1946,8 +1890,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
       requestBody:
         content:
           application/json:
@@ -1983,8 +1925,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
   "/api/v1/caterings/{catering_id}/reservations":
     parameters:
     - name: catering_id
@@ -2010,10 +1950,6 @@ paths:
           description: successful
         '401':
           description: unauthorized
-        '404':
-          description: not found
-        '422':
-          description: invalid request
     post:
       summary: create CATERING RESERVATION by tourist
       tags:
@@ -2026,8 +1962,6 @@ paths:
           description: successful created
         '401':
           description: unauthorized
-        '404':
-          description: not found
         '422':
           description: invalid request
       requestBody:

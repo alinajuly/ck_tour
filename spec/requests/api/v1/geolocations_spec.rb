@@ -55,7 +55,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     post('create geolocation by admin (attraction) or partner (catering/tour)') do
       tags 'Map'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :geolocation,
                 in: :body,
                 required: true,
@@ -137,7 +137,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
     put('update geolocation by admin or partner') do
       tags 'Map'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :geolocation,
                 in: :body,
                 required: false,
@@ -168,7 +168,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
         let(:id) { geolocation.id }
 
         it 'updates the requested geolocation' do
-          put "/api/v1/attractions/#{parent.id}/geolocations/#{geolocation.id}", params: { geolocation: { latitude: 95218 } }
+          put "/api/v1/attractions/#{parent.id}/geolocations/#{geolocation.id}", params: { id: geolocation.id, latitude: nil }
           geolocation.reload
           expect(response).to eq(422)
         end
@@ -177,7 +177,7 @@ RSpec.describe 'api/v1/geolocations', type: :request do
 
     delete('delete geolocation by admin or partner') do
       tags 'Map'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(204, 'no content') do
         let(:id) { geolocation.id }
