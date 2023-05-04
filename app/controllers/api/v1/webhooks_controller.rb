@@ -29,7 +29,7 @@ class Api::V1::WebhooksController < ApplicationController
     else
       puts "Unhandled event type: #{event.type}"
     end
-  end
+  end  
 
   private
 
@@ -40,7 +40,7 @@ class Api::V1::WebhooksController < ApplicationController
     user.update(stripe_id: customer.id)
 
     Subscription.create(
-      user:,
+      user: user,
       customer_id: user.stripe_id,
       status: subscription.status,
       current_period_end: Time.at(subscription.current_period_end),
@@ -52,18 +52,18 @@ class Api::V1::WebhooksController < ApplicationController
       interval: event.data.object.plan.interval
     )
 
-    return unless ['trialing', 'active'].include?(subscription.status)
+    if ['trialing', 'active'].include?(subscription.status)
       user = User.find_by(email: customer.email)
-      return unless user
+      if user
         user.update(role: 'partner')
         UserMailer.user_partner(user).deliver_later
-      
-    
+      end
+    end
   end
 
   def handle_subscription_updated(event)
-    subscription_id = event.data.object.id
-    subscription = Subscription.find_by(subscription_id:)
+    subscription_id = event.data.object.id 
+    subscription = Subscription.find_by(subscription_id: subscription_id) 
     customer = Stripe::Customer.retrieve(event.data.object.customer)
 
     if subscription
@@ -86,32 +86,32 @@ class Api::V1::WebhooksController < ApplicationController
       end
     end
 
-    return unless ['trialing', 'active'].include?(subscription.status)
+    if ['trialing', 'active'].include?(subscription.status)
       user = User.find_by(email: customer.email)
-      return unless user
+      if user
         user.update(role: 'partner')
         UserMailer.user_partner(user).deliver_later
-      
-    
+      end
+    end
   end
 
   def handle_subscription_deleted(event)
-    subscription_id = event.data.object.id
-    subscription = Subscription.find_by(subscription_id:)
+    subscription_id = event.data.object.id 
+    subscription = Subscription.find_by(subscription_id: subscription_id)
     customer = Stripe::Customer.retrieve(event.data.object.customer)
 
-    subscription.update!(status: event.data.object.status) if subscription
+    if subscription
+      subscription.update!(status: event.data.object.status)
+    end
 
-    unless ['unpaid', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'paused'].include?(subscription.status)
-  return
-end
+    if ['unpaid', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'paused'].include?(subscription.status)
       user = User.find_by(email: customer.email)
-      return unless user
+      if user
         user.update(role: 'tourist')
         user.accommodations.unpublished! if user.accommodations.present?
         user.tours.unpublished! if user.tours.present?
         user.caterings.unpublished! if user.caterings.present?
-      
-    
+      end
+    end
   end
 end
