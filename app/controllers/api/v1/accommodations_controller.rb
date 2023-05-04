@@ -111,6 +111,11 @@ class Api::V1::AccommodationsController < ApplicationController
     @accommodation = AccommodationPolicy::EditScope.new(current_user, Accommodation).resolve.find(params[:id])
   end
 
+  # Only allow a list of trusted parameters through.
+  def edit_accommodation_params
+    params.permit(policy(@accommodation).permitted_attributes)
+  end
+
   def authorize_policy
     authorize Accommodation
   end
