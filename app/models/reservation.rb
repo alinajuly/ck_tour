@@ -11,6 +11,7 @@ class Reservation < ApplicationRecord
 
   validates :check_in, :check_out, :number_of_peoples, presence: true
   validates :check_out, comparison: { greater_than: :check_in }
+  validates :number_of_peoples, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :not_in_past, on: :create
   validate :enough_places, on: :create
 end
