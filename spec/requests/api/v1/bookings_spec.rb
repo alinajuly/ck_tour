@@ -2,17 +2,36 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/bookings', type: :request do
+  let!(:partner) { create(:user, role: 'partner') }
+  let(:token) { JWT.encode({ user_id: partner.id }, Rails.application.secret_key_base) }
+  let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+  let(:Authorization) { headers['Authorization'] }
+  let!(:accommodation) { create(:accommodation, user_id: partner.id) }
+  let!(:accommodation_id) { accommodation.id }
+  let!(:room) { create(:room, accommodation_id: accommodation.id) }
+  let!(:room_id) { room.id }
+  let!(:geolocation) { create(:geolocation, geolocationable_type: 'Accommodation', geolocationable_id: accommodation.id) }
+  let!(:user) { create(:user, role: 'tourist', email: 'testemail@example.com') }
+  let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+  let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+  let(:Authorization) { headers['Authorization'] }
+
   path '/api/v1/users/{id}/bookings' do
     parameter name: 'id', in: :path, type: :string, description: 'user id'
+    let(:id) { user.id }
 
     get('list ACCOMMODATION BOOKING for tourist') do
       tags 'Tourist Accommodations'
       produces 'application/json'
-      security [jwt_auth: []]
+      security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old bookings'
 
+      let(:archived) { nil }
+
       response(200, 'successful') do
+        let!(:booking) { create(:booking, room_id: room.id, user_id: user.id) }
+
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
@@ -44,7 +63,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
 
     get('show ACCOMMODATION BOOKING for tourist') do
       tags 'Tourist Accommodations'
-      security [jwt_auth: []]
+      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         let(:user_id) { '123' }
@@ -88,7 +107,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     put('update ACCOMMODATION BOOKING: confirmation (approved/cancelled) - partner only, other attr. by tourist') do
       tags 'Tourist Accommodations'
       consumes 'application/json'
-      security [jwt_auth: []]
+      security [ jwt_auth: [] ]
       parameter name: :booking,
                 in: :body,
                 schema: {
@@ -131,7 +150,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
 
     delete('delete ACCOMMODATION BOOKING by tourist') do
       tags 'Tourist Accommodations'
-      security [jwt_auth: []]
+      security [ jwt_auth: [] ]
 
       response(200, 'successful') do
         it 'should returns status response' do
@@ -166,7 +185,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     get('list ACCOMMODATION BOOKING for partner') do
       tags 'Partner Accommodations'
       produces 'application/json'
-      security [jwt_auth: []]
+      security [ jwt_auth: [] ]
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old bookings'
 
@@ -198,7 +217,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
     post('create ACCOMMODATION BOOKING by tourist') do
       tags 'Tourist Accommodations'
       consumes 'application/json'
-      security [jwt_auth: []]
+      security [ jwt_auth: [] ]
       parameter name: :booking,
                 in: :body,
                 required: true,
@@ -213,7 +232,7 @@ RSpec.describe 'api/v1/bookings', type: :request do
                     full_name: { type: :string },
                     room_id: { type: :integer }
                   },
-                  required: %i[number_of_peoples check_in check_out room_id]
+                  required: [ :number_of_peoples, :check_in, :check_out, :room_id ]
                 }
 
       response(201, 'successful created') do
