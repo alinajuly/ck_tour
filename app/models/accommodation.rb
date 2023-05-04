@@ -19,7 +19,7 @@ class Accommodation < ApplicationRecord
   VALID_PHONE_REGEX = /\A\d{3}-\d{3}-\d{4}\z/
   VALID_REG_CODE_REGEX = /\A\d{8,10}\z/
   validates :name, :kind, :address_owner, :person, presence: true, length: { maximum: 255 }
-  validates :description, presence: true
+  validates :description, presence: true, length: { maximum: 2000 }
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }
   validates :phone, presence: true, format: { with: VALID_PHONE_REGEX }
   validates :reg_code, presence: true, format: { with: VALID_REG_CODE_REGEX }
