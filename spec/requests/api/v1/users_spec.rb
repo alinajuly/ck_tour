@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'swagger_helper'
-require_relative '../../../../app/controllers/concerns/json_web_token'
 
 RSpec.describe 'api/v1/users', type: :request do
 
@@ -61,6 +60,10 @@ RSpec.describe 'api/v1/users', type: :request do
 
         it 'should returns status response' do
           expect(response.status).to eq(201)
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:email]).to eq('john@example.com')
+          expect(json[:name]).to eq('John')
+          expect(json[:role]).to eq('tourist')
         end
 
         run_test!
