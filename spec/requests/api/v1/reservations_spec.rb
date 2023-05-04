@@ -106,7 +106,6 @@ RSpec.describe 'api/v1/reservations', type: :request do
         let(:Authorization) { nil }
 
         run_test! do |response|
-          data = JSON.parse(response.body)
           reservation.update(note: 'additional table!!!')
           expect(response.status).to eq(401)
         end

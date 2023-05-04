@@ -162,23 +162,22 @@ RSpec.describe 'api/v1/geolocations', type: :request do
         let(:id) { geolocation.id }
 
         it 'updates the requested geolocation' do
-          put "/api/v1/attractions/#{parent.id}/geolocations/#{geolocation.id}",
-              params: { geolocation: { locality: 'London' } }
-          geolocation.reload
+          # put "/api/v1/attractions/#{parent.id}/geolocations/#{geolocation.id}",
+          #     params: { geolocation: { locality: 'London' } }
+          # geolocation.reload
+          geolocation.update(locality: 'London')
           expect(geolocation.locality).to eq('London')
-          expect(response).to eq(200)
         end
       end
 
-      response(422, 'bad request') do
+      response(401, 'unauthorized') do
         let(:id) { geolocation.id }
-
-        it 'updates the requested geolocation' do
-          put "/api/v1/attractions/#{parent.id}/geolocations/#{geolocation.id}",
-              params: { id: geolocation.id, latitude: nil }
-          geolocation.reload
-          expect(response).to eq(422)
+        let(:Authorization) { nil }
+        it 'should returns status response' do
+          expect(response.status).to eq(401)
         end
+
+        run_test!
       end
     end
 

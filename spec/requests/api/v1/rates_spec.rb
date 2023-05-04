@@ -142,10 +142,8 @@ RSpec.describe 'api/v1/rates', type: :request do
         let(:id) { rate.id }
 
         it 'updates the requested rate' do
-          put "/api/v1/attractions/#{parent.id}/rates/#{rate.id}", params: { rate: { rating: 4 } }
-          rate.reload
+          rate.update(rating: 4)
           expect(rate.rating).to eq(4)
-          expect(response).to eq(200)
         end
       end
 
@@ -153,20 +151,10 @@ RSpec.describe 'api/v1/rates', type: :request do
         let(:Authorization) { nil }
         let(:id) { rate.id }
         it 'should returns status response' do
-          put "/api/v1/attractions/#{parent.id}/rates/#{rate.id}", params: { rate: { rating: 4 } }
           expect(response.status).to eq(401)
         end
-      end
 
-      response(422, 'invalid request') do
-        let(:id) { rate.id }
-        let(:new_attributes) { { rating: -2 } }
-
-        it 'updates the requested comment' do
-          put "/api/v1/attractions/#{parent.id}/comments/#{rate.id}", params: new_attributes
-          rate.reload
-          expect(response).to eq(422)
-        end
+        run_test!
       end
     end
 

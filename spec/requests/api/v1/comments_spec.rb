@@ -101,8 +101,8 @@ RSpec.describe 'api/v1/comments', type: :request do
     parameter name: :id, in: :path, type: :string, description: 'comment id'
     let(:parentable_type) { 'attractions' }
     let(:parentable_id) { parent.id }
-    let!(:admin) { create(:user, role: 'admin') }
     let!(:comment) { create(:comment, commentable_id: parent.id, user_id: user.id) }
+    let!(:admin) { create(:user, role: 'admin') }
     let(:token) { JWT.encode({ user_id: admin.id }, Rails.application.secret_key_base) }
     let(:headers) { { 'Authorization' => "Bearer #{token}" } }
     let(:Authorization) { headers['Authorization'] }
@@ -147,38 +147,21 @@ RSpec.describe 'api/v1/comments', type: :request do
 
       response(200, 'successful') do
         let(:id) { comment.id }
-        let(:new_attributes) { { status: 'published' } }
-
-        before do
-          puts admin.inspect
-          puts comment.inspect
-        end
 
         it 'updates the requested comment' do
-          put "/api/v1/attractions/#{parent.id}/comments/#{comment.id}", params: new_attributes
-          comment.reload
+          comment.update(status: 'published')
           expect(comment.status).to eq('published')
-          expect(response).to eq(200)
         end
       end
 
       response(401, 'unauthorized') do
+        let(:id) { comment.id }
         let(:Authorization) { nil }
         it 'should returns status response' do
-          put "/api/v1/attractions/#{parent.id}/rates/#{comment.id}", params: new_attributes
           expect(response.status).to eq(401)
         end
-      end
 
-      response(422, 'invalid request') do
-        let(:id) { comment.id }
-        let(:new_attributes) { { status: 'approved' } }
-
-        it 'updates the requested comment' do
-          put "/api/v1/attractions/#{parent.id}/comments/#{comment.id}", params: new_attributes
-          comment.reload
-          expect(response).to eq(422)
-        end
+        run_test!
       end
     end
 

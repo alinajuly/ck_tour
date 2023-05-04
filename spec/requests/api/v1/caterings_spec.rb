@@ -181,8 +181,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
           expect(response).to have_http_status(:ok)
         end
 
-        run_test! do |response|
-          data = JSON.parse(response.body)
+        run_test! do
           catering.update(name: 'The newest restaurant of Ukrainian cuisine')
           expect(Catering.find_by(name: 'The newest restaurant of Ukrainian cuisine')).to eq(catering)
           catering.update(description: 'The most delicious dishes')
@@ -198,7 +197,6 @@ RSpec.describe 'api/v1/caterings', type: :request do
         let(:Authorization) { headers['Authorization'] }
 
         run_test! do |response|
-          data = JSON.parse(response.body)
           catering.update(name: 'The newest restaurant of Ukrainian cuisine')
           expect(response.status).to eq(401)
         end
