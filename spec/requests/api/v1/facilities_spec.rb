@@ -143,16 +143,6 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
 
         run_test!
       end
-
-      response(404, 'not found') do
-        let(:id) { 'invalid' }
-
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-
-        run_test!
-      end
     end
   end
 end

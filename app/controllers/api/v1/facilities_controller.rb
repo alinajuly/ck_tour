@@ -5,11 +5,15 @@ class Api::V1::FacilitiesController < ApplicationController
   before_action :set_facility, only: %i[update destroy]
 
   def index
-    @facilities = @accommodation.facilities.all
+    if @accommodation.nil?
+      render json: { error: 'record_not_found' }, status: :not_found
+    else
+      @facilities = @accommodation.facilities
 
-    authorize @facilities
+      authorize @facilities
+    end
 
-    render json: @facilities, status: :ok
+    render json: @facilities, status: :ok if @facilities
   end
 
   # POST /api/v1/facilities
@@ -40,7 +44,7 @@ class Api::V1::FacilitiesController < ApplicationController
   def destroy
     authorize @facility
 
-    if @facility.destroy!
+    if @facility.destroy_all
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @facility.errors, status: :unprocessable_entity
