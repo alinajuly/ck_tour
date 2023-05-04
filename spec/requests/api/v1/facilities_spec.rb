@@ -2,46 +2,25 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'Api::V1::Facilities', type: :request do
+  let!(:user) { create(:user, role: 'partner') }
+  let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+  let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+  let(:Authorization) { headers['Authorization'] }
+  let!(:accommodation) { create(:accommodation, user_id: user.id) }
+  let!(:accommodation_id) { accommodation.id }
+
   path '/api/v1/accommodations/{accommodation_id}/facilities' do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
 
     get('list facilities for all') do
       tags 'Accommodation'
-      response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
 
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
-      end
 
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -68,40 +47,25 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
                 }
 
       response(201, 'successful created') do
-        let(:accommodation_id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-
-      response(201, 'successful created') do
+        let!(:facility) { build(:facility, accommodation_id: accommodation.id) }
+        
         it 'should returns status response' do
           expect(response.status).to eq(201)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
+        let!(:user) { create(:user, role: 'partner') }
+        let(:Authorization) { nil }
+        let!(:facility) { create(:facility, accommodation_id: accommodation.id) }
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
-      end
 
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
   end
@@ -109,6 +73,12 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
   path '/api/v1/accommodations/{accommodation_id}/facilities/{id}' do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     parameter name: 'id', in: :path, type: :string, description: 'facility_id'
+
+    let(:Authorization) { headers['Authorization'] }
+    let!(:accommodation) { create(:accommodation, user_id: user.id) }
+    let!(:accommodation_id) { accommodation.id }
+    let!(:facility) { create(:facility, accommodation_id: accommodation.id) }
+    let(:id) { facility.id }
 
     put('update facility of accommodation by partner') do
       tags 'Partner Accommodations'
@@ -132,41 +102,22 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
                 }
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-
-      response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
+        let!(:user) { create(:user, role: 'partner') }
+        let(:Authorization) { nil }
+        
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
-      end
 
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -175,41 +126,32 @@ RSpec.describe 'Api::V1::Facilities', type: :request do
       security [jwt_auth: []]
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-
-      response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
+        let!(:user) { create(:user, role: 'partner') }
+        let(:Authorization) { nil }
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
+
+        run_test!
       end
 
       response(404, 'not found') do
+        let(:id) { 'invalid' }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
   end

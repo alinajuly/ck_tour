@@ -7,6 +7,7 @@ class Api::V1::AmenitiesController < ApplicationController
 
   def index
     @amenities = @room.amenities.all
+    
     authorize @amenities
 
     render json: @amenities, status: :ok
