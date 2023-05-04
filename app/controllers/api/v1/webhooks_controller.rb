@@ -63,7 +63,7 @@ class Api::V1::WebhooksController < ApplicationController
 
   def handle_subscription_updated(event)
     subscription_id = event.data.object.id
-    subscription = Subscription.find_by(subscription_id:))
+    subscription = Subscription.find_by(subscription_id:)
     customer = Stripe::Customer.retrieve(event.data.object.customer)
 
     if subscription
@@ -97,7 +97,7 @@ class Api::V1::WebhooksController < ApplicationController
 
   def handle_subscription_deleted(event)
     subscription_id = event.data.object.id
-    subscription = Subscription.find_by(subscription_id:))
+    subscription = Subscription.find_by(subscription_id:)
     customer = Stripe::Customer.retrieve(event.data.object.customer)
 
     subscription.update!(status: event.data.object.status) if subscription
