@@ -2,11 +2,15 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/caterings', type: :request do
+  let!(:user) { create(:user, role: 'partner') }
+  let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+  let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+
   path '/api/v1/caterings' do
     get('list CATERING - published for all') do
       tags 'Catering'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :geolocations, in: :query, schema: { type: :string },
                 description: 'Locality'
       parameter name: :user_id, in: :query, schema: { type: :integer },
@@ -20,28 +24,26 @@ RSpec.describe 'api/v1/caterings', type: :request do
       parameter name: :number_of_peoples, in: :query, schema: { type: :string },
                 description: 'Guests quantity'
 
+      let(:Authorization) { headers['Authorization'] }
+      let!(:catering1) { create(:catering, user_id: user.id, name: 'Restaurant 1') }
+      let!(:catering2) { create(:catering, user_id: user.id, name: 'Restaurant 2') }
+      let(:geolocations) { nil }
+      let(:check_in) { Time.now + 3.hours }
+      let(:check_out) { Time.now + 7.hours }
+      let(:number_of_peoples) { 2 }
+      let(:user_id) { nil }
+      let(:status) { 'unpublished' }
+
+      before do
+        allow_any_instance_of(Api::V1::CateringsController).to receive(:available_caterings).and_return([catering1])
+      end
+
       response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
-      end
 
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
-      end
-
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -49,7 +51,7 @@ RSpec.describe 'api/v1/caterings', type: :request do
       tags 'Partner Caterings'
       description 'Creates a new catering'
       consumes 'multipart/form-data'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :catering,
                 in: :formData,
                 required: true,
@@ -74,30 +76,36 @@ RSpec.describe 'api/v1/caterings', type: :request do
                             format: :binary }
                       }
                   },
-                  required: [ :name, :description, :places, :address_owner, :phone, :email, :kind,
-                              :user_id, :reg_code, :person ]
+                  required: %i[name description places address_owner phone email kind
+                               user_id reg_code person]
                 }
 
       response(201, 'successful created') do
-        it 'should returns status response' do
+        let(:Authorization) { headers['Authorization'] }
+        let!(:catering) { build_stubbed(:catering, name: 'Abscdgytraed', user_id: user.id) }
+
+        run_test! do
+          expect(Catering.find_by(name: 'Abscdgytraed')).to eq(catering)
           expect(response.status).to eq(201)
         end
       end
 
       response(401, 'unauthorized') do
-        it 'should returns status response' do
+        let(:Authorization) { nil }
+        let!(:catering) { build(:catering, user_id: user.id) }
+
+        run_test! do
           expect(response.status).to eq(401)
         end
       end
 
-      response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
-
       response(422, 'invalid request') do
-        it 'should returns status response' do
+        let(:Authorization) { headers['Authorization'] }
+        let!(:catering) do
+          { name: 'Test Catering', description: 'A test catering', kind: 'cafe', user_id: user.id }
+        end
+
+        run_test! do
           expect(response.status).to eq(422)
         end
       end
@@ -106,52 +114,38 @@ RSpec.describe 'api/v1/caterings', type: :request do
 
   path '/api/v1/caterings/{id}' do
     parameter name: :id, in: :path, type: :string, description: 'catering id'
+    let(:Authorization) { headers['Authorization'] }
+    let!(:catering) { create(:catering, user_id: user.id) }
 
     get('show CATERING - published for all') do
       tags 'Catering'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
-        let(:id) { '123' }
+        let(:id) { catering.id }
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-      end
-
-      response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
-      end
 
-      response(401, 'unauthorized') do
-        it 'should returns status response' do
-          expect(response.status).to eq(401)
-        end
+        run_test!
       end
 
       response(404, 'not found') do
+        let(:id) { 'invalid' }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
     put('update CATERING: status by admin: published/unpublished , other attr. by partner his own only') do
       tags 'Partner Caterings'
       consumes 'multipart/form-data'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :catering,
                 in: :formData,
                 schema: {
@@ -178,67 +172,71 @@ RSpec.describe 'api/v1/caterings', type: :request do
                 }
 
       response(200, 'successful') do
-        let(:id) { '123' }
+        let(:id) { catering.id }
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
+        it 'returns a 200 response' do
+          expect(response).to have_http_status(:ok)
         end
-      end
 
-      response(200, 'successful') do
-        it 'should returns status response' do
-          expect(response.status).to eq(200)
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          catering.update(name: 'The newest restaurant of Ukrainian cuisine')
+          expect(Catering.find_by(name: 'The newest restaurant of Ukrainian cuisine')).to eq(catering)
+          catering.update(description: 'The most delicious dishes')
+          expect(Catering.find_by(description: 'The most delicious dishes')).to eq(catering)
         end
       end
 
       response(401, 'unauthorized') do
-        it 'should returns status response' do
+        let(:id) { catering.id }
+        let!(:user) { create(:user) }
+        let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+        let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+        let(:Authorization) { headers['Authorization'] }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          catering.update(name: 'The newest restaurant of Ukrainian cuisine')
           expect(response.status).to eq(401)
         end
       end
 
       response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
+        let(:id) { 'invalid' }
+        let(:catering_attributes) { attributes_for(:catering) }
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
+        run_test! do
+          expect(response.status).to eq(404)
         end
       end
     end
 
     delete('delete CATERING - for admin all, for partner his own only') do
       tags 'Partner Caterings'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
-      response(200, 'successful') do
-        it 'should returns status response' do
+      response(200, 'ok') do
+        let(:id) { catering.id }
+
+        run_test! do
           expect(response.status).to eq(200)
         end
       end
 
       response(401, 'unauthorized') do
-        it 'should returns status response' do
+        let(:id) { catering.id }
+        let(:Authorization) { nil }
+
+        run_test! do
           expect(response.status).to eq(401)
         end
       end
 
       response(404, 'not found') do
-        it 'should returns status response' do
-          expect(response.status).to eq(404)
-        end
-      end
+        let(:id) { 'invalid' }
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
+        run_test! do
+          expect(response.status).to eq(404)
         end
       end
     end

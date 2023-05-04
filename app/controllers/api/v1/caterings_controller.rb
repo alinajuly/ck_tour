@@ -4,9 +4,9 @@ class Api::V1::CateringsController < ApplicationController
 
   skip_before_action :authenticate_request, only: %i[index show]
   before_action :current_user, only: %i[index show]
+  before_action :authorize_policy
   before_action :set_catering, only: :show
   before_action :edit_catering, only: %i[update destroy]
-  before_action :authorize_policy
 
   # GET /api/v1/caterings
   def index

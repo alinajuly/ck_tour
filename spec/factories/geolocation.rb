@@ -3,7 +3,7 @@ FactoryBot.define do
     locality { 'New York' }
     street { '5th Avenue' }
     suite { '25' }
-    zip_code { '000000' }
+    zip_code { '12345' }
     latitude { 49.445000 }
     longitude { 32.063333 }
     geolocationable_type { 'Attraction' }
