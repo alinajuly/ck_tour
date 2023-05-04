@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'swagger_helper'
-require_relative '../../../../app/controllers/concerns/json_web_token'
 
 RSpec.describe 'api/v1/tours', type: :request do
   let!(:user) { create(:user, role: 'partner') }
