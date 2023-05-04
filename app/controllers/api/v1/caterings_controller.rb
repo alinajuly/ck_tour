@@ -25,7 +25,11 @@ class Api::V1::CateringsController < ApplicationController
     authorize @caterings
 
     if @caterings
-      render json: { data: @caterings.map { |catering| catering.as_json.merge(images: catering.images.map { |image| url_for(image) }) } }, status: :ok
+      render json: { data: @caterings.map do |catering|
+                             catering.as_json.merge(images: catering.images.map do |image|
+                                                              url_for(image)
+                                                            end)
+                           end }, status: :ok
     else
       render json: @caterings.errors, status: :bad_request
     end

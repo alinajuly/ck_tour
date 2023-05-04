@@ -9,7 +9,7 @@ class Api::V1::AuthenticationController < ApplicationController
       token = jwt_encode(user_id: @user.id)
       response.set_header('token', token)
       @user_id = @user.id
-      render json: { token: token, user_id: @user_id }, status: :ok
+      render json: { token:, user_id: @user_id }, status: :ok
     else
       render json: { error: 'unauthorized' }, status: :unauthorized
     end

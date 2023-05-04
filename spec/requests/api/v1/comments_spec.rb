@@ -13,8 +13,10 @@ RSpec.describe 'api/v1/comments', type: :request do
   let(:Authorization) { headers['Authorization'] }
 
   path '/api/v1/{parentable_type}/{parentable_id}/comments' do
-    parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations, catering, tour'
-    parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attraction_id, accommodation_id, catering_id, tour_id'
+    parameter name: 'parentable_type', in: :path, type: :string,
+              description: 'f.e. attractions, accommodations, catering, tour'
+    parameter name: 'parentable_id', in: :path, type: :string,
+              description: 'f.e. attraction_id, accommodation_id, catering_id, tour_id'
     let(:parentable_type) { 'attractions' }
     let(:parentable_id) { parent.id }
 
@@ -92,8 +94,10 @@ RSpec.describe 'api/v1/comments', type: :request do
   end
 
   path '/api/v1/{parentable_type}/{parentable_id}/comments/{id}' do
-    parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations, catering, tour'
-    parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attraction_id, accommodation_id, catering_id, tour_id'
+    parameter name: 'parentable_type', in: :path, type: :string,
+              description: 'f.e. attractions, accommodations, catering, tour'
+    parameter name: 'parentable_id', in: :path, type: :string,
+              description: 'f.e. attraction_id, accommodation_id, catering_id, tour_id'
     parameter name: :id, in: :path, type: :string, description: 'comment id'
     let(:parentable_type) { 'attractions' }
     let(:parentable_id) { parent.id }

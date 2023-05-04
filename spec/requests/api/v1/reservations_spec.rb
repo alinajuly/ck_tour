@@ -20,7 +20,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     get('list CATERING RESERVATION for tourist') do
       tags 'Tourist Caterings'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old reservations'
       let(:archived) { nil }
@@ -46,7 +46,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
 
     get('show CATERING RESERVATION for tourist') do
       tags 'Tourist Caterings'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         it 'should returns status response' do
@@ -70,7 +70,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     put('update CATERING RESERVATION: confirmation (approved/cancelled) - partner only, other attr. by tourist') do
       tags 'Tourist Caterings'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :reservation,
                 in: :body,
                 schema: {
@@ -124,7 +124,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
 
     delete('delete CATERING RESERVATION by tourist') do
       tags 'Tourist Caterings'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let(:id) { reservation.id }
@@ -160,7 +160,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     get('list CATERING RESERVATION for partner') do
       tags 'Partner Caterings'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :archived, in: :query, schema: { type: :string },
                 description: 'Archive of old reservations'
       let(:archived) { nil }
@@ -192,7 +192,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
     post('create CATERING RESERVATION by tourist') do
       tags 'Tourist Caterings'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :reservation,
                 in: :body,
                 required: true,
@@ -207,7 +207,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
                     full_name: { type: :string },
                     catering_id: { type: :integer }
                   },
-                  required: [ :number_of_peoples, :check_in, :check_out, :catering_id ]
+                  required: %i[number_of_peoples check_in check_out catering_id]
                 }
 
       response(201, 'successful created') do

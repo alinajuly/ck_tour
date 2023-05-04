@@ -1,6 +1,6 @@
 module ReservationableUtilities
   extend ActiveSupport::Concern
-  
+
   def list_for_partner
     catering_reservations = @catering.reservations
     @reservations = if params[:archived].present?

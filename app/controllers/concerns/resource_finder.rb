@@ -9,7 +9,7 @@ module ResourceFinder
   def parentable_class
     params.each_key do |name|
       if name.match?(/(.+)_id$/)
-        model = name[/([^\/.]*)_id$/, 1]
+        model = name[%r{([^/.]*)_id$}, 1]
         return model.classify.safe_constantize, name
       end
       nil

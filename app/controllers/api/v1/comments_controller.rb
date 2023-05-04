@@ -45,7 +45,6 @@ class Api::V1::CommentsController < ApplicationController
 
   # DELETE /api/v1/comments/1
   def destroy
-
     if @comment.destroy!
       render json: { status: 'Delete' }, status: :no_content
     else

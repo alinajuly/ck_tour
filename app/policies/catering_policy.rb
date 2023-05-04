@@ -25,7 +25,8 @@ class CateringPolicy < ApplicationPolicy
     if user.admin?
       [:status]
     elsif user.partner?
-      [:places, :description, :name, :kind, :phone, :email, :reg_code, :address_owner, :person, :user_id, { images: [] }]
+      [:places, :description, :name, :kind, :phone, :email, :reg_code, :address_owner, :person, :user_id,
+       { images: [] }]
     end
   end
 

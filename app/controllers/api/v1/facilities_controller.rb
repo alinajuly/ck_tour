@@ -52,4 +52,3 @@ class Api::V1::FacilitiesController < ApplicationController
                   :wi_fi, :breakfast, :pets)
   end
 end
-

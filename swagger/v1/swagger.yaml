@@ -257,10 +257,8 @@ paths:
       responses:
         '200':
           description: successful
-        '404':
-          description: not found
-        '422':
-          description: invalid request
+        '401':
+          description: unauthorized
   "/api/v1/accommodations/{accommodation_id}/rooms/{room_id}/amenities":
     parameters:
     - name: accommodation_id
@@ -633,8 +631,6 @@ paths:
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
       requestBody:
         content:
           multipart/form-data:
@@ -1172,6 +1168,8 @@ paths:
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized
         '422':
           description: invalid request
       requestBody:
@@ -1798,8 +1796,6 @@ paths:
           description: successful
         '401':
           description: unauthorized
-        '404':
-          description: not found
         '422':
           description: invalid request
       requestBody:
@@ -1820,13 +1816,11 @@ paths:
       - jwt_auth: []
       responses:
         '200':
-          description: successful
+          description: Successful
         '401':
           description: unauthorized
         '404':
           description: not found
-        '422':
-          description: invalid request
   "/api/v1/users/{id}/reservations":
     parameters:
     - name: id

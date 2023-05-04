@@ -5,7 +5,7 @@ class Api::V1::PlansController < ApplicationController
   include ActionView::Layouts
   include ActionController::Rendering
 
-  #GET api/v1/plans
+  # GET api/v1/plans
   def show
     @prices = Stripe::Price.list(expand: ['data.product'], limit: 4)
 

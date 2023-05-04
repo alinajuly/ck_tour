@@ -4,7 +4,6 @@ class Api::V1::AttractionsController < ApplicationController
   before_action :set_attractions, only: :index
   before_action :set_attraction, only: %i[show update destroy]
 
-
   # GET /api/v1/attractions
   def index
     authorize @attractions

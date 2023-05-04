@@ -29,6 +29,7 @@ module Bookingable
     # pass validation if room places are enough for guests
     return if number_of_peoples <= room.places
 
-    errors.add(:room, 'is not enough places in the selected room, please select less people and choose another room for the rest')
+    errors.add(:room,
+               'is not enough places in the selected room, please select less people and choose another room for the rest')
   end
 end

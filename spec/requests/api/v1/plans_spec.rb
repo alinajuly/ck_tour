@@ -2,7 +2,6 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/plans_controller', type: :request do
-
   path '/api/v1/plans' do
     get('plans for authenticated user') do
       tags 'Plans'

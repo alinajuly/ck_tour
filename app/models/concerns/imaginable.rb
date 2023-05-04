@@ -8,6 +8,7 @@ module Imaginable
   def validate_image_format
     return unless image.attached?
 
-    errors.add(:image, 'must be a JPEG, PNG, or GIF') unless image.content_type.in?(%w[image/jpeg image/jpg image/png image/gif])
+    errors.add(:image, 'must be a JPEG, PNG, or GIF') unless image.content_type.in?(%w[image/jpeg image/jpg image/png
+                                                                                       image/gif])
   end
 end

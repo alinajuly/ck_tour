@@ -25,8 +25,10 @@ RSpec.describe 'api/v1/geolocations', type: :request do
   end
 
   path '/api/v1/{parentable_type}/{parentable_id}/geolocations' do
-    parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations, caterings, places'
-    parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attraction_id, accommodation_id, catering_id, place_id'
+    parameter name: 'parentable_type', in: :path, type: :string,
+              description: 'f.e. attractions, accommodations, caterings, places'
+    parameter name: 'parentable_id', in: :path, type: :string,
+              description: 'f.e. attraction_id, accommodation_id, catering_id, place_id'
     let(:parentable_type) { 'attractions' }
     let(:parentable_id) { parent.id }
 
@@ -160,7 +162,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
         let(:id) { geolocation.id }
 
         it 'updates the requested geolocation' do
-          put "/api/v1/attractions/#{parent.id}/geolocations/#{geolocation.id}", params: { geolocation: { locality: 'London' } }
+          put "/api/v1/attractions/#{parent.id}/geolocations/#{geolocation.id}",
+              params: { geolocation: { locality: 'London' } }
           geolocation.reload
           expect(geolocation.locality).to eq('London')
           expect(response).to eq(200)
@@ -171,7 +174,8 @@ RSpec.describe 'api/v1/geolocations', type: :request do
         let(:id) { geolocation.id }
 
         it 'updates the requested geolocation' do
-          put "/api/v1/attractions/#{parent.id}/geolocations/#{geolocation.id}", params: { id: geolocation.id, latitude: nil }
+          put "/api/v1/attractions/#{parent.id}/geolocations/#{geolocation.id}",
+              params: { id: geolocation.id, latitude: nil }
           geolocation.reload
           expect(response).to eq(422)
         end

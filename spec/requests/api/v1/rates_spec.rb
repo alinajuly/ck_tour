@@ -13,15 +13,17 @@ RSpec.describe 'api/v1/rates', type: :request do
   let(:Authorization) { headers['Authorization'] }
 
   path '/api/v1/{parentable_type}/{parentable_id}/rates' do
-    parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations, caterings, tours'
-    parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attraction_id, accommodation_id, catering_id, tour_id'
+    parameter name: 'parentable_type', in: :path, type: :string,
+              description: 'f.e. attractions, accommodations, caterings, tours'
+    parameter name: 'parentable_id', in: :path, type: :string,
+              description: 'f.e. attraction_id, accommodation_id, catering_id, tour_id'
     let(:parentable_type) { 'attractions' }
     let(:parentable_id) { parent.id }
 
     get('averedge rate for all') do
       tags 'Rate'
       produces 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       let!(:rate) { create(:rate, ratable_id: parent.id, user_id: user.id) }
 
       response(200, 'successful') do
@@ -45,7 +47,7 @@ RSpec.describe 'api/v1/rates', type: :request do
     post('create rate by authenticated user') do
       tags 'Rate'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :rate,
                 in: :body,
                 required: true,
@@ -89,8 +91,10 @@ RSpec.describe 'api/v1/rates', type: :request do
   end
 
   path '/api/v1/{parentable_type}/{parentable_id}/rates/{id}' do
-    parameter name: 'parentable_type', in: :path, type: :string, description: 'f.e. attractions, accommodations, caterings, tours'
-    parameter name: 'parentable_id', in: :path, type: :string, description: 'f.e. attraction_id, accommodation_id, catering_id, tour_id'
+    parameter name: 'parentable_type', in: :path, type: :string,
+              description: 'f.e. attractions, accommodations, caterings, tours'
+    parameter name: 'parentable_id', in: :path, type: :string,
+              description: 'f.e. attraction_id, accommodation_id, catering_id, tour_id'
     parameter name: :id, in: :path, type: :string, description: 'rate id'
     let(:parentable_type) { 'attractions' }
     let(:parentable_id) { parent.id }
@@ -98,7 +102,7 @@ RSpec.describe 'api/v1/rates', type: :request do
 
     get('show rate for all') do
       tags 'Rate'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
 
       response(200, 'successful') do
         let(:id) { rate.id }
@@ -123,7 +127,7 @@ RSpec.describe 'api/v1/rates', type: :request do
     put('update rate by authenticated user or admin') do
       tags 'Rate'
       consumes 'application/json'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       parameter name: :rate,
                 in: :body,
                 schema: {
@@ -168,7 +172,7 @@ RSpec.describe 'api/v1/rates', type: :request do
 
     delete('delete rate by admin') do
       tags 'Rate'
-      security [ jwt_auth: [] ]
+      security [jwt_auth: []]
       let!(:admin) { create(:user, role: 'admin') }
       let(:token) { JWT.encode({ user_id: admin.id }, Rails.application.secret_key_base) }
       let(:headers) { { 'Authorization' => "Bearer #{token}" } }

@@ -18,10 +18,10 @@ module Userable
   end
 
   def ensure_stripe_customer
-    response = Stripe::Customer.create(email: email)
+    response = Stripe::Customer.create(email:)
     self.stripe_id = response.id
   end
-  
+
   # to retrieve all the Stripe info for user
   def retrieve_stripe_reference
     Stripe::Customer.retrieve(stripe_id)
