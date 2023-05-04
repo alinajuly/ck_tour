@@ -13,7 +13,7 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       tags 'Accommodation'
 
       response(200, 'successful') do
-        let!(:Authorization) { headers['Authorization'] }
+        let(:Authorization) { headers['Authorization'] }
         let!(:accommodation) { create(:accommodation, user_id: user.id) }
         let!(:room) { create(:room, accommodation_id: accommodation.id) }
         let!(:accommodation_id) { accommodation.id }
@@ -27,16 +27,14 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       end
 
       response(404, 'not found') do
+        let(:Authorization) { headers['Authorization'] }
+        let!(:accommodation) { create(:accommodation, user_id: user.id) }
+        let!(:room) { create(:room, accommodation_id: accommodation.id) }
+        let!(:accommodation_id) { 'invalid' }
+        let!(:room_id) { 'invalid' }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
-        end
-
-        run_test!
-      end
-
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
         end
 
         run_test!
@@ -65,40 +63,51 @@ RSpec.describe "Api::V1::Amenities", type: :request do
                 }
 
       response(201, 'successful created') do
-        let(:accommodation_id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-
-      response(201, 'successful created') do
+        let(:Authorization) { headers['Authorization'] }
+        let!(:accommodation) { create(:accommodation, user_id: user.id) }
+        let!(:room) { create(:room, accommodation_id: accommodation.id) }
+        let!(:accommodation_id) { accommodation.id }
+        let!(:room_id) { room.id }
+        let!(:amenity) { build(:amenity, room_id: room.id) }
+        
         it 'should returns status response' do
           expect(response.status).to eq(201)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
+        let!(:user) { create(:user) }
+        let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+        let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+        let(:Authorization) { headers['Authorization'] }
+        let!(:accommodation) { create(:accommodation, user_id: user.id) }
+        let!(:room) { create(:room, accommodation_id: accommodation.id) }
+        let!(:accommodation_id) { accommodation.id }
+        let!(:room_id) { room.id }
+        let!(:amenity) { build(:amenity, room_id: room.id) }
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
+
+        run_test!
       end
 
       response(404, 'not found') do
+        let(:Authorization) { headers['Authorization'] }
+        let!(:accommodation) { create(:accommodation, user_id: user.id) }
+        let!(:room) { create(:room, accommodation_id: accommodation.id) }
+        let!(:accommodation_id) { 'invalid' }
+        let!(:room_id) { 'invalid' }
+        let!(:amenity) { build(:amenity, room_id: room.id) }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
   end
@@ -107,6 +116,13 @@ RSpec.describe "Api::V1::Amenities", type: :request do
     parameter name: 'accommodation_id', in: :path, type: :string, description: 'accommodation_id'
     parameter name: 'room_id', in: :path, type: :string, description: 'room_id'
     parameter name: 'id', in: :path, type: :string, description: 'amenity_id'
+
+    let(:Authorization) { headers['Authorization'] }
+    let!(:accommodation) { create(:accommodation, user_id: user.id) }
+    let!(:room) { create(:room, accommodation_id: accommodation.id) }
+    let!(:accommodation_id) { accommodation.id }
+    let!(:room_id) { room.id }
+    let!(:amenity) { create(:amenity, room_id: room.id) }
 
     put('update amenity of room - for partner only') do
       tags 'Partner Accommodations'
@@ -129,41 +145,42 @@ RSpec.describe "Api::V1::Amenities", type: :request do
                 }
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
+        let(:id) { amenity.id }
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-
-      response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
+        let!(:user) { create(:user) }
+        let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+        let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+        let(:Authorization) { headers['Authorization'] }
+        let!(:accommodation) { create(:accommodation, user_id: user.id) }
+        let!(:room) { create(:room, accommodation_id: accommodation.id) }
+        let!(:accommodation_id) { accommodation.id }
+        let!(:room_id) { room.id }
+        let!(:amenity) { create(:amenity, room_id: room.id) }
+        let(:id) { amenity.id }
+        
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
+
+        run_test!
       end
 
       response(404, 'not found') do
+        let(:id) { 'invalid' }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
 
@@ -172,41 +189,38 @@ RSpec.describe "Api::V1::Amenities", type: :request do
       security [ jwt_auth: [] ]
 
       response(200, 'successful') do
-        let(:accommodation_id) { '123' }
-        let(:id) { '123' }
+        let!(:accommodation_id) { accommodation.id }
+        let(:id) { amenity.id }
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-
-      response(200, 'successful') do
         it 'should returns status response' do
           expect(response.status).to eq(200)
         end
+
+        run_test!
       end
 
       response(401, 'unauthorized') do
+        let!(:user) { create(:user) }
+        let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base) }
+        let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+        let(:Authorization) { headers['Authorization'] }
+        let(:id) { amenity.id }
+
         it 'should returns status response' do
           expect(response.status).to eq(401)
         end
+
+        run_test!
       end
 
       response(404, 'not found') do
+        let(:id) { 'invalid' }
+
         it 'should returns status response' do
           expect(response.status).to eq(404)
         end
-      end
 
-      response(422, 'invalid request') do
-        it 'should returns status response' do
-          expect(response.status).to eq(422)
-        end
+        run_test!
       end
     end
   end
