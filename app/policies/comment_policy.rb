@@ -20,12 +20,11 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def index?
-    # user.admin? || (record.status.eql? 1)
     true
   end
 
   def show?
-    user.admin? || (record.status.eql? 1)
+    true || (record.status.eql? 1)
   end
 
   def create?
