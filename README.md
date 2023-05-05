@@ -54,7 +54,7 @@ type in console
 rails s
 ```
 
-## Open Swagger UI in browser:
+## Open Swagger UI in browser
 
 [localhost:3000/api-docs](http://localhost:3000/api-docs/index.html)
 
