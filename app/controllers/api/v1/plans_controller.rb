@@ -1,9 +1,10 @@
 class Api::V1::PlansController < ApplicationController
+  include ActionView::Layouts
+  include ActionController::Rendering
+
   skip_before_action :authenticate_request
   before_action :authenticate_request_stripe
   before_action :current_user
-  include ActionView::Layouts
-  include ActionController::Rendering
 
   # GET api/v1/plans
   def show

@@ -257,6 +257,26 @@ RSpec.describe 'api/v1/bookings', type: :request do
 
         run_test!
       end
+
+      response(404, 'not found') do
+        let!(:booking) { build(:booking, check_in: Date.today - 5.days) }
+
+        it 'should returns status response' do
+          expect(response.status).to eq(404)
+        end
+
+        run_test!
+      end
+      
+      response(422, 'invalid request') do
+        let!(:booking) { build(:booking, number_of_peoples: 20) }
+
+        it 'should returns status response' do
+          expect(response.status).to eq(422)
+        end
+
+        run_test!
+      end
     end
   end
 end
