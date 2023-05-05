@@ -9,14 +9,14 @@ class Api::V1::CommentsController < ApplicationController
   def index
     @comments = policy_scope(parentable.comments)
 
-    render json: @comments
+    render json: CommentSerializer.new(@comments)
   end
 
   # GET /api/v1/comments/1
   def show
     @comment = policy_scope(parentable.comments).find(params[:id])
 
-    render json: @comment
+    render json: CommentSerializer.new(@comment)
   end
 
   # POST /api/v1/comments
