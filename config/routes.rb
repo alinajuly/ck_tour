@@ -44,11 +44,6 @@ Rails.application.routes.draw do
         resources :rates
       end
 
-      # get 'plans/show'
-      resource :plans
-      resources :webhooks, only: [:create]
-      resource :billing_portals, only: [:create]
-
       resources :tours do
         resources :places
         get '/appointments', to: 'appointments#list_for_partner'
@@ -62,6 +57,10 @@ Rails.application.routes.draw do
       end
 
       get '/geolocations', to: 'geolocations#geolocations_map'
+
+      resource :plans
+      resources :webhooks, only: [:create]
+      resource :billing_portals, only: [:create]
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
