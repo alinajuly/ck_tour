@@ -1,5 +1,8 @@
 class Api::V1::RatesController < ApplicationController
   include ResourceFinder
+  
+  RATING_ZERO = 0
+
   before_action :current_user, only: :show
   before_action :authorize_policy
   before_action :set_rate, only: %i[update destroy]
@@ -10,7 +13,7 @@ class Api::V1::RatesController < ApplicationController
     average_rating = parentable.rates.average(:rating)
 
     @rates = if average_rating.nil?
-               0
+               RATING_ZERO
              else
                average_rating.round(1)
              end
@@ -22,7 +25,7 @@ class Api::V1::RatesController < ApplicationController
   def show
     @rate = parentable.rates.find(params[:id])
 
-    @rate.rating = 0 if @rate.rating.nil?
+    @rate.rating = RATING_ZERO if @rate.rating.nil?
 
     render json: @rate, status: :ok
   end

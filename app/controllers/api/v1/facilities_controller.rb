@@ -12,7 +12,6 @@ class Api::V1::FacilitiesController < ApplicationController
 
       authorize @facilities
     end
-
     render json: @facilities, status: :ok if @facilities
   end
 

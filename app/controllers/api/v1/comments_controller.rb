@@ -1,5 +1,6 @@
 class Api::V1::CommentsController < ApplicationController
   include ResourceFinder
+  
   before_action :current_user, only: %i[index show]
   before_action :set_comment, only: %i[update destroy]
   skip_before_action :authenticate_request, only: %i[index show]
