@@ -34,6 +34,14 @@ class Api::V1::BookingsController < ApplicationController
 
     authorize @booking
 
+    begin
+      @room = Room.find(params[:room_id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: 'record not found' }, status: :not_found and return
+    end
+
+    @booking.room = @room
+
     if @booking.save
       BookingMailer.booking_confirmation(@booking.user, @booking).deliver_now
       BookingMailer.booking_tourist(@booking.user, @booking).deliver_now
