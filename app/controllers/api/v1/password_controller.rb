@@ -2,13 +2,13 @@ class Api::V1::PasswordController < ApplicationController
   skip_before_action :authenticate_request, except: :update
 
   def forgot
-    return render json: { error: 'Email not present' } if params[:email].blank? # check if email is present
+    return render json: { error: 'Email not present' } if params[:email].blank?
 
-    user = User.find_by(email: params[:email]) # if present find user by email
+    user = User.find_by(email: params[:email])
 
     if user.present?
-      user.generate_password_token! # generate pass token
-      PasswordResetMailer.with(user:).password_reset.deliver_now
+      user.generate_password_token! 
+      PasswordResetMailer.with(user:).password_reset.deliver_later
       render json: { reset_password_token: user.reset_password_token }, status: :ok
     else
       render json: { error: ['Email address not found. Please check and try again.'] }, status: :not_found
@@ -22,7 +22,7 @@ class Api::V1::PasswordController < ApplicationController
 
     user = User.find_by(reset_password_token: token)
 
-    if user.present? && user.password_token_valid?
+    if user&.password_token_valid?
       if user.reset_password!(params[:password])
         render json: { status: 'ok' }, status: :ok
       else

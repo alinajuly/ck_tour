@@ -3,8 +3,8 @@ module Reservationable
 
   def not_in_past
     # validate on upcoming of check_in and check_out dates
-    errors.add(:check_in, "can't be in the past") if check_in.present? && check_in <= Time.now
-    errors.add(:check_out, "can't be in the past") if check_out.present? && check_out < Time.now
+    errors.add(:check_in, "can't be in the past") if check_in.present? && check_in <= Time.current
+    errors.add(:check_out, "can't be in the past") if check_out.present? && check_out < Time.current
   end
 
   def enough_places

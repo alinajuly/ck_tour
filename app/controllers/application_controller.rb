@@ -14,6 +14,7 @@ class ApplicationController < ActionController::API
 
   def authenticate_request
     header = request.headers['Authorization']
+
     if header.present? && header.split(' ').first == 'Bearer'
       token = header.split(' ').last
       decoded = jwt_decode(token)
@@ -47,9 +48,5 @@ class ApplicationController < ActionController::API
 
   def invalid_argument
     render json: { error: 'invalid argument' }, status: :unprocessable_entity
-  end
-
-  def render_success(data:, status: :ok)
-    render json: { data: }, status:
   end
 end

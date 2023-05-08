@@ -40,7 +40,7 @@ class Api::V1::WebhooksController < ApplicationController
     # Retrieve necessary data from the event object
     subscription = event.data.object
     customer = Stripe::Customer.retrieve(event.data.object.customer)
-    user = User.find_by(email: customer.email)
+    user = User.find_by(email: customer.email) #check user
     user.update(stripe_id: customer.id)
 
     Subscription.create(
@@ -58,7 +58,6 @@ class Api::V1::WebhooksController < ApplicationController
 
     # Update the user's role and send email notification if necessary
     if ['trialing', 'active'].include?(subscription.status)
-      user = User.find_by(email: customer.email)
       if user
         user.update(role: 'partner')
         UserMailer.user_partner(user).deliver_later
@@ -72,6 +71,7 @@ class Api::V1::WebhooksController < ApplicationController
     subscription_id = event.data.object.id 
     subscription = Subscription.find_by(subscription_id: subscription_id) 
     customer = Stripe::Customer.retrieve(event.data.object.customer)
+    user = User.find_by(email: customer.email)
 
     # Update the subscription record
     if subscription
@@ -84,7 +84,6 @@ class Api::V1::WebhooksController < ApplicationController
     end
 
     if ['unpaid', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'paused'].include?(subscription.status)
-      user = User.find_by(email: customer.email)
       if user
         user.update(role: 'tourist')
         UserMailer.user_tourist(user).deliver_later
@@ -95,7 +94,6 @@ class Api::V1::WebhooksController < ApplicationController
     end
 
     if ['trialing', 'active'].include?(subscription.status)
-      user = User.find_by(email: customer.email)
       if user
         user.update(role: 'partner')
         UserMailer.user_partner(user).deliver_later

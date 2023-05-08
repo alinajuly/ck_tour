@@ -28,8 +28,8 @@ RSpec.describe 'api/v1/caterings', type: :request do
       let!(:catering1) { create(:catering, user_id: user.id, name: 'Restaurant 1') }
       let!(:catering2) { create(:catering, user_id: user.id, name: 'Restaurant 2') }
       let(:geolocations) { nil }
-      let(:check_in) { Time.now + 3.hours }
-      let(:check_out) { Time.now + 7.hours }
+      let(:check_in) { Time.current + 3.hours }
+      let(:check_out) { Time.current + 7.hours }
       let(:number_of_peoples) { 2 }
       let(:user_id) { nil }
       let(:status) { 'unpublished' }

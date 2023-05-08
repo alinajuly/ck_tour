@@ -61,6 +61,7 @@ class Api::V1::CateringsController < ApplicationController
     authorize @catering
 
     build_images if params[:images].present?
+    
     if @catering.update(edit_catering_params.except(:images))
       if @catering.published? && params[:status].present?
         StatusMailer.catering_published(@catering.user, @catering).deliver_later

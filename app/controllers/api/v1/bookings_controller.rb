@@ -43,8 +43,8 @@ class Api::V1::BookingsController < ApplicationController
     @booking.room = @room
 
     if @booking.save
-      BookingMailer.booking_confirmation(@booking.user, @booking).deliver_now
-      BookingMailer.booking_tourist(@booking.user, @booking).deliver_now
+      BookingMailer.booking_confirmation(@booking.user, @booking).deliver_later
+      BookingMailer.booking_tourist(@booking.user, @booking).deliver_later
       render json: @booking, status: :created
     else
       render json: @booking.errors, status: :unprocessable_entity
@@ -56,13 +56,14 @@ class Api::V1::BookingsController < ApplicationController
 
     if @booking.update(edit_booking_params)
       if @booking.approved? && params[:confirmation].present?
-        BookingMailer.booking_approved(@booking.user, @booking).deliver_now
+        BookingMailer.booking_approved(@booking.user, @booking).deliver_later
       elsif @booking.cancelled? && params[:confirmation].present?
-        BookingMailer.booking_cancelled(@booking.user, @booking).deliver_now
+        BookingMailer.booking_cancelled(@booking.user, @booking).deliver_later
       else
-        BookingMailer.booking_updated_for_partner(@booking.user, @booking).deliver_now
-        BookingMailer.booking_updated_for_tourist(@booking.user, @booking).deliver_now
+        BookingMailer.booking_updated_for_partner(@booking.user, @booking).deliver_later
+        BookingMailer.booking_updated_for_tourist(@booking.user, @booking).deliver_later
       end
+      
       render json: { status: 'Update', data: @booking }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity
@@ -71,8 +72,9 @@ class Api::V1::BookingsController < ApplicationController
 
   def destroy
     if @booking.destroy!
-      BookingMailer.booking_deleted(@booking.user, @booking).deliver_now
-      BookingMailer.booking_deleted_for_partner(@booking.user, @booking).deliver_now
+      BookingMailer.booking_deleted(@booking.user, @booking).deliver_later
+      BookingMailer.booking_deleted_for_partner(@booking.user, @booking).deliver_later
+
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @booking.errors, status: :unprocessable_entity

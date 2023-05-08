@@ -13,7 +13,7 @@ class Api::V1::RoomsController < ApplicationController
     @rooms = if (params[:check_in] && params[:check_out] && params[:number_of_peoples]).present?
                available_rooms
              elsif @accommodation.rooms.present?
-               @accommodation.rooms.all
+               @accommodation.rooms
              end
 
     if @rooms.present?
@@ -23,7 +23,7 @@ class Api::V1::RoomsController < ApplicationController
                                                         end)
                            end }, status: :ok
     elsif @rooms.nil?
-      render json: { data: 'Sorry, is not enough places in our accommodation' }
+      render json: { data: 'Sorry, is not enough places in our accommodation' } #визначитись з умовою
     else
       render json: @rooms.errors, status: :bad_request
     end
@@ -41,6 +41,7 @@ class Api::V1::RoomsController < ApplicationController
     authorize @room
 
     build_images if params[:images].present?
+
     if @room.save
       room_json
     else

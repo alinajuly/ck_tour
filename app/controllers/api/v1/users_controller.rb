@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
     @users = if params[:role].present?
                User.role_filter(params[:role])
              else
-               User.all
+               User.all #змінити місцями
              end
 
     authorize @users

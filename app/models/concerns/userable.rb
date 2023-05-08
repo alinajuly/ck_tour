@@ -3,12 +3,12 @@ module Userable
 
   def generate_password_token!
     self.reset_password_token = generate_token
-    self.reset_password_sent_at = Time.now.utc
+    self.reset_password_sent_at = Time.current.utc
     save!(validate: false)
   end
 
   def password_token_valid?
-    (reset_password_sent_at + PASSWORD_RESET_EXPIRATION) > Time.now.utc
+    (reset_password_sent_at + PASSWORD_RESET_EXPIRATION) > Time.current.utc
   end
 
   def reset_password!(password)

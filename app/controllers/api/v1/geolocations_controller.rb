@@ -1,17 +1,14 @@
 class Api::V1::GeolocationsController < ApplicationController
   include ResourceFinder
+
   skip_before_action :authenticate_request, only: %i[index show geolocations_map]
   before_action :authorize_policy
   before_action :set_geolocation, only: %i[show update destroy]
 
   def index
     @geolocations = parentable.geolocations
-
-    if @geolocations
-      render json: @geolocations, status: :ok
-    else
-      render json: @geolocations.errors, status: :bad_request
-    end
+    
+    render json: @geolocations, status: :ok
   end
 
   def show
@@ -45,7 +42,7 @@ class Api::V1::GeolocationsController < ApplicationController
   def destroy
     authorize @geolocation
 
-    if @geolocation.destroy!
+    if @geolocation.destroy
       render json: { status: 'Delete' }, status: :no_content
     else
       render json: @geolocation.errors, status: :unprocessable_entity

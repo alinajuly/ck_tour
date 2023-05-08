@@ -6,8 +6,8 @@ class Reservation < ApplicationRecord
 
   enum confirmation: %i[pending approved cancelled]
 
-  scope :upcoming_reservation, -> { where('check_out >= ?', Time.now) }
-  scope :archival_reservation, -> { where('check_out < ?', Time.now) }
+  scope :upcoming_reservation, -> { where('check_out >= ?', Time.current) }
+  scope :archival_reservation, -> { where('check_out < ?', Time.current) }
 
   validates :check_in, :check_out, :number_of_peoples, presence: true
   validates :check_out, comparison: { greater_than: :check_in }

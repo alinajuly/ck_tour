@@ -16,6 +16,7 @@ class Catering < ApplicationRecord
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d-]+(\.[a-z\d-]+)*\.[a-z]+\z/i
   VALID_REG_CODE_REGEX = /\A\d{8,10}\z/
+  
   validates :name, :kind, :address_owner, :person, presence: true, length: { maximum: 255 }
   validates :description, presence: true, length: { maximum: 2000 }
   validates :places, presence: true, numericality: { greater_than_or_equal_to: 0 }

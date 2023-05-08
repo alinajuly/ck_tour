@@ -33,8 +33,9 @@ class Api::V1::AppointmentsController < ApplicationController
     authorize @appointment
 
     if @appointment.save
-      AppointmentMailer.appointment_confirmation(@appointment.user, @appointment).deliver_now
-      AppointmentMailer.appointment_tourist(@appointment.user, @appointment).deliver_now
+      AppointmentMailer.appointment_confirmation(@appointment.user, @appointment).deliver_later
+      AppointmentMailer.appointment_tourist(@appointment.user, @appointment).deliver_later
+
       render json: @appointment, status: :created
     else
       render json: @appointment.errors, status: :unprocessable_entity
@@ -44,15 +45,16 @@ class Api::V1::AppointmentsController < ApplicationController
   def update
     authorize @appointment
 
-    if @appointment.update(edit_appointment_params)
+    if @appointment.update(edit_appointment_params) #add service
       if @appointment.approved? && params[:confirmation].present?
-        AppointmentMailer.appointment_approved(@appointment.user, @appointment).deliver_now
+        AppointmentMailer.appointment_approved(@appointment.user, @appointment).deliver_later
       elsif @appointment.cancelled? && params[:confirmation].present?
-        AppointmentMailer.appointment_cancelled(@appointment.user, @appointment).deliver_now
+        AppointmentMailer.appointment_cancelled(@appointment.user, @appointment).deliver_later
       else
-        AppointmentMailer.appointment_updated_for_partner(@appointment.user, @appointment).deliver_now
-        AppointmentMailer.appointment_updated_for_tourist(@appointment.user, @appointment).deliver_now
+        AppointmentMailer.appointment_updated_for_partner(@appointment.user, @appointment).deliver_later
+        AppointmentMailer.appointment_updated_for_tourist(@appointment.user, @appointment).deliver_later
       end
+
       render json: { status: 'Update', data: @appointment }, status: :ok
     else
       render json: @appointment.errors, status: :unprocessable_entity
@@ -63,8 +65,9 @@ class Api::V1::AppointmentsController < ApplicationController
     authorize @appointment
 
     if @appointment.destroy!
-      AppointmentMailer.appointment_deleted(@appointment.user, @appointment).deliver_now
-      AppointmentMailer.appointment_deleted_for_partner(@appointment.user, @appointment).deliver_now
+      AppointmentMailer.appointment_deleted(@appointment.user, @appointment).deliver_later
+      AppointmentMailer.appointment_deleted_for_partner(@appointment.user, @appointment).deliver_later
+      
       render json: { status: 'Delete' }, status: :ok
     else
       render json: @appointment.errors, status: :unprocessable_entity

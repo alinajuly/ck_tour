@@ -6,8 +6,8 @@ class Appointment < ApplicationRecord
 
   enum confirmation: %i[pending approved cancelled]
 
-  scope :upcoming_appointment, -> { joins(:tour).where('time_end >= ?', Time.now) }
-  scope :archival_appointment, -> { joins(:tour).where('time_end < ?', Time.now) }
+  scope :upcoming_appointment, -> { joins(:tour).where('time_end >= ?', Time.current) }
+  scope :archival_appointment, -> { joins(:tour).where('time_end < ?', Time.current) }
 
   validates :number_of_peoples, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :enough_seats, on: :create

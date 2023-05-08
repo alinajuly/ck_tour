@@ -44,6 +44,7 @@ class Api::V1::AccommodationsController < ApplicationController
     authorize @accommodation
 
     build_images if params[:images].present?
+
     if @accommodation.save
       accommodation_json
     else
@@ -56,6 +57,7 @@ class Api::V1::AccommodationsController < ApplicationController
     authorize @accommodation
 
     build_images if params[:images].present?
+    
     if @accommodation.update(edit_accommodation_params.except(:images))
       if @accommodation.published? && params[:status].present?
         StatusMailer.accommodation_published(@accommodation.user, @accommodation).deliver_later

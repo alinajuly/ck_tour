@@ -6,7 +6,7 @@ class Api::V1::AmenitiesController < ApplicationController
   before_action :set_amenity, only: %i[update destroy]
 
   def index
-    @amenities = @room.amenities.all
+    @amenities = @room.amenities
     
     authorize @amenities
 
@@ -51,7 +51,7 @@ class Api::V1::AmenitiesController < ApplicationController
   private
 
   def set_accommodation
-    @accommodation = Accommodation.find_by_id(params[:accommodation_id])
+    @accommodation = Accommodation.find_by(id: params[:accommodation_id])
   end
 
   def set_room
