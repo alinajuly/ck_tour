@@ -24,7 +24,7 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def show?
-    record.published?
+    true || (record.status.eql? 1)
   end
 
   def create?
